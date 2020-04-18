@@ -16,21 +16,22 @@ class Game: # La partie
 
     def StartLevel(self, level): #On instancie les objets au début de niveau        
         self.player_space_ship = objects.PlayerSpaceShip(self.sprites_list["Player"],self.window_size[0]/2,self.window_size[1]/2)
-        self.asteroids = []
+        self.asteroids = [] #Création d'un tableau qui contient tous les astéroides
         for i in range(2*level):
             self.asteroids.append(objects.Asteroid(self.sprites_list["Asteroid"],self.window_size,1))
 
-    def GameDraw(self,win):    #Cette fonction va dessiner chaque élément du niveau
+    def GameDraw(self,win):    #Demande à chaque élément contenu dans la partie de se dessiner dans la fenêtre
         self.player_space_ship.Draw(win)
         for asteroid in self.asteroids:
             asteroid.Draw(win)
+            asteroid.Move()
 
 class App: # Le programme
     def __init__(self):
-        self.folder = os.path.dirname(__file__)
-        self.window_size=[1280,720]
-        self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]))        
-        self.GetSprites()
+        self.folder = os.path.dirname(__file__) #Va chercher le répertoire dans lequel est le Main
+        self.window_size=[1280,720] #Tableau qui contient la résolution de la fenêtre
+        self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]))    #Création de la fenêtre
+        self.GetAssets()
         self.game = Game(self.sprite_list,self.window_size)    #Sera instancié quand on clique sur NEW GAME
 
         self.running = True        
@@ -42,15 +43,15 @@ class App: # Le programme
             pygame.display.update() #Met à jour l'affichage
         pygame.quit()
 
-    def GetSprites(self):   #Va chercher les assets dans les fichiers du jeu
-        self.sprite_list = {
+    def GetAssets(self):   #Va chercher les assets dans les fichiers du jeu
+        self.sprite_list = {    #Dictionnaire qui associe une image à un mot clé
             "Player": pygame.image.load(os.path.join(self.folder, 'Assets/player.png')),
             "Asteroid": pygame.image.load(os.path.join(self.folder, 'Assets/rock.png'))
         }
 
     def Events(self):
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT:   #Lorsque l'on clique sur la croix pour quitter
                 self.running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -62,7 +63,7 @@ class App: # Le programme
                     pass
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
-        self.game.GameDraw(self.window)
+        self.game.GameDraw(self.window) #Dit à la partie de dessiner ce qu'elle contient dans la fenêtre
 
 if __name__ == "__main__":  #Instancie le programme
     app = App()
