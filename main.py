@@ -1,5 +1,6 @@
 import pygame
 import os.path
+from threading import Thread
 pygame.init()
 
 #Import des modules contenant les classes que l'on va instancier
@@ -51,6 +52,8 @@ class App: # Le programme
                     print('LClick')
                     #player.Shoot()
             elif event.type == pygame.KEYDOWN:
+                if event.key == K_LEFT:
+                   # PlayerSpaceShip.angle += 10
                 #player.Key(event.key)
                 pass
 
