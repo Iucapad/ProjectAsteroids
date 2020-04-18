@@ -14,13 +14,13 @@ class Game: # La partie
         self.StartLevel(self.level)
 
     def StartLevel(self, level): #On instancie les objets au début de niveau        
-        self.PlayerSpaceShip = objects.PlayerSpaceShip(self.sprites_list["Player"],self.window_size[0]/2,self.window_size[1]/2)
+        self.player_space_ship = objects.PlayerSpaceShip(self.sprites_list["Player"],self.window_size[0]/2,self.window_size[1]/2)
         self.asteroids = []
         for i in range(2*level):
             self.asteroids.append(objects.Asteroid(self.sprites_list["Asteroid"],self.window_size,1))
 
     def GameDraw(self,win):    #Cette fonction va dessiner chaque élément du niveau
-        self.PlayerSpaceShip.Draw(win)
+        self.player_space_ship.Draw(win)
         for asteroid in self.asteroids:
             asteroid.Draw(win)
 
