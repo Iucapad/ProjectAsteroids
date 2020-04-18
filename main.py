@@ -5,7 +5,7 @@ pygame.init()
 #Import des modules contenant les classes que l'on va instancier
 import objects
 
-class Game:
+class Game: # La partie 
     def __init__(self,plaSpr,astSpr,window_size,level=1):
         self.window_size=window_size
         self.playerSprite=plaSpr
@@ -24,7 +24,7 @@ class Game:
         for asteroid in self.asteroids:
             asteroid.Draw(win)
 
-class App:
+class App: # Le programme
     def __init__(self):
         folder = os.path.dirname(__file__)
         self.window_size=[1280,720]

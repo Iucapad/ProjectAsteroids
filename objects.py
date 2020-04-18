@@ -1,38 +1,74 @@
 import pygame
 import random
+import math
 
-class Player:
+class PlayerSpaceShip:
 
-    def __init__(self,sprite,x,y):
-        self.sprite=sprite
-        self.x=x
-        self.y=y
-        self.size=50
-        self.angle=90
+    def __init__(self,sprite,x,y): # Constructeur
+        self.sprite = sprite
+        self.x = x      # Todo, faire centrer le vaisseau du joueur au centre de la fenêtre
+        self.y = y
+        self.angle = 90
+        self.speed = 1
+        self.acceleration = 0 
+        self.size = 50
+        self.life = 3
+        self.shootRate = 1   
+        self.type = 0
 
-    def Key(self,key):
-        if (key==pygame.K_RIGHT):
-            print('right')
+    def Move(self):
+        self.x = x + math.cos(self.angle)   # A test
+        self.y = y + math.sin(self.angle)
 
-    def Shoot(self):
+
+    def Shoot(self): # Méthode pour le tir
         pass
 
-    def Teleport(self):
+    def Teleport(self): # Méthode pour la téléportaiton
         if (True) :
             #TP()
             pass
         else :
             Teleport()
 
-    def Draw(self,window):
+    def Draw(self,window): # Méthode d'affichage
         window.blit(self.sprite,(self.x-self.size/2,self.y-self.size/2))
+
+
+class EnnemySpaceShip:
+
+    def __init__(self,sprite,x,y): # Constructeur
+        self.sprite = sprite
+        self.x = x
+        self.y = y
+        self.angle = 90
+        self.speed = 1
+        self.acceleration = 0 
+        self.size = 50
+        self.life = 2
+        self.shootRate = 1   
+        self.type = 1
+
+    def Shoot(self): # Méthode pour le tir
+        pass
+
+    def Teleport(self): # Méthode pour la téléportaiton
+        if (True) :
+            #TP()
+            pass
+        else :
+            Teleport()
+
+    def Draw(self,window): # Méthode d'affichage
+        window.blit(self.sprite,(self.x-self.size/2,self.y-self.size/2))
+
 
 class Asteroid:
 
     def __init__(self,sprite,window_size,initialType,x=None,y=None): #Constructeur de l'objet
-        self.sprite=sprite
-        self.type=initialType
-        self.size=0
+        self.sprite = sprite
+        self.type = initialType
+        self.size = 0
         if (x is None): #Si on ne passe pas de paramètre, créé aléatoirement sur l'écran
             self.x=random.randint(0,window_size[0])
             self.y=random.randint(0,window_size[1])
@@ -58,3 +94,11 @@ class Asteroid:
 
     def Draw(self,window):
         window.blit(self.sprite,(self.x-self.size/2,self.y-self.size/2))
+
+class LaserShot:
+    
+    def __init__(self, sprite, x, y):
+        self.x = x 
+        self.y = y 
+        self.angle = 90
+        self.type = 0 # Todo
