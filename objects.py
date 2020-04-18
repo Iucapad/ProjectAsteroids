@@ -31,7 +31,7 @@ class Asteroid:
 
     def __init__(self,sprite,window_size,initialType,x=None,y=None): #Constructeur de l'objet
         self.sprite=sprite
-        self.size=initialType
+        self.type=initialType
         self.size=0
         if (x is None): #Si on ne passe pas de paramètre, créé aléatoirement sur l'écran
             self.x=random.randint(0,window_size[0])
