@@ -4,27 +4,26 @@ import math
 
 class PlayerSpaceShip:
 
-    def __init__(self,sprite,x,y): # Constructeur
-        self.sprite = sprite
-        self.x = x      # Todo, faire centrer le vaisseau du joueur au centre de la fenêtre
+    def __init__(self, sprite, x, y):  # Constructeur
+        self.sprite = sprite        # L'image du vaisseau 
+        self.x = x                  # Todo, faire centrer le vaisseau du joueur au centre de la fenêtre
         self.y = y
         self.angle = 90
-        self.speed = 1
-        self.acceleration = 0 
-        self.size = 50
-        self.life = 3
-        self.shootRate = 1   
-        self.type = 0
+        self.speed = 1              # A test
+        self.acceleration = 0       # A test
+        self.size = 50              
+        self.life = 3   
+        self.shootRate = 1          # A test   
+        self.type = 0               
 
     def Move(self):
         self.x = x + math.cos(self.angle)   # A test
         self.y = y + math.sin(self.angle)
 
-
     def Shoot(self): # Méthode pour le tir
-        pass
+        pass    # Todo
 
-    def Teleport(self): # Méthode pour la téléportaiton
+    def Teleport(self): # Méthode pour la téléportaiton Todo
         if (True) :
             #TP()
             pass
@@ -37,7 +36,7 @@ class PlayerSpaceShip:
 
 class EnnemySpaceShip:
 
-    def __init__(self,sprite,x,y): # Constructeur
+    def __init__(self, sprite, x, y, SpaceShipType): # Constructeur
         self.sprite = sprite
         self.x = x
         self.y = y
@@ -47,7 +46,11 @@ class EnnemySpaceShip:
         self.size = 50
         self.life = 2
         self.shootRate = 1   
-        self.type = 1
+        self.type = SpaceShipType
+
+    def Move(self):
+        self.x = x + math.cos(self.angle)   # A test
+        self.y = y + math.sin(self.angle)
 
     def Shoot(self): # Méthode pour le tir
         pass
@@ -65,28 +68,32 @@ class EnnemySpaceShip:
 
 class Asteroid:
 
-    def __init__(self,sprite,window_size,initialType,x=None,y=None): #Constructeur de l'objet
+    def __init__(self, sprite, WindowSize, AsteroidType, x=None, y=None): #Constructeur de l'objet
         self.sprite = sprite
-        self.type = initialType
+        self.type = AsteroidType
         self.size = 0
         if (x is None): #Si on ne passe pas de paramètre, créé aléatoirement sur l'écran
-            self.x=random.randint(0,window_size[0])
-            self.y=random.randint(0,window_size[1])
+            self.x=random.randint(0, WindowSize[0])
+            self.y=random.randint(0, WindowSize[1])
         else:   #Sinon on crée l'objet à la bonne position
-            self.x=x
-            self.y=y        
+            self.x = x
+            self.y = y        
         self.Appearance(self.sprite)
 
-    def Appearance(self,sprite):    #Dimensionne l'asteroide selon son type et altère la taille pour les rendre uniques
-        if (self.type==1):
-            size=60
-        elif (self.type==2):
-            size=30
-        elif (self.type==3):
-            size=15
+    def Move(self):
+        self.x = x + math.cos(self.angle)   # A test
+        self.y = y + math.sin(self.angle)
+
+    def Appearance(self, sprite):    #Dimensionne l'asteroide selon son type et altère la taille pour les rendre uniques
+        if (self.type == 1):
+            size = 60
+        elif (self.type == 2):
+            size = 30
+        elif (self.type == 3):
+            size = 15
         scale=random.uniform(0.7,1)
-        self.size=int(scale*size)
-        self.sprite=pygame.transform.scale(sprite,(self.size,self.size))
+        self.size = int(scale*size)
+        self.sprite = pygame.transform.scale(sprite,(self.size,self.size))
 
     def Destroy(self):
         #create 2 new asteroids with type-=1
@@ -97,8 +104,9 @@ class Asteroid:
 
 class LaserShot:
     
-    def __init__(self, sprite, x, y):
+    def __init__(self, sprite, x, y, LaserShotType):
         self.x = x 
         self.y = y 
         self.angle = 90
-        self.type = 0 # Todo
+        self.speed = 1
+        self.type = LaserShotType # Todo
