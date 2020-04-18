@@ -56,14 +56,10 @@ class App: # Le programme
                 if event.button == 1:
                     print('Clic gauche')
             elif event.type == pygame.KEYDOWN:
-<<<<<<< HEAD
-                if event.key == K_LEFT:
+                if event.key == pygame.K_LEFT:
                    # PlayerSpaceShip.angle += 10
                 #player.Key(event.key)
-                pass
-=======
-                print('appui sur une touche')
->>>>>>> de9053405b7acc9cd2b97ad8cb9ae6176e35f15a
+                    pass
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
         self.game.GameDraw(self.window)
