@@ -6,18 +6,18 @@ pygame.init()
 import objects
 
 class Game: # La partie 
-    def __init__(self, plaSpr, astSpr, window_size, level=1):
+    def __init__(self, pla_spr, ast_spr, window_size, level=1):
         self.window_size = window_size
-        self.playerSprite = plaSpr
-        self.asteroidSprite = astSpr
+        self.player_sprite = pla_spr
+        self.asteroid_sprite = ast_spr
         self.score = 0
         self.StartLevel(level)
 
     def StartLevel(self, level): #On instancie les objets au début de niveau        
-        self.PlayerSpaceShip = objects.PlayerSpaceShip(self.playerSprite,self.window_size[0]/2,self.window_size[1]/2)
+        self.PlayerSpaceShip = objects.PlayerSpaceShip(self.player_sprite,self.window_size[0]/2,self.window_size[1]/2)
         self.asteroids = []
         for i in range(2*level):
-            self.asteroids.append(objects.Asteroid(self.asteroidSprite,self.window_size,1))
+            self.asteroids.append(objects.Asteroid(self.asteroid_sprite,self.window_size,1))
 
     def GameDraw(self,win):    #Cette fonction va dessiner chaque élément du niveau
         self.PlayerSpaceShip.Draw(win)

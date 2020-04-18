@@ -13,7 +13,7 @@ class PlayerSpaceShip:
         self.acceleration = 0       # A test
         self.size = 50              
         self.life = 3   
-        self.shootRate = 1          # A test   
+        self.shoot_rate = 1          # A test   
         self.type = 0               
 
     def Move(self):
@@ -36,7 +36,7 @@ class PlayerSpaceShip:
 
 class EnnemySpaceShip:
 
-    def __init__(self, sprite, x, y, SpaceShipType): # Constructeur
+    def __init__(self, sprite, space_ship_type, x, y): # Constructeur
         self.sprite = sprite
         self.x = x
         self.y = y
@@ -45,8 +45,8 @@ class EnnemySpaceShip:
         self.acceleration = 0 
         self.size = 50
         self.life = 2
-        self.shootRate = 1   
-        self.type = SpaceShipType
+        self.shoot_rate = 1   
+        self.type = space_ship_type
 
     def Move(self):
         self.x = x + math.cos(self.angle)   # A test
@@ -68,13 +68,13 @@ class EnnemySpaceShip:
 
 class Asteroid:
 
-    def __init__(self, sprite, WindowSize, AsteroidType, x=None, y=None): #Constructeur de l'objet
+    def __init__(self, sprite, window_size, asteroid_type, x=None, y=None): #Constructeur de l'objet
         self.sprite = sprite
-        self.type = AsteroidType
+        self.type = asteroid_type
         self.size = 0
         if (x is None): #Si on ne passe pas de paramètre, créé aléatoirement sur l'écran
-            self.x=random.randint(0, WindowSize[0])
-            self.y=random.randint(0, WindowSize[1])
+            self.x=random.randint(0, window_size[0])
+            self.y=random.randint(0, window_size[1])
         else:   #Sinon on crée l'objet à la bonne position
             self.x = x
             self.y = y        
@@ -104,9 +104,9 @@ class Asteroid:
 
 class LaserShot:
     
-    def __init__(self, sprite, x, y, LaserShotType):
+    def __init__(self, sprite, laser_shot_type, x, y):
         self.x = x 
         self.y = y 
         self.angle = 90
         self.speed = 1
-        self.type = LaserShotType # Todo
+        self.type = laser_shot_type # Todo
