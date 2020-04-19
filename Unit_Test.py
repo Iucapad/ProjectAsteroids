@@ -1,9 +1,9 @@
 import objects
 import main
 
-def test_cons_PlayerSpaceShip():
-    """ Test des constantes de la class PlayerSpaceShip : """
-    my_PlayerSpaceShip = objects.PlayerSpaceShip(sprite="Player", x=10, y=4)
+def test_var_PlayerSpaceShip():
+    """ Test des variables de la class PlayerSpaceShip : """
+    my_PlayerSpaceShip = objects.PlayerSpaceShip(sprite=2, x=10, y=4)
     assert type(my_PlayerSpaceShip.sprite) is int or float
     assert type(my_PlayerSpaceShip.x) is int or float
     assert type(my_PlayerSpaceShip.y) is int or float
@@ -14,8 +14,13 @@ def test_cons_PlayerSpaceShip():
     assert type(my_PlayerSpaceShip.life) is int or float
     assert type(my_PlayerSpaceShip.shoot_rate) is int or float
     assert type(my_PlayerSpaceShip.type) is int or float
-    assert my_PlayerSpaceShip.sprite == "Player"
+    assert my_PlayerSpaceShip.sprite == 2
     assert my_PlayerSpaceShip.x == 10
     assert my_PlayerSpaceShip.y == 4
 
-def test_cons
+def test_var_Game():
+    debut = main.Game()
+    assert type (debut.score) is int
+    assert type (debut.level) is int
+    
+    
