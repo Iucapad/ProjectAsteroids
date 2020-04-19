@@ -22,5 +22,9 @@ def test_var_Game():
     debut = main.Game()
     assert type (debut.score) is int
     assert type (debut.level) is int
+    assert type (debut.window_size) is int
+    assert type (debut.sprites_list) is string
     
-    
+def test_StartLevel():
+    debutpartie = main.StartLevel (coucou, [3]/12,[5])
+    assert debutpartie.sprites_list = coucou
