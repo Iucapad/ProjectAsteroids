@@ -113,7 +113,9 @@ class Asteroid:
         self.type = asteroid_type
         self.vitesse=random.randint(7, 10)
         self.size = 0
-        self.angle=0 
+        self.angle=random.randint(0, 360)
+        self.angle_orientation=random.randint(0, 360)
+        self.rotation=random.randint(1,2)
         if (x is None): #Si on ne passe pas de paramètre, créé aléatoirement sur l'écran
             self.x=random.randint(0, window_size[0])
             self.y=random.randint(0, window_size[1])
@@ -123,8 +125,12 @@ class Asteroid:
         self.Appearance(self.sprite)
 
     def Move(self): #Méthode pour le déplacement des astéroïdes
-        self.x = self.x + (math.cos(self.angle)*self.vitesse)/15
-        self.y = self.y + (math.sin(self.angle)*self.vitesse)/15
+        self.x = self.x + (math.cos(self.angle)*self.vitesse)/20
+        self.y = self.y + (math.sin(self.angle)*self.vitesse)/20
+        if self.rotation==1:
+            self.angle_orientation+=0.1
+        if self.rotation==2:
+            self.angle_orientation-=0.1
 
     def Appearance(self, sprite):    #Dimensionne l'asteroide selon son type et initialise un angle de déplacement
         if (self.type == 1):    #Type Grand
@@ -135,15 +141,15 @@ class Asteroid:
             size = 15
         scale=random.uniform(0.7,1) #Donne un angle aléatoire pour son mouvement initial
         self.size = int(scale*size) #Fait varier la dimension pour les rendre uniques
-        self.sprite = pygame.transform.scale(sprite,(self.size,self.size))
-        self.angle=random.randint(0, 360)
+        self.sprite = pygame.transform.scale(sprite,(self.size,self.size))        
 
     def Destroy(self):  #PAS CERTAIN QUE CE SOIT ICI
         #create 2 new asteroids with type-=1 at self.x,self.y
         pass
 
     def Draw(self,window):  #Dessine l'objet présent à sa position
-        window.blit(self.sprite,(self.x-self.size/2,self.y-self.size/2))
+        surface = pygame.transform.rotate(self.sprite,self.angle_orientation)
+        window.blit(surface,(self.x-self.size/2,self.y-self.size/2))
 
 class LaserShot:
     

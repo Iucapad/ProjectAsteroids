@@ -1,4 +1,5 @@
 import pygame
+import random
 import os.path
 import objects, interface   #Import des modules contenant les classes que l'on va instancier
 
@@ -17,8 +18,9 @@ class Game: # La partie
     def StartLevel(self, level): # On instancie les objets au début de niveau
         self.asteroids = [] #Création d'un tableau qui contient tous les astéroides
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
-        for i in range(2*level):
-            self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid"], self.app.window_size,1))
+        for i in range(level+1):
+            alt_spr=random.randint(1,3)
+            self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid"+str(alt_spr)], self.app.window_size,1))
         self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"],1,200,300))
 
     def CompleteLevel(self):
@@ -101,7 +103,9 @@ class App: # Le programme
     def LoadSprites(self):                                       # Va chercher les assets dans les fichiers du jeu
         self.sprites_list = {
             "Player": pygame.image.load(os.path.join(self.folder, 'Assets/player.png')),
-            "Asteroid": pygame.image.load(os.path.join(self.folder, 'Assets/rock.png')),
+            "Asteroid1": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid1.png')),
+            "Asteroid2": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid2.png')),
+            "Asteroid3": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid3.png')),
             "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png'))
         }
         background=pygame.image.load(os.path.join(self.folder, 'Assets/background.png'))
