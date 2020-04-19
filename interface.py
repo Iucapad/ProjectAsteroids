@@ -1,24 +1,40 @@
 import pygame
 
-import main
+text_font=pygame.font.SysFont(None, 30, bold=False, italic=False)
+
+def DrawText(text,font,color,app,corner,padding):
+    text_obj = font.render(text,1,color)
+    text_rect = text_obj.get_rect()
+    if corner==1:
+        text_rect.topleft = (padding,padding)
+    elif corner==2:
+        text_rect.topright = (app.window_size[0]-padding,padding)
+    elif corner==3:
+        text_rect.bottomright = (app.window_size[0]-padding,app.window_size[1]-padding)
+    elif corner==4:
+        text_rect.bottomleft = (padding,app.window_size[1]-padding)
+    app.window.blit(text_obj,text_rect)
 
 class GameInfo:
 
-    def __init__(self):
-        pass
+    def __init__(self,app):
+        self.app=app
 
-    def DrawGameInfo(self,score,level,life):
-        print("Score:",score, " Niveau:",level, " Vies:",life)
+    def DrawGameInfo(self,app,score,level,life):
+        DrawText((" Niveau: "+str(level)),text_font,(255,255,255),app,1,25)
+        DrawText((" Score: "+str(score)),text_font,(255,255,255),app,2,25)
+        DrawText((" Vies: "+str(life)),text_font,(255,255,255),app,3,25)
 
 class MainMenu:
     
     def __init__(self,app):
         self.value=0
         clock = pygame.time.Clock()
-        self.display=True
+        self.display=True        
 
         while self.display:
             app.window.fill((45,45,90))
+            DrawText("Menu principal",text_font,(255,255,255),app,2,20)
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

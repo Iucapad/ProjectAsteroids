@@ -9,21 +9,20 @@ import objects, interface
 
 class Game: # La partie 
     def __init__(self, app):
-        self.window_size = app.window_size
-        self.sprites_list = app.sprites_list
+        self.app=app
         self.score = 0
         self.level = 1
         self.StartLevel(self.level)
-        self.game_info = interface.GameInfo()
+        self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
 
     def StartLevel(self, level): # On instancie les objets au début de niveau        
-        self.player_space_ship = objects.PlayerSpaceShip(self.sprites_list["Player"], self.window_size[0]/2, self.window_size[1]/2)
+        self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list["Player"], self.app.window_size[0]/2, self.app.window_size[1]/2)
         self.asteroids = [] #Création d'un tableau qui contient tous les astéroides
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         for i in range(2*level):
-            self.asteroids.append(objects.Asteroid(self.sprites_list["Asteroid"], self.window_size,1))
-        self.ennemyspaceships.append(objects.EnnemySpaceShip(self.sprites_list["Ennemy"],1,200,300))
+            self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid"], self.app.window_size,1))
+        self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"],1,200,300))
 
     def UpdateLoop(self,window,window_size):
         self.GameEvents(window_size)#Gestion des évènements de la partie
@@ -62,7 +61,7 @@ class Game: # La partie
             asteroid.Move()
         for ennemyspaceship in self.ennemyspaceships:
             ennemyspaceship.Draw(win)
-        self.game_info.DrawGameInfo(self.score,self.level,self.player_space_ship.GetLife)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
+        self.game_info.DrawGameInfo(self.app,self.score,self.level,self.player_space_ship.GetLife)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 
 class App: # Le programme
     def __init__(self):
