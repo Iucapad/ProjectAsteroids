@@ -6,4 +6,5 @@ class GameInfo:
         pass
 
     def DrawGameInfo(self,score,level,life):
-        print("Score:",score, " Niveau:",level, " Vies:",life)
+        a = 1
+        #print("") #"Score:",score, " Niveau:",level, " Vies:",life)
