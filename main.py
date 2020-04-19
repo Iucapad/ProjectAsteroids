@@ -65,20 +65,22 @@ class Game: # La partie
 
 class App: # Le programme
     def __init__(self):
+        self.state="game"
         self.folder = os.path.dirname(__file__)
         self.window_size = [1280,720]
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
         self.GetSprites()
+        #self.menu=interface.MainMenu(self.window)
         self.game = Game(self.sprite_list,self.window_size)     # Sera instancié quand on clique sur NEW GAME
+        clock = pygame.time.Clock()
 
         self.running = True        
-        while self.running:                                     # Boucle qui exécute et affiche le jeu + vérifie les inputs
-            pygame.time.delay(100)
+        while self.running:
             self.Events()                   # Gestion des évènements/inputs/clics
             self.window.fill((0,0,0))                           # Vide l'affichage de la frame
             self.FrameDraw()                                    # Appelle la fonction qui dessine les objets du jeu
-            pygame.display.update()                             # Met à jour l'affichage
+            clock.tick(60)                            # Met à jour l'affichage
         pygame.quit()
 
     def GetSprites(self):                                       # Va chercher les assets dans les fichiers du jeu
@@ -92,14 +94,16 @@ class App: # Le programme
         for event in pygame.event.get():
             if event.type == pygame.QUIT:   #Lorsque l'on clique sur la croix pour quitter
                 self.running = False
-            elif event.type == pygame.KEYDOWN:
-                self.game.key_pressed[event.key] = True
-            elif event.type == pygame.KEYUP:
-                self.game.key_pressed[event.key] = False
+            if self.state=="game":
+                if event.type == pygame.KEYDOWN:
+                    self.game.key_pressed[event.key] = True
+                elif event.type == pygame.KEYUP:
+                    self.game.key_pressed[event.key] = False
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
-        self.game.UpdateLoop(self.window,self.window_size) #Evènements de la partie à exécuter
-        pygame.display.update() #Met à jour l'affichage
+        if self.state=="game":
+            self.game.UpdateLoop(self.window,self.window_size) #Evènements de la partie à exécuter
+            pygame.display.update() #Met à jour l'affichage
 
 if __name__ == "__main__":  #Instancie le programme
     app = App()
