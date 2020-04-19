@@ -18,14 +18,37 @@ class Game: # La partie
     def StartLevel(self, level): #On instancie les objets au début de niveau        
         self.player_space_ship = objects.PlayerSpaceShip(self.sprites_list["Player"],self.window_size[0]/2,self.window_size[1]/2)
         self.asteroids = [] #Création d'un tableau qui contient tous les astéroides
+        self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         for i in range(2*level):
             self.asteroids.append(objects.Asteroid(self.sprites_list["Asteroid"],self.window_size,1))
+        self.ennemyspaceships.append(objects.EnnemySpaceShip(self.sprites_list["Ennemy"],1,200,300))
 
-    def GameDraw(self,win):    #Demande à chaque élément contenu dans la partie de se dessiner dans la fenêtre
-        self.player_space_ship.Draw(win)
+    def UpdateLoop(self,window,window_size):
+        self.GameEvents(window_size)#Gestion des évènements de la partie
+        self.GameDraw(window) #Dessiner ce qu'elle contient dans la fenêtre
+
+    def GameEvents(self,window_size):   #Gère les évènements de la partie en continu
+        self.BorderWrapping(self.player_space_ship,window_size)
         for asteroid in self.asteroids:
-            asteroid.Draw(win)
+            self.BorderWrapping(asteroid,window_size)
+
+    def BorderWrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
+        if (obj.x > window_size[0]):
+            obj.x = 0
+        elif (obj.x < 0 ):
+            obj.x = window_size[0]
+        if (obj.y > window_size[1]):
+            obj.y = 0
+        elif (obj.y < 0 ):
+                obj.y = window_size[1]
+
+    def GameDraw(self,window):    #Demande à chaque élément contenu dans la partie de se dessiner dans la fenêtre
+        self.player_space_ship.Draw(window)
+        for asteroid in self.asteroids:
+            asteroid.Draw(window)
             asteroid.Move()
+        for ennemyspaceship in self.ennemyspaceships:
+            ennemyspaceship.Draw(window)
         self.game_info.DrawGameInfo(self.score,self.level,self.player_space_ship.GetLife)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 
 class App: # Le programme
@@ -49,7 +72,8 @@ class App: # Le programme
     def GetAssets(self):   #Va chercher les assets dans les fichiers du jeu
         self.sprite_list = {    #Dictionnaire qui associe une image à un mot clé
             "Player": pygame.image.load(os.path.join(self.folder, 'Assets/player.png')),
-            "Asteroid": pygame.image.load(os.path.join(self.folder, 'Assets/rock.png'))
+            "Asteroid": pygame.image.load(os.path.join(self.folder, 'Assets/rock.png')),
+            "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png'))
         }
 
     def Events(self):
@@ -66,7 +90,7 @@ class App: # Le programme
                     pass
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
-        self.game.GameDraw(self.window) #Dit à la partie de dessiner ce qu'elle contient dans la fenêtre
+        self.game.UpdateLoop(self.window,self.window_size) #Evènements de la partie à exécuter
         pygame.display.update() #Met à jour l'affichage
 
 if __name__ == "__main__":  #Instancie le programme
