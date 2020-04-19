@@ -6,6 +6,8 @@ pygame.init()
 #Import des modules contenant les classes que l'on va instancier
 import objects, interface
 
+global app
+
 class Game: # La partie 
     def __init__(self, sprites_list, window_size):
         self.window_size = window_size
@@ -62,14 +64,14 @@ class Game: # La partie
 
 class App: # Le programme
     def __init__(self):
-        self.state="game"
+        self.state="menu"
         self.folder = os.path.dirname(__file__)
         self.window_size = [1280,720]
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
         self.GetSprites()
-        #self.menu=interface.MainMenu(self.window)
-        self.game = Game(self.sprite_list,self.window_size)     # Sera instancié quand on clique sur NEW GAME
+        self.menu=interface.MainMenu(self.window)
+        #self.game = Game(self.sprite_list,self.window_size)     # Sera instancié quand on clique sur NEW GAME
         clock = pygame.time.Clock()
 
         self.running = True        
@@ -79,6 +81,10 @@ class App: # Le programme
             self.FrameDraw()                                    # Appelle la fonction qui dessine les objets du jeu
             clock.tick(60)                            # Met à jour l'affichage
         pygame.quit()
+
+    def StartGame(self):
+        self.game = Game(self.sprite_list,self.window_size)
+        self.state="game"
 
     def GetSprites(self):                                       # Va chercher les assets dans les fichiers du jeu
         self.sprite_list = {
