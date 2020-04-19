@@ -66,13 +66,14 @@ class Game: # La partie
 
 class App: # Le programme
     def __init__(self):
-        self.state="menu"
+        self.state="game"
         self.folder = os.path.dirname(__file__)
         self.window_size = [1280,720]
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
         self.LoadSprites()
-        self.menu=interface.MainMenu(self)
+        #self.menu=interface.MainMenu(self)
+        self.StartGame()
         clock = pygame.time.Clock()
 
         self.running = True        
