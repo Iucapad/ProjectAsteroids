@@ -25,8 +25,7 @@ def test_var_Asteroids():
     assert type(my_Asteroids.speed) is int
     assert type(my_Asteroids.size) is int or float
     assert type(my_Asteroids.angle) is int
-    assert my_Asteroids.x == my_Asteroids.x>0 and my_Asteroids.x<100
-    assert my_Asteroids.y == my_Asteroids.y > 0 and my_Asteroids.y < 100
+    
     my_Asteroids = objects.Asteroid(sprite=pygame.Surface([10, 10]), window_size=[100,200], asteroid_type=1, x=10, y=20)
     assert type(my_Asteroids.type) is int
     assert type(my_Asteroids.speed) is int
@@ -34,6 +33,10 @@ def test_var_Asteroids():
     assert type(my_Asteroids.angle) is int
     assert my_Asteroids.x == 10
     assert my_Asteroids.y == 20
+    
+    with pytest.raises(AssertionError):
+       assert my_Asteroids.x == 101
+    assert my_Asteroids.y == 102
 
 """def test_var_Game():
     debut = main.Game()
