@@ -10,19 +10,50 @@ class PlayerSpaceShip:
         self.y = y
         self.angle_orientation = 0
         self.angle_inertie = 0 
-        self.speed = 1              # A test
-        self.acceleration = 0       # A test
+        self.speed = 2
+        self.max_speed = 15
+        self.hspeed = 5
+        self.vspeed = 5
+        self.fd_fric = 0.5
+        self.bd_fric = 0.1
+        self.acceleration = 5       # A test
         self.size = 50              
-        self.life = 3   
+        self.life = 3    
         self.shoot_rate = 1          # A test   
-        self.type = 0               
+        self.type = 0        
+        self.thrust = False       
 
 
-    def MoveInertie(self):
-        # pygame.transform.rotate(self.sprite, self.angle)
+    def Move(self):
+        self.speed = math.sqrt(self.hspeed**2 + self.vspeed**2)
+        if self.thrust:
+            if self.speed + self.fd_fric < self.max_speed:
+                self.hspeed += self.fd_fric * math.cos(self.angle_orientation * math.pi / 180)
+                self.vspeed += self.fd_fric * math.sin(self.angle_orientation * math.pi / 180)
+            else:
+                self.hspeed = self.max_speed * math.cos(self.angle_orientation * math.pi / 180)
+                self.vspeed = self.max_speed * math.sin(self.angle_orientation * math.pi / 180)
+        else:
+            if self.speed - self.bd_fric > 0:
+                change_in_hspeed = (self.bd_fric * math.cos(self.vspeed / self.hspeed))
+                change_in_vspeed = (self.bd_fric * math.sin(self.vspeed / self.hspeed))
+                if self.hspeed != 0:
+                    if change_in_hspeed / abs(change_in_hspeed) == self.hspeed / abs(self.hspeed):
+                        self.hspeed -= change_in_hspeed
+                    else:
+                        self.hspeed += change_in_hspeed
+                if self.vspeed != 0:
+                    if change_in_vspeed / abs(change_in_vspeed) == self.vspeed / abs(self.vspeed):
+                        self.vspeed -= change_in_vspeed
+                    else:
+                        self.vspeed += change_in_vspeed
+            else:
+                self.hspeed = 0
+                self.vspeed = 0
 
-        self.x = self.x + math.cos(self.angle_inertie)   # A test
-        self.y = self.y + math.sin(self.angle_inertie)
+        self.x += self.hspeed
+        self.y += self.vspeed
+  
 
     def Shoot(self): # Méthode pour le tir
         pass    # Todo
@@ -49,16 +80,18 @@ class EnnemySpaceShip:
         self.x = x
         self.y = y
         self.angle = 90
-        self.speed = 10
+        self.max_speed = 15
         self.acceleration = 0 
         self.size = 50
         self.life = 2
+        self.fd_fric = 0.5
+        self.bd_fric = 0.1
         self.shoot_rate = 1   
         self.type = space_ship_type
 
     def Move(self):
-        self.x = self.x + math.cos(self.angle)               # A test
-        self.y = self.y + math.sin(self.angle)    
+        print("todo")
+  
 
     def Shoot(self): # Méthode pour le tir
         pass

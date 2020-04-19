@@ -35,13 +35,17 @@ class Game: # La partie
 
         if self.key_pressed.get(pygame.K_LEFT):
             self.player_space_ship.angle_orientation += 5
-            print(self.player_space_ship.angle_orientation)
-        elif self.key_pressed.get(pygame.K_RIGHT):
+
+
+        if self.key_pressed.get(pygame.K_RIGHT):
             self.player_space_ship.angle_orientation -= 5
-            print(self.player_space_ship.angle_orientation)
-        elif self.key_pressed.get(pygame.K_UP):
+
+
+        if self.key_pressed.get(pygame.K_UP):
+            self.player_space_ship.thrust = True
             self.player_space_ship.angle_inertie = self.player_space_ship.angle_orientation
-            print(self.player_space_ship.angle_inertie)
+        else:
+            self.player_space_ship.thrust = False
 
     def BorderWrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
         if (obj.x > window_size[0]):
@@ -55,7 +59,7 @@ class Game: # La partie
 
     def GameDraw(self, win):    # Cette fonction va dessiner chaque élément du niveau
         self.player_space_ship.Draw(win)
-        self.player_space_ship.MoveInertie()
+        self.player_space_ship.Move()
         for asteroid in self.asteroids:
             asteroid.Draw(win)
             asteroid.Move()
