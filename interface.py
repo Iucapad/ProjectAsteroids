@@ -13,9 +13,9 @@ class MainMenu:
     def __init__(self,window):
         self.window=window
         clock = pygame.time.Clock()
-        
+
         while True:
-            self.window.fille((255,255,255))
+            self.window.fill((255,255,255))
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

@@ -62,11 +62,13 @@ class Game: # La partie
 
 class App: # Le programme
     def __init__(self):
+        self.state="game"
         self.folder = os.path.dirname(__file__)
         self.window_size = [1280,720]
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
         self.GetSprites()
+        #self.menu=interface.MainMenu(self.window)
         self.game = Game(self.sprite_list,self.window_size)     # Sera instancié quand on clique sur NEW GAME
         clock = pygame.time.Clock()
 
@@ -89,14 +91,16 @@ class App: # Le programme
         for event in pygame.event.get():
             if event.type == pygame.QUIT:   #Lorsque l'on clique sur la croix pour quitter
                 self.running = False
-            elif event.type == pygame.KEYDOWN:
-                self.game.key_pressed[event.key] = True
-            elif event.type == pygame.KEYUP:
-                self.game.key_pressed[event.key] = False
+            if self.state=="game":
+                if event.type == pygame.KEYDOWN:
+                    self.game.key_pressed[event.key] = True
+                elif event.type == pygame.KEYUP:
+                    self.game.key_pressed[event.key] = False
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
-        self.game.UpdateLoop(self.window,self.window_size) #Evènements de la partie à exécuter
-        pygame.display.update() #Met à jour l'affichage
+        if self.state=="game":
+            self.game.UpdateLoop(self.window,self.window_size) #Evènements de la partie à exécuter
+            pygame.display.update() #Met à jour l'affichage
 
 if __name__ == "__main__":  #Instancie le programme
     app = App()
