@@ -14,8 +14,8 @@ class PlayerSpaceShip:
         self.max_speed = 6
         self.hspeed = 3
         self.vspeed = 3
-        self.fd_fric = 5
-        self.bd_fric = 5
+        self.fd_fric = 5  				#inertie
+        self.bd_fric = 5				#inertie
         self.size = 50              
         self.life = 3    
         self.shoot_rate = 1             # A test   
