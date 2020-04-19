@@ -1,6 +1,7 @@
 import pygame
 import os.path
 import objects, interface   #Import des modules contenant les classes que l'on va instancier
+
 pygame.init()
 
 class Game: # La partie 
@@ -112,9 +113,14 @@ class App: # Le programme
                 self.running = False
             if self.state=="game":
                 if event.type == pygame.KEYDOWN:
-                    self.game.key_pressed[event.key] = True
+                    if event.key == pygame.K_ESCAPE:
+                        self.state="menu"
+                        self.pause=interface.PauseMenu(self)
+                    else:
+                        self.game.key_pressed[event.key] = True
                 elif event.type == pygame.KEYUP:
-                    self.game.key_pressed[event.key] = False
+                    self.game.key_pressed[event.key] = False                   
+
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
         if self.state=="game":

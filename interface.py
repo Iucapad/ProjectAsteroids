@@ -1,5 +1,7 @@
 import pygame
 
+pygame.init()
+
 menu_font=pygame.font.SysFont(None, 40, bold=True, italic=False)
 text_font=pygame.font.SysFont(None, 30, bold=False, italic=False)
 
@@ -32,10 +34,30 @@ class GameInfo:
         CornerText((" Score: "+str(score)),text_font,(255,255,255),app,2,25)
         CornerText((" Vies: "+str(life)),text_font,(255,255,255),app,3,25)
 
+class PauseMenu:
+    def __init__(self,app):
+        clock = pygame.time.Clock()
+        self.display=True        
+
+        while self.display:
+            DrawText("PAUSE",menu_font,(255,255,255),app,app.window_size[0]/2,100)
+            
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.display=False
+                        app.state="game"
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        pass
+            pygame.display.update()
+            clock.tick(30)
+
 class MainMenu:
     
     def __init__(self,app):
-        self.value=0
         clock = pygame.time.Clock()
         self.display=True        
 

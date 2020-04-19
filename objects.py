@@ -12,8 +12,8 @@ class PlayerSpaceShip:
         self.thrust = False             # true = le vaisseau accélère
         self.vitesse = 1                # Vitesse actuelle
         self.max_vitesse = 6            # Vitesse max
-        self.vitesse_horizontale = 3
-        self.vitesse_verticale = 3
+        self.vitesse_horizontale = 0
+        self.vitesse_verticale = 0
         self.acceleration = 0.5 		# Inertie
         self.deceleration = 0.1			# Inertie
         self.size = 50                      
