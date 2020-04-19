@@ -13,7 +13,7 @@ class Game: # La partie
         self.score = 0
         self.level = 1
         self.StartLevel(self.level)
-        self.game_info=interface.GameInfo()
+        self.game_info = interface.GameInfo()
 
     def StartLevel(self, level): # On instancie les objets au début de niveau        
         self.PlayerSpaceShip = objects.PlayerSpaceShip(self.sprites_list["Player"], self.window_size[0]/2, self.window_size[1]/2)
@@ -23,10 +23,11 @@ class Game: # La partie
 
     def GameDraw(self, win):    # Cette fonction va dessiner chaque élément du niveau
         self.PlayerSpaceShip.Draw(win)
+        self.PlayerSpaceShip.Move()
         for asteroid in self.asteroids:
             asteroid.Draw(win)
             asteroid.Move()
-        self.game_info.DrawGameInfo(self.score,self.level,self.player_space_ship.GetLife)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
+        self.game_info.DrawGameInfo(self.score,self.level,self.PlayerSpaceShip.GetLife)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 
 class App: # Le programme
     def __init__(self):
@@ -39,7 +40,7 @@ class App: # Le programme
         self.running = True        
         while self.running:                                     # Boucle qui exécute et affiche le jeu + vérifie les inputs
             pygame.time.delay(100)
-            self.Events(game.PlayerSpaceShip)                   # Gestion des évènements/inputs/clics
+            self.Events(self.game.PlayerSpaceShip)                   # Gestion des évènements/inputs/clics
             self.window.fill((0,0,0))                           # Vide l'affichage de la frame
             self.FrameDraw()                                    # Appelle la fonction qui dessine les objets du jeu
             pygame.display.update()                             # Met à jour l'affichage
@@ -55,18 +56,19 @@ class App: # Le programme
         for event in pygame.event.get():
             if event.type == pygame.QUIT:   #Lorsque l'on clique sur la croix pour quitter
                 self.running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    print('Clic gauche')
+           # elif event.type == pygame.MOUSEBUTTONDOWN:
+            #    if event.button == 1:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    PlayerSpaceShip.angle += 10
-                    PlayerSpaceShip.Key(event.key)
-                    pass
+                    print(PlayerSpaceShip.angle)
+                    PlayerSpaceShip.angle -= 1
+                elif event.key == pygame.K_RIGHT:
+                    PlayerSpaceShip.angle += 1
+                    print(PlayerSpaceShip.angle)
 
-    def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
-        self.game.GameDraw(self.window) #Dit à la partie de dessiner ce qu'elle contient dans la fenêtre
-        pygame.display.update() #Met à jour l'affichage
+    def FrameDraw(self):    # Cette fonction va dessiner chaque élément du programme
+        self.game.GameDraw(self.window) # Dit à la partie de dessiner ce qu'elle contient dans la fenêtre
+        pygame.display.update() # Met à jour l'affichage
 
 if __name__ == "__main__":  #Instancie le programme
     app = App()
