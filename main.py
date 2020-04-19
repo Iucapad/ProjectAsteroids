@@ -4,7 +4,7 @@ from threading import Thread
 pygame.init()
 
 #Import des modules contenant les classes que l'on va instancier
-import objects
+import objects, interface
 
 class Game: # La partie 
     def __init__(self, sprites_list, window_size):
@@ -13,6 +13,7 @@ class Game: # La partie
         self.score = 0
         self.level = 1
         self.StartLevel(self.level)
+        self.game_info=interface.GameInfo()
 
     def StartLevel(self, level): # On instancie les objets au début de niveau        
         self.PlayerSpaceShip = objects.PlayerSpaceShip(self.sprites_list["Player"], self.window_size[0]/2, self.window_size[1]/2)
@@ -24,6 +25,8 @@ class Game: # La partie
         self.PlayerSpaceShip.Draw(win)
         for asteroid in self.asteroids:
             asteroid.Draw(win)
+            asteroid.Move()
+        self.game_info.DrawGameInfo(self.score,self.level,self.player_space_ship.GetLife)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 
 class App: # Le programme
     def __init__(self):
@@ -50,7 +53,7 @@ class App: # Le programme
 
     def Events(self, PlayerSpaceShip):
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT:   #Lorsque l'on clique sur la croix pour quitter
                 self.running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -62,7 +65,8 @@ class App: # Le programme
                     pass
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
-        self.game.GameDraw(self.window)
+        self.game.GameDraw(self.window) #Dit à la partie de dessiner ce qu'elle contient dans la fenêtre
+        pygame.display.update() #Met à jour l'affichage
 
 if __name__ == "__main__":  #Instancie le programme
     app = App()
