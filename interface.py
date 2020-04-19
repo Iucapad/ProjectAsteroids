@@ -62,7 +62,7 @@ class MainMenu:
         self.display=True        
 
         while self.display:
-            app.window.fill((45,45,90))
+            app.window.blit(app.background,(0,0)) 
             DrawText("Menu principal",menu_font,(255,255,255),app,app.window_size[0]/2,100)
             DrawText("Meilleur score: x",text_font,(255,255,255),app,app.window_size[0]/2,125)
             

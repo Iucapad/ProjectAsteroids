@@ -89,7 +89,7 @@ class App: # Le programme
         self.running = True        
         while self.running:
             self.Events()                   # Gestion des évènements/inputs/clics
-            self.window.blit(self.background,(0,0))                           # Vide l'affichage de la frame
+            self.window.fill((10,0,16))                          # Vide l'affichage de la frame
             self.FrameDraw()                                    # Appelle la fonction qui dessine les objets du jeu
             clock.tick(60)                            # Met à jour l'affichage
         pygame.quit()
