@@ -10,7 +10,7 @@ def test_var_PlayerSpaceShip():
     assert type(my_PlayerSpaceShip.x) is int or float
     assert type(my_PlayerSpaceShip.y) is int or float
     assert type(my_PlayerSpaceShip.angle_inertie) is int or float
-    assert type(my_PlayerSpaceShip.speed) is int or float
+    assert type(my_PlayerSpaceShip.vitesse) is int or float
     assert type(my_PlayerSpaceShip.acceleration) is int or float
     assert type(my_PlayerSpaceShip.size) is int or float
     assert type(my_PlayerSpaceShip.life) is int or float
@@ -24,7 +24,7 @@ def test_var_Asteroids():
     """Test des variables de la class Asteroids : """
     my_Asteroids = objects.Asteroid(sprite=pygame.Surface([10, 10]), window_size=[10,20], asteroid_type=1, x=None, y=None)
     assert type(my_Asteroids.type) is int
-    assert type(my_Asteroids.speed) is int
+    assert type(my_Asteroids.vitesse) is int
     assert type(my_Asteroids.size) is int or float
     assert type(my_Asteroids.angle) is int
     """Test que le randint donne bien un nombre random entre 0 et window_size quand X=None et y=None"""
@@ -32,7 +32,7 @@ def test_var_Asteroids():
     assert my_Asteroids.y in range(21)
     my_Asteroids2 = objects.Asteroid(sprite=pygame.Surface([10, 10]), window_size=[100,200], asteroid_type=1, x=10, y=20)
     assert type(my_Asteroids2.type) is int
-    assert type(my_Asteroids2.speed) is int
+    assert type(my_Asteroids2.vitesse) is int
     assert type(my_Asteroids2.size) is int or float
     assert type(my_Asteroids2.angle) is int
     """Test que x=x et y=y quand x!=None ety!=None """

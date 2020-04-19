@@ -1,11 +1,7 @@
 import pygame
 import os.path
-from threading import Thread
+import objects, interface   #Import des modules contenant les classes que l'on va instancier
 pygame.init()
-
-#Import des modules contenant les classes que l'on va instancier
-import objects, interface
-
 
 class Game: # La partie 
     def __init__(self, app):

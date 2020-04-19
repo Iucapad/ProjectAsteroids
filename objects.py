@@ -3,55 +3,55 @@ import random
 import math
 
 class PlayerSpaceShip:
-
     def __init__(self, sprite, x, y):   # Constructeur
         self.sprite = sprite            # L'image du vaisseau 
         self.x = x                      # Place le joueur à la position indiquée
         self.y = y
-        self.angle_orientation = 0
-        self.angle_inertie = 0 
-        self.speed = 1
-        self.max_speed = 6
-        self.hspeed = 3
-        self.vspeed = 3
-        self.fd_fric = 5  				#inertie
-        self.bd_fric = 5				#inertie
-        self.size = 50              
-        self.life = 3    
-        self.shoot_rate = 1             # A test   
-        self.type = 0        
-        self.thrust = False       
-
-
+        self.angle_orientation = 0      # angle de vue
+        self.angle_inertie = 0          # angle de déplacement
+        self.thrust = False             # true = le vaisseau accélère
+        self.vitesse = 1                # Vitesse actuelle
+        self.max_vitesse = 6            # Vitesse max
+        self.vitesse_horizontale = 3
+        self.vitesse_verticale = 3
+        self.acceleration = 0.5 		# Inertie
+        self.deceleration = 0.1			# Inertie
+        self.size = 50                      
+        self.life = 3                   # Nombre de vie
+        self.shoot_rate = 1             # Cadence de tir  
+        self.type = 0                   
+              
     def Move(self):
-        self.speed = math.sqrt(self.hspeed**2 + self.vspeed**2)
-        if self.thrust:
-            if self.speed + self.fd_fric < self.max_speed:
-                self.hspeed += self.fd_fric * math.cos(self.angle_orientation * math.pi / 180)
-                self.vspeed += self.fd_fric * math.sin(self.angle_orientation * math.pi / 180)
-            else:
-                self.hspeed = self.max_speed * math.cos(self.angle_orientation * math.pi / 180)
-                self.vspeed = self.max_speed * math.sin(self.angle_orientation * math.pi / 180)
-        else:
-            if self.speed - self.bd_fric > 0:
-                change_in_hspeed = (self.bd_fric * math.cos(self.vspeed / self.hspeed))
-                change_in_vspeed = (self.bd_fric * math.sin(self.vspeed / self.hspeed))
-                if self.hspeed != 0:
-                    if change_in_hspeed / abs(change_in_hspeed) == self.hspeed / abs(self.hspeed):
-                        self.hspeed -= change_in_hspeed
-                    else:
-                        self.hspeed += change_in_hspeed
-                if self.vspeed != 0:
-                    if change_in_vspeed / abs(change_in_vspeed) == self.vspeed / abs(self.vspeed):
-                        self.vspeed -= change_in_vspeed
-                    else:
-                        self.vspeed += change_in_vspeed
-            else:
-                self.hspeed = 0
-                self.vspeed = 0
+        self.vitesse = math.sqrt(self.vitesse_horizontale**2 + self.vitesse_verticale**2)     # Calcul de la vitesse actuelle
+        
+        if self.thrust: # Si l'utilisateur appuie appuie sur ↑
+            if self.vitesse + self.acceleration < self.max_vitesse:  # Si la vitesse actuelle est inférieure à la vitesse maximale
+                self.vitesse_horizontale += self.acceleration * math.cos(self.angle_orientation * math.pi / 180)  
+                self.vitesse_verticale += self.acceleration * math.sin(self.angle_orientation * math.pi / 180)
+            else:   # Si la vitesse actuelle est égale à la vitesse max
+                self.vitesse_horizontale = self.max_vitesse * math.cos(self.angle_orientation * math.pi / 180) 
+                self.vitesse_verticale = self.max_vitesse * math.sin(self.angle_orientation * math.pi / 180)
 
-        self.x += self.hspeed
-        self.y -= self.vspeed
+        else:   # Si l'utilisateur n'appuie pas sur ↑
+            if self.vitesse - self.deceleration > 0:   # Si le vaisseau est toujours en mouvement 
+                change_in_vitesse_horizontale = (self.deceleration * math.cos(self.vitesse_verticale / self.vitesse_horizontale))
+                change_in_vitesse_verticale = (self.deceleration * math.sin(self.vitesse_verticale / self.vitesse_horizontale))
+                if self.vitesse_horizontale != 0:
+                    if change_in_vitesse_horizontale / abs(change_in_vitesse_horizontale) == self.vitesse_horizontale / abs(self.vitesse_horizontale):
+                        self.vitesse_horizontale -= change_in_vitesse_horizontale
+                    else:
+                        self.vitesse_horizontale += change_in_vitesse_horizontale
+                if self.vitesse_verticale != 0:
+                    if change_in_vitesse_verticale / abs(change_in_vitesse_verticale) == self.vitesse_verticale / abs(self.vitesse_verticale):
+                        self.vitesse_verticale -= change_in_vitesse_verticale
+                    else:
+                        self.vitesse_verticale += change_in_vitesse_verticale
+            else: # Si le vaisseau a perdu toute sa vitesse
+                self.vitesse_horizontale = 0
+                self.vitesse_verticale = 0
+
+        self.x += self.vitesse_horizontale
+        self.y -= self.vitesse_verticale
   
 
     def Shoot(self): # Méthode pour le tir
@@ -79,12 +79,12 @@ class EnnemySpaceShip:
         self.x = x
         self.y = y
         self.angle = 90
-        self.max_speed = 15
+        self.max_vitesse = 15
         self.acceleration = 0 
         self.size = 50
         self.life = 2
-        self.fd_fric = 0.5
-        self.bd_fric = 0.1
+        self.acceleration = 0.5
+        self.deceleration = 0.1
         self.shoot_rate = 1   
         self.type = space_ship_type
 
@@ -111,7 +111,7 @@ class Asteroid:
     def __init__(self, sprite, window_size, asteroid_type, x=None, y=None): #Constructeur de l'objet
         self.sprite = sprite
         self.type = asteroid_type
-        self.speed=random.randint(7, 10)
+        self.vitesse=random.randint(7, 10)
         self.size = 0
         self.angle=0 
         if (x is None): #Si on ne passe pas de paramètre, créé aléatoirement sur l'écran
@@ -123,8 +123,8 @@ class Asteroid:
         self.Appearance(self.sprite)
 
     def Move(self): #Méthode pour le déplacement des astéroïdes
-        self.x = self.x + (math.cos(self.angle)*self.speed)/15
-        self.y = self.y + (math.sin(self.angle)*self.speed)/15
+        self.x = self.x + (math.cos(self.angle)*self.vitesse)/15
+        self.y = self.y + (math.sin(self.angle)*self.vitesse)/15
 
     def Appearance(self, sprite):    #Dimensionne l'asteroide selon son type et initialise un angle de déplacement
         if (self.type == 1):    #Type Grand
@@ -151,5 +151,5 @@ class LaserShot:
         self.x = x 
         self.y = y 
         self.angle = 90
-        self.speed = 1
+        self.vitesse = 1
         self.type = laser_shot_type # Todo
