@@ -30,6 +30,10 @@ class PlayerSpaceShip:
         else :
             Teleport()
 
+    @property
+    def GetLife(self):
+        return self.life
+
     def Draw(self,window): # Méthode d'affichage
         window.blit(self.sprite,(self.x-self.size/2,self.y-self.size/2))
 
@@ -71,6 +75,7 @@ class Asteroid:
     def __init__(self, sprite, window_size, asteroid_type, x=None, y=None): #Constructeur de l'objet
         self.sprite = sprite
         self.type = asteroid_type
+        self.speed=random.randint(7, 10)
         self.size = 0
         self.angle=0 
         if (x is None): #Si on ne passe pas de paramètre, créé aléatoirement sur l'écran
@@ -82,8 +87,8 @@ class Asteroid:
         self.Appearance(self.sprite)
 
     def Move(self): #Méthode pour le déplacement des astéroïdes
-        self.x = self.x + math.cos(self.angle)
-        self.y = self.y + math.sin(self.angle)
+        self.x = self.x + (math.cos(self.angle)*self.speed)/30
+        self.y = self.y + (math.sin(self.angle)*self.speed)/30
 
     def Appearance(self, sprite):    #Dimensionne l'asteroide selon son type et initialise un angle de déplacement
         if (self.type == 1):    #Type Grand

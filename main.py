@@ -4,7 +4,7 @@ from threading import Thread
 pygame.init()
 
 #Import des modules contenant les classes que l'on va instancier
-import objects
+import objects, interface
 
 class Game: # La partie 
     def __init__(self, sprites_list, window_size):
@@ -13,6 +13,7 @@ class Game: # La partie
         self.score = 0
         self.level = 1
         self.StartLevel(self.level)
+        self.game_info=interface.GameInfo()
 
     def StartLevel(self, level): #On instancie les objets au début de niveau        
         self.player_space_ship = objects.PlayerSpaceShip(self.sprites_list["Player"],self.window_size[0]/2,self.window_size[1]/2)
@@ -25,22 +26,24 @@ class Game: # La partie
         for asteroid in self.asteroids:
             asteroid.Draw(win)
             asteroid.Move()
+        self.game_info.DrawGameInfo(self.score,self.level,self.player_space_ship.GetLife)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 
 class App: # Le programme
     def __init__(self):
         self.folder = os.path.dirname(__file__) #Va chercher le répertoire dans lequel est le Main
         self.window_size=[1280,720] #Tableau qui contient la résolution de la fenêtre
-        self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]))    #Création de la fenêtre
+        pygame.display.set_caption("Asteroids")
+        self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]), pygame.DOUBLEBUF)    #Création de la fenêtre
         self.GetAssets()
         self.game = Game(self.sprite_list,self.window_size)    #Sera instancié quand on clique sur NEW GAME
+        clock = pygame.time.Clock()
 
         self.running = True        
         while self.running:  #Boucle qui exécute et affiche le jeu + vérifie les inputs
-            pygame.time.delay(100)
             self.Events()   #Gestion des évènements/inputs/clics
             self.window.fill((0,0,0)) #Vide l'affichage de la frame
             self.FrameDraw() #Appelle la fonction qui dessine les objets du jeu
-            pygame.display.update() #Met à jour l'affichage
+            clock.tick(60)
         pygame.quit()
 
     def GetAssets(self):   #Va chercher les assets dans les fichiers du jeu
@@ -64,6 +67,7 @@ class App: # Le programme
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
         self.game.GameDraw(self.window) #Dit à la partie de dessiner ce qu'elle contient dans la fenêtre
+        pygame.display.update() #Met à jour l'affichage
 
 if __name__ == "__main__":  #Instancie le programme
     app = App()
