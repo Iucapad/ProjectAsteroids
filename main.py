@@ -68,14 +68,14 @@ class App: # Le programme
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
         self.GetSprites()
         self.game = Game(self.sprite_list,self.window_size)     # Sera instancié quand on clique sur NEW GAME
+        clock = pygame.time.Clock()
 
         self.running = True        
-        while self.running:                                     # Boucle qui exécute et affiche le jeu + vérifie les inputs
-            pygame.time.delay(100)
+        while self.running:
             self.Events()                   # Gestion des évènements/inputs/clics
             self.window.fill((0,0,0))                           # Vide l'affichage de la frame
             self.FrameDraw()                                    # Appelle la fonction qui dessine les objets du jeu
-            pygame.display.update()                             # Met à jour l'affichage
+            clock.tick(60)                            # Met à jour l'affichage
         pygame.quit()
 
     def GetSprites(self):                                       # Va chercher les assets dans les fichiers du jeu
