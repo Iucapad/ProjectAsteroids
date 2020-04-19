@@ -85,9 +85,9 @@ class App: # Le programme
             #    if event.button == 1:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    player_space_ship.angle_orientation -= 1
-                elif event.key == pygame.K_RIGHT:
                     player_space_ship.angle_orientation += 1
+                elif event.key == pygame.K_RIGHT:
+                    player_space_ship.angle_orientation -= 1
                 elif event.key == pygame.K_UP:
                     player_space_ship.angle_inertie = player_space_ship.angle_orientation
 

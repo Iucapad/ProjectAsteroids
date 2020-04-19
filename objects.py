@@ -38,8 +38,8 @@ class PlayerSpaceShip:
         return self.life
 
     def Draw(self,window): # Méthode d'affichage
-        # pygame.transform.rotate() 
-        window.blit(self.sprite,(self.x-self.size/2,self.y-self.size/2))
+        surface = pygame.transform.rotate(self.sprite,self.angle_orientation)     
+        window.blit(surface,(self.x-self.size/2,self.y-self.size/2))
 
 class EnnemySpaceShip:
 
