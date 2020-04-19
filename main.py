@@ -80,14 +80,15 @@ class App: # Le programme
         for event in pygame.event.get():
             if event.type == pygame.QUIT:   #Lorsque l'on clique sur la croix pour quitter
                 self.running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    print('Clic gauche')
+           # elif event.type == pygame.MOUSEBUTTONDOWN:
+            #    if event.button == 1:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    PlayerSpaceShip.angle += 10
-                    PlayerSpaceShip.Key(event.key)
-                    pass
+                    print(PlayerSpaceShip.angle)
+                    PlayerSpaceShip.angle -= 1
+                elif event.key == pygame.K_RIGHT:
+                    PlayerSpaceShip.angle += 1
+                    print(PlayerSpaceShip.angle)
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
         self.game.UpdateLoop(self.window,self.window_size) #Evènements de la partie à exécuter
