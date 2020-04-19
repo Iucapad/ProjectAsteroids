@@ -15,14 +15,21 @@ class Game: # La partie
         self.StartLevel(self.level)
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
-
-    def StartLevel(self, level): # On instancie les objets au début de niveau        
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list["Player"], self.app.window_size[0]/2, self.app.window_size[1]/2)
+
+    def StartLevel(self, level): # On instancie les objets au début de niveau
         self.asteroids = [] #Création d'un tableau qui contient tous les astéroides
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         for i in range(2*level):
             self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid"], self.app.window_size,1))
         self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"],1,200,300))
+
+    def CompleteLevel(self):
+        self.player_space_ship.x=self.app.window_size[0]/2
+        self.player_space_ship.y=self.app.window_size[1]/2
+        self.score += 100
+        self.level += 1
+        self.StartLevel(self.level)
 
     def UpdateLoop(self,window,window_size):
         self.GameEvents(window_size)#Gestion des évènements de la partie
@@ -32,20 +39,23 @@ class Game: # La partie
         self.BorderWrapping(self.player_space_ship,window_size)
         for asteroid in self.asteroids:
             self.BorderWrapping(asteroid,window_size)
+        for ennemyspaceship in self.ennemyspaceships:
+            self.BorderWrapping(ennemyspaceship,window_size)
 
         if self.key_pressed.get(pygame.K_LEFT):
             self.player_space_ship.angle_orientation += 5
 
-
         if self.key_pressed.get(pygame.K_RIGHT):
             self.player_space_ship.angle_orientation -= 5
-
 
         if self.key_pressed.get(pygame.K_UP):
             self.player_space_ship.thrust = True
             self.player_space_ship.angle_inertie = self.player_space_ship.angle_orientation
         else:
             self.player_space_ship.thrust = False
+
+        if self.key_pressed.get(pygame.K_SPACE):
+            pass    #TIR
 
     def BorderWrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
         if (obj.x > window_size[0]):
@@ -69,14 +79,14 @@ class Game: # La partie
 
 class App: # Le programme
     def __init__(self):
-        self.state="game"
+        self.state="menu"
         self.folder = os.path.dirname(__file__)
         self.window_size = [1280,720]
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
         self.LoadSprites()
-        #self.menu=interface.MainMenu(self)
-        self.StartGame()
+        self.menu=interface.MainMenu(self)
+        #self.StartGame()
         clock = pygame.time.Clock()
 
         self.running = True        
