@@ -11,11 +11,11 @@ class PlayerSpaceShip:
         self.angle_orientation = 0
         self.angle_inertie = 0 
         self.speed = 1
-        self.max_speed = 6
-        self.hspeed = 3
-        self.vspeed = 3
-        self.fd_fric = 5  				#inertie
-        self.bd_fric = 5				#inertie
+        self.max_speed = 7
+        self.hspeed = 0
+        self.vspeed = 0
+        self.fd_fric = 0.5			    #inertie
+        self.bd_fric = 0.1				#inertie
         self.size = 50              
         self.life = 3    
         self.shoot_rate = 1             # A test   
