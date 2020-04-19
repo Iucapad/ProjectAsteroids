@@ -14,13 +14,13 @@ class Game: # La partie
         self.level = 1
         self.StartLevel(self.level)
 
-    def StartLevel(self, level): #On instancie les objets au début de niveau        
-        self.PlayerSpaceShip = objects.PlayerSpaceShip(self.sprites_list["Player"],self.window_size[0]/2,self.window_size[1]/2)
+    def StartLevel(self, level): # On instancie les objets au début de niveau        
+        self.PlayerSpaceShip = objects.PlayerSpaceShip(self.sprites_list["Player"], self.window_size[0]/2, self.window_size[1]/2)
         self.asteroids = []
         for i in range(2*level):
-            self.asteroids.append(objects.Asteroid(self.sprites_list["Asteroid"],self.window_size,1))
+            self.asteroids.append(objects.Asteroid(self.sprites_list["Asteroid"], self.window_size,1))
 
-    def GameDraw(self,win):    #Cette fonction va dessiner chaque élément du niveau
+    def GameDraw(self, win):    # Cette fonction va dessiner chaque élément du niveau
         self.PlayerSpaceShip.Draw(win)
         for asteroid in self.asteroids:
             asteroid.Draw(win)
@@ -28,27 +28,27 @@ class Game: # La partie
 class App: # Le programme
     def __init__(self):
         self.folder = os.path.dirname(__file__)
-        self.window_size=[1280,720]
+        self.window_size = [1280,720]
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]))        
         self.GetSprites()
-        self.game = Game(self.sprite_list,self.window_size)    #Sera instancié quand on clique sur NEW GAME
+        self.game = Game(self.sprite_list,self.window_size)     # Sera instancié quand on clique sur NEW GAME
 
         self.running = True        
-        while self.running:  #Boucle qui exécute et affiche le jeu + vérifie les inputs
+        while self.running:                                     # Boucle qui exécute et affiche le jeu + vérifie les inputs
             pygame.time.delay(100)
-            self.Events()   #Gestion des évènements/inputs/clics
-            self.window.fill((0,0,0)) #Vide l'affichage de la frame
-            self.FrameDraw() #Appelle la fonction qui dessine les objets du jeu
-            pygame.display.update() #Met à jour l'affichage
+            self.Events(game.PlayerSpaceShip)                   # Gestion des évènements/inputs/clics
+            self.window.fill((0,0,0))                           # Vide l'affichage de la frame
+            self.FrameDraw()                                    # Appelle la fonction qui dessine les objets du jeu
+            pygame.display.update()                             # Met à jour l'affichage
         pygame.quit()
 
-    def GetSprites(self):   #Va chercher les assets dans les fichiers du jeu
+    def GetSprites(self):                                       # Va chercher les assets dans les fichiers du jeu
         self.sprite_list = {
             "Player": pygame.image.load(os.path.join(self.folder, 'Assets/player.png')),
             "Asteroid": pygame.image.load(os.path.join(self.folder, 'Assets/rock.png'))
         }
 
-    def Events(self):
+    def Events(self, PlayerSpaceShip):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -56,14 +56,10 @@ class App: # Le programme
                 if event.button == 1:
                     print('Clic gauche')
             elif event.type == pygame.KEYDOWN:
-<<<<<<< HEAD
-                if event.key == K_LEFT:
-                   # PlayerSpaceShip.angle += 10
-                #player.Key(event.key)
-                pass
-=======
-                print('appui sur une touche')
->>>>>>> de9053405b7acc9cd2b97ad8cb9ae6176e35f15a
+                if event.key == pygame.K_LEFT:
+                    PlayerSpaceShip.angle += 10
+                    PlayerSpaceShip.Key(event.key)
+                    pass
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
         self.game.GameDraw(self.window)
