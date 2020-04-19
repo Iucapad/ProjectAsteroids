@@ -56,7 +56,8 @@ class App: # Le programme
     def __init__(self):
         self.folder = os.path.dirname(__file__)
         self.window_size = [1280,720]
-        self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]))        
+        pygame.display.set_caption("Asteroids")
+        self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
         self.GetSprites()
         self.game = Game(self.sprite_list,self.window_size)     # Sera instancié quand on clique sur NEW GAME
 
@@ -76,7 +77,7 @@ class App: # Le programme
             "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png'))
         }
 
-    def Events(self, PlayerSpaceShip):
+    def Events(self, player_space_ship):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:   #Lorsque l'on clique sur la croix pour quitter
                 self.running = False
@@ -84,11 +85,11 @@ class App: # Le programme
             #    if event.button == 1:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    PlayerSpaceShip.angle_orientation -= 1
+                    player_space_ship.angle_orientation -= 1
                 elif event.key == pygame.K_RIGHT:
-                    PlayerSpaceShip.angle_orientation += 1
+                    player_space_ship.angle_orientation += 1
                 elif event.key == pygame.K_UP:
-                    PlayerSpaceShip.angle_inertie = PlayerSpaceShip.angle_orientation
+                    player_space_ship.angle_inertie = player_space_ship.angle_orientation
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
         self.game.UpdateLoop(self.window,self.window_size) #Evènements de la partie à exécuter
