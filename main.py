@@ -6,12 +6,11 @@ pygame.init()
 #Import des modules contenant les classes que l'on va instancier
 import objects, interface
 
-global app
 
 class Game: # La partie 
-    def __init__(self, sprites_list, window_size):
-        self.window_size = window_size
-        self.sprites_list = sprites_list
+    def __init__(self, app):
+        self.window_size = app.window_size
+        self.sprites_list = app.sprites_list
         self.score = 0
         self.level = 1
         self.StartLevel(self.level)
@@ -72,9 +71,8 @@ class App: # Le programme
         self.window_size = [1280,720]
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
-        self.GetSprites()
-        self.menu=interface.MainMenu(self.window)
-        #self.game = Game(self.sprite_list,self.window_size)     # Sera instancié quand on clique sur NEW GAME
+        self.LoadSprites()
+        self.menu=interface.MainMenu(self)
         clock = pygame.time.Clock()
 
         self.running = True        
@@ -86,11 +84,11 @@ class App: # Le programme
         pygame.quit()
 
     def StartGame(self):
-        self.game = Game(self.sprite_list,self.window_size)
+        self.game = Game(self)
         self.state="game"
 
-    def GetSprites(self):                                       # Va chercher les assets dans les fichiers du jeu
-        self.sprite_list = {
+    def LoadSprites(self):                                       # Va chercher les assets dans les fichiers du jeu
+        self.sprites_list = {
             "Player": pygame.image.load(os.path.join(self.folder, 'Assets/player.png')),
             "Asteroid": pygame.image.load(os.path.join(self.folder, 'Assets/rock.png')),
             "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png'))

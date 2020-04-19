@@ -12,18 +12,19 @@ class GameInfo:
 
 class MainMenu:
     
-    def __init__(self,window):
-        self.window=window
+    def __init__(self,app):
         self.value=0
         clock = pygame.time.Clock()
+        self.display=True
 
-        while True:
-            self.window.fill((45,45,90))
+        while self.display:
+            app.window.fill((45,45,90))
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                 if event.type == pygame.KEYDOWN:
-                    main.App.StartGame()
+                    self.display=False
+                    app.StartGame()
             pygame.display.update()
             clock.tick(30)
