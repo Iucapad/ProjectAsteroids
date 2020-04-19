@@ -14,6 +14,7 @@ class Game: # La partie
         self.level = 1
         self.StartLevel(self.level)
         self.game_info = interface.GameInfo()
+        self.key_pressed = {}
 
     def StartLevel(self, level): # On instancie les objets au début de niveau        
         self.player_space_ship = objects.PlayerSpaceShip(self.sprites_list["Player"], self.window_size[0]/2, self.window_size[1]/2)
@@ -31,6 +32,13 @@ class Game: # La partie
         self.BorderWrapping(self.player_space_ship,window_size)
         for asteroid in self.asteroids:
             self.BorderWrapping(asteroid,window_size)
+
+        if self.key_pressed.get(pygame.K_LEFT):
+            self.player_space_ship.angle_orientation += 1
+        elif self.key_pressed.get(pygame.K_RIGHT):
+            self.player_space_ship.angle_orientation -= 1
+        elif self.key_pressed.get(pygame.K_UP):
+            self.player_space_ship.angle_inertie = self.player_space_ship.angle_orientation
 
     def BorderWrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
         if (obj.x > window_size[0]):
@@ -64,7 +72,7 @@ class App: # Le programme
         self.running = True        
         while self.running:                                     # Boucle qui exécute et affiche le jeu + vérifie les inputs
             pygame.time.delay(100)
-            self.Events(self.game.player_space_ship)                   # Gestion des évènements/inputs/clics
+            self.Events()                   # Gestion des évènements/inputs/clics
             self.window.fill((0,0,0))                           # Vide l'affichage de la frame
             self.FrameDraw()                                    # Appelle la fonction qui dessine les objets du jeu
             pygame.display.update()                             # Met à jour l'affichage
@@ -77,19 +85,14 @@ class App: # Le programme
             "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png'))
         }
 
-    def Events(self, player_space_ship):
+    def Events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:   #Lorsque l'on clique sur la croix pour quitter
                 self.running = False
-           # elif event.type == pygame.MOUSEBUTTONDOWN:
-            #    if event.button == 1:
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    player_space_ship.angle_orientation += 1
-                elif event.key == pygame.K_RIGHT:
-                    player_space_ship.angle_orientation -= 1
-                elif event.key == pygame.K_UP:
-                    player_space_ship.angle_inertie = player_space_ship.angle_orientation
+                self.game.key_pressed[event.key] = True
+            elif event.type == pygame.KEYUP:
+                self.game.key_pressed[event.key] = False
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
         self.game.UpdateLoop(self.window,self.window_size) #Evènements de la partie à exécuter
