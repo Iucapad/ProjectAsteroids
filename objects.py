@@ -4,22 +4,21 @@ import math
 
 class PlayerSpaceShip:
 
-    def __init__(self, sprite, x, y):  # Constructeur
-        self.sprite = sprite        # L'image du vaisseau 
-        self.x = x                  # Place le joueur à la position indiquée
+    def __init__(self, sprite, x, y):   # Constructeur
+        self.sprite = sprite            # L'image du vaisseau 
+        self.x = x                      # Place le joueur à la position indiquée
         self.y = y
         self.angle_orientation = 0
         self.angle_inertie = 0 
-        self.speed = 2
-        self.max_speed = 15
-        self.hspeed = 5
-        self.vspeed = 5
-        self.fd_fric = 0.5
-        self.bd_fric = 0.1
-        self.acceleration = 5       # A test
+        self.speed = 1
+        self.max_speed = 6
+        self.hspeed = 3
+        self.vspeed = 3
+        self.fd_fric = 5
+        self.bd_fric = 5
         self.size = 50              
         self.life = 3    
-        self.shoot_rate = 1          # A test   
+        self.shoot_rate = 1             # A test   
         self.type = 0        
         self.thrust = False       
 
@@ -52,7 +51,7 @@ class PlayerSpaceShip:
                 self.vspeed = 0
 
         self.x += self.hspeed
-        self.y += self.vspeed
+        self.y -= self.vspeed
   
 
     def Shoot(self): # Méthode pour le tir
