@@ -20,6 +20,7 @@ class PlayerSpaceShip:
 
     def MoveInertie(self):
         # pygame.transform.rotate(self.sprite, self.angle)
+
         self.x = self.x + math.cos(self.angle_inertie)   # A test
         self.y = self.y + math.sin(self.angle_inertie)
 
@@ -48,7 +49,7 @@ class EnnemySpaceShip:
         self.x = x
         self.y = y
         self.angle = 90
-        self.speed = 1000000000000000
+        self.speed = 10
         self.acceleration = 0 
         self.size = 50
         self.life = 2
