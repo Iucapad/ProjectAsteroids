@@ -8,7 +8,8 @@ class PlayerSpaceShip:
         self.sprite = sprite        # L'image du vaisseau 
         self.x = x                  # Place le joueur à la position indiquée
         self.y = y
-        self.angle = 90
+        self.angle_orientation = 0
+        self.angle_inertie = 0 
         self.speed = 1              # A test
         self.acceleration = 0       # A test
         self.size = 50              
@@ -16,10 +17,11 @@ class PlayerSpaceShip:
         self.shoot_rate = 1          # A test   
         self.type = 0               
 
-    def Move(self):
+
+    def MoveInertie(self):
         # pygame.transform.rotate(self.sprite, self.angle)
-        self.x = self.x + math.cos(self.angle)   # A test
-        self.y = self.y + math.sin(self.angle)
+        self.x = self.x + math.cos(self.angle_inertie)   # A test
+        self.y = self.y + math.sin(self.angle_inertie)
 
     def Shoot(self): # Méthode pour le tir
         pass    # Todo
@@ -36,6 +38,7 @@ class PlayerSpaceShip:
         return self.life
 
     def Draw(self,window): # Méthode d'affichage
+        # pygame.transform.rotate() 
         window.blit(self.sprite,(self.x-self.size/2,self.y-self.size/2))
 
 class EnnemySpaceShip:
@@ -87,8 +90,8 @@ class Asteroid:
         self.Appearance(self.sprite)
 
     def Move(self): #Méthode pour le déplacement des astéroïdes
-        self.x = self.x + (math.cos(self.angle)*self.speed)/30
-        self.y = self.y + (math.sin(self.angle)*self.speed)/30
+        self.x = self.x + (math.cos(self.angle)*self.speed)/15
+        self.y = self.y + (math.sin(self.angle)*self.speed)/15
 
     def Appearance(self, sprite):    #Dimensionne l'asteroide selon son type et initialise un angle de déplacement
         if (self.type == 1):    #Type Grand

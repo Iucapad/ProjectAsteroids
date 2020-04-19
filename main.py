@@ -44,7 +44,7 @@ class Game: # La partie
 
     def GameDraw(self, win):    # Cette fonction va dessiner chaque élément du niveau
         self.player_space_ship.Draw(win)
-        self.player_space_ship.Move()
+        self.player_space_ship.MoveInertie()
         for asteroid in self.asteroids:
             asteroid.Draw(win)
             asteroid.Move()
@@ -84,11 +84,11 @@ class App: # Le programme
             #    if event.button == 1:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    print(PlayerSpaceShip.angle)
-                    PlayerSpaceShip.angle -= 1
+                    PlayerSpaceShip.angle_orientation -= 1
                 elif event.key == pygame.K_RIGHT:
-                    PlayerSpaceShip.angle += 1
-                    print(PlayerSpaceShip.angle)
+                    PlayerSpaceShip.angle_orientation += 1
+                elif event.key == pygame.K_UP:
+                    PlayerSpaceShip.angle_inertie = PlayerSpaceShip.angle_orientation
 
     def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
         self.game.UpdateLoop(self.window,self.window_size) #Evènements de la partie à exécuter
