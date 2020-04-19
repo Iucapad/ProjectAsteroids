@@ -17,8 +17,9 @@ class PlayerSpaceShip:
         self.type = 0               
 
     def Move(self):
-        self.x = x + math.cos(self.angle)   # A test
-        self.y = y + math.sin(self.angle)
+        # pygame.transform.rotate(self.sprite, self.angle)
+        self.x = self.x + math.cos(self.angle)   # A test
+        self.y = self.y + math.sin(self.angle)
 
     def Shoot(self): # Méthode pour le tir
         pass    # Todo
@@ -37,7 +38,6 @@ class PlayerSpaceShip:
     def Draw(self,window): # Méthode d'affichage
         window.blit(self.sprite,(self.x-self.size/2,self.y-self.size/2))
 
-
 class EnnemySpaceShip:
 
     def __init__(self, sprite, space_ship_type, x, y): # Constructeur
@@ -45,7 +45,7 @@ class EnnemySpaceShip:
         self.x = x
         self.y = y
         self.angle = 90
-        self.speed = 1
+        self.speed = 1000000000000000
         self.acceleration = 0 
         self.size = 50
         self.life = 2
@@ -53,8 +53,8 @@ class EnnemySpaceShip:
         self.type = space_ship_type
 
     def Move(self):
-        self.x = x + math.cos(self.angle)   # A test
-        self.y = y + math.sin(self.angle)
+        self.x = self.x + math.cos(self.angle)               # A test
+        self.y = self.y + math.sin(self.angle)    
 
     def Shoot(self): # Méthode pour le tir
         pass
