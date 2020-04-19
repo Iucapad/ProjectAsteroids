@@ -1,4 +1,5 @@
 import objects
+import main
 
 def test_cons_PlayerSpaceShip():
     """ Test des constantes de la class PlayerSpaceShip : """
@@ -16,3 +17,5 @@ def test_cons_PlayerSpaceShip():
     assert my_PlayerSpaceShip.sprite == 2
     assert my_PlayerSpaceShip.x == 10
     assert my_PlayerSpaceShip.y == 4
+
+def test_cons
