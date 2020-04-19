@@ -82,7 +82,7 @@ class App: # Le programme
         self.running = True        
         while self.running:
             self.Events()                   # Gestion des évènements/inputs/clics
-            self.window.fill((0,0,0))                           # Vide l'affichage de la frame
+            self.window.blit(self.background,(0,0))                           # Vide l'affichage de la frame
             self.FrameDraw()                                    # Appelle la fonction qui dessine les objets du jeu
             clock.tick(60)                            # Met à jour l'affichage
         pygame.quit()
@@ -97,6 +97,8 @@ class App: # Le programme
             "Asteroid": pygame.image.load(os.path.join(self.folder, 'Assets/rock.png')),
             "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png'))
         }
+        background=pygame.image.load(os.path.join(self.folder, 'Assets/background.png'))
+        self.background=pygame.transform.scale(background, (self.window_size[0], self.window_size[1]))
 
     def Events(self):
         for event in pygame.event.get():
