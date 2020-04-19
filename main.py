@@ -34,9 +34,9 @@ class Game: # La partie
             self.BorderWrapping(asteroid,window_size)
 
         if self.key_pressed.get(pygame.K_LEFT):
-            self.player_space_ship.angle_orientation += 1
+            self.player_space_ship.angle_orientation += 10
         elif self.key_pressed.get(pygame.K_RIGHT):
-            self.player_space_ship.angle_orientation -= 1
+            self.player_space_ship.angle_orientation -= 10
         elif self.key_pressed.get(pygame.K_UP):
             self.player_space_ship.angle_inertie = self.player_space_ship.angle_orientation
 
