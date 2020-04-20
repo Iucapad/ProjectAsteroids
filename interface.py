@@ -97,9 +97,6 @@ class MainMenu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                elif event.type == pygame.KEYDOWN:
-                    self.display=False
-                    app.StartGame()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         self.click=True

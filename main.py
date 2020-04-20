@@ -9,7 +9,7 @@ class Game: # La partie
     def __init__(self, app):
         self.app=app
         self.score = 0
-        self.level = 1
+        self.level = 2
         self.StartLevel(self.level)
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
@@ -21,7 +21,8 @@ class Game: # La partie
         for i in range(level+1):
             alt_spr=random.randint(1,3)
             self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid"+str(alt_spr)], self.app.window_size,1))
-        self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"],1,200,300))
+        if (self.level>1):
+            self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"],1,200,300))
 
     def CompleteLevel(self):
         self.player_space_ship.x=self.app.window_size[0]/2
@@ -32,14 +33,15 @@ class Game: # La partie
 
     def UpdateLoop(self,window,window_size):
         self.GameEvents(window_size)#Gestion des évènements de la partie
+        self.GameCollisions()#Gestion des collisions des objets
         self.GameDraw(window) #Dessiner ce qu'elle contient dans la fenêtre
 
     def GameEvents(self,window_size):   #Gère les évènements de la partie en continu
-        self.BorderWrapping(self.player_space_ship,window_size)
+        self.BorderWrapping(self.player_space_ship.rect,window_size)
         for asteroid in self.asteroids:
-            self.BorderWrapping(asteroid,window_size)
+            self.BorderWrapping(asteroid.rect,window_size)
         for ennemyspaceship in self.ennemyspaceships:
-            self.BorderWrapping(ennemyspaceship,window_size)
+            self.BorderWrapping(ennemyspaceship.rect,window_size)
 
         if self.key_pressed.get(pygame.K_LEFT):
             self.player_space_ship.angle_orientation += 5
@@ -55,6 +57,12 @@ class Game: # La partie
 
         if self.key_pressed.get(pygame.K_SPACE):
             pass    #TIR
+
+    def GameCollisions(self):
+        for asteroid in self.asteroids:
+            if (self.player_space_ship.rect.collidepoint(asteroid.rect.x,asteroid.rect.y)):
+                print("echo")
+
 
     def BorderWrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
         if (obj.x > window_size[0]):
@@ -91,7 +99,7 @@ class App: # Le programme
         self.running = True        
         while self.running:
             self.Events()                   # Gestion des évènements/inputs/clics
-            self.window.fill((10,0,16))                          # Vide l'affichage de la frame
+            self.window.fill((0,0,0))                          # Vide l'affichage de la frame
             self.FrameDraw()                                    # Appelle la fonction qui dessine les objets du jeu
             clock.tick(60)                            # Met à jour l'affichage
         pygame.quit()

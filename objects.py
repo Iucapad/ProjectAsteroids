@@ -3,10 +3,11 @@ import random
 import math
 
 class PlayerSpaceShip:
-    def __init__(self, sprite, x, y):   # Constructeur
-        self.sprite = sprite            # L'image du vaisseau 
-        self.x = x                      # Place le joueur à la position indiquée
-        self.y = y
+    def __init__(self, sprite, x, y,size=50):   # Constructeur
+        self.sprite = sprite           # L'image du vaisseau 
+        self.rect = self.sprite.get_rect()
+        self.rect.x = x-size/2                    # Place le joueur à la position indiquée
+        self.rect.y = y-size/2    
         self.angle_orientation = 0      # angle de vue
         self.angle_inertie = 0          # angle de déplacement
         self.thrust = False             # true = le vaisseau accélère
@@ -15,8 +16,7 @@ class PlayerSpaceShip:
         self.vitesse_horizontale = 0
         self.vitesse_verticale = 0
         self.acceleration = 0.5 		# Inertie
-        self.deceleration = 0.1			# Inertie
-        self.size = 50                      
+        self.deceleration = 0.1			# Inertie                      
         self.life = 3                   # Nombre de vie
         self.shoot_rate = 1             # Cadence de tir  
         self.type = 0                   
@@ -50,8 +50,8 @@ class PlayerSpaceShip:
                 self.vitesse_horizontale = 0
                 self.vitesse_verticale = 0
 
-        self.x += self.vitesse_horizontale
-        self.y -= self.vitesse_verticale
+        self.rect.x += self.vitesse_horizontale
+        self.rect.y -= self.vitesse_verticale
   
 
     def Shoot(self): # Méthode pour le tir
@@ -70,14 +70,14 @@ class PlayerSpaceShip:
 
     def Draw(self,window): # Méthode d'affichage
         surface = pygame.transform.rotate(self.sprite,self.angle_orientation)     
-        window.blit(surface,(self.x-self.size/2,self.y-self.size/2))
-
+        window.blit(surface,self.rect)
 class EnnemySpaceShip:
 
     def __init__(self, sprite, space_ship_type, x, y): # Constructeur
         self.sprite = sprite
-        self.x = x
-        self.y = y
+        self.rect = self.sprite.get_rect()
+        self.rect.x = x
+        self.rect.y = y
         self.angle = 90
         self.max_vitesse = 15
         self.acceleration = 0 
@@ -103,31 +103,34 @@ class EnnemySpaceShip:
             Teleport()
 
     def Draw(self,window): # Méthode d'affichage
-        window.blit(self.sprite,(self.x-self.size/2,self.y-self.size/2))
+        window.blit(self.sprite,self.rect)
 
 
 class Asteroid:
 
     def __init__(self, sprite, window_size, asteroid_type, x=None, y=None): #Constructeur de l'objet
         self.sprite = sprite
+        self.rect = self.sprite.get_rect()
         self.type = asteroid_type
-        self.vitesse=random.randint(7, 10)
+        self.vitesse=random.randint(7,10)
         self.size = 0
         self.angle=random.randint(0, 360)
         self.angle_orientation=random.randint(0, 360)
         self.rotation=random.randint(1,2)
         if (x is None): #Si on ne passe pas de paramètre, créé aléatoirement sur l'écran
-            self.x=random.randint(0, window_size[0])
-            self.y=random.randint(0, window_size[1])
+            self.rect.x=random.randint(0, window_size[0])
+            self.rect.y=random.randint(0, window_size[1])
         else:   #Sinon on crée l'objet à la position demandée
             self.x = x
             self.y = y    
         self.Appearance(self.sprite)
+        self.valX=(math.cos(self.angle)*self.vitesse)/2
+        self.valY=(math.sin(self.angle)*self.vitesse)/2
 
     def Move(self): #Méthode pour le déplacement des astéroïdes
-        self.x = self.x + (math.cos(self.angle)*self.vitesse)/20
-        self.y = self.y + (math.sin(self.angle)*self.vitesse)/20
-        if self.rotation==1:
+        self.rect.x += self.valX
+        self.rect.y += self.valY        
+        if self.rotation==1:                #Orientation du sprite
             self.angle_orientation+=0.1
         if self.rotation==2:
             self.angle_orientation-=0.1
@@ -149,7 +152,7 @@ class Asteroid:
 
     def Draw(self,window):  #Dessine l'objet présent à sa position
         surface = pygame.transform.rotate(self.sprite,self.angle_orientation)
-        window.blit(surface,(self.x-self.size/2,self.y-self.size/2))
+        window.blit(surface,self.rect)
 
 class LaserShot:
     
