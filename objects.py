@@ -101,13 +101,6 @@ class EnnemySpaceShip:
     def shoot(self): # Méthode pour le tir
         pass
 
-    def teleport(self): # Méthode pour la téléportation
-        if (True) :
-            #TP()
-            pass
-        else :
-            teleport()
-
     def draw(self,window): # Méthode d'affichage
         window.blit(self.sprite,self.rect)
 
@@ -172,3 +165,5 @@ class BonusItem:
         self.sprite = sprite
         self.bonus_type = bonus_type
 
+class BlackHole:
+    pass
