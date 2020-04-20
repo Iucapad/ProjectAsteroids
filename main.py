@@ -93,7 +93,6 @@ class App: # Le programme
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
         self.LoadSprites()
         self.menu=interface.MainMenu(self)
-        #self.StartGame()
         clock = pygame.time.Clock()
 
         self.running = True        

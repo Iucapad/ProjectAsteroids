@@ -124,8 +124,8 @@ class Asteroid:
             self.x = x
             self.y = y    
         self.Appearance(self.sprite)
-        self.valX=(math.cos(self.angle)*self.vitesse)/2
-        self.valY=(math.sin(self.angle)*self.vitesse)/2
+        self.valX=(math.cos(self.angle)*self.vitesse)/5
+        self.valY=(math.sin(self.angle)*self.vitesse)/5
 
     def Move(self): #Méthode pour le déplacement des astéroïdes
         self.rect.x += self.valX
