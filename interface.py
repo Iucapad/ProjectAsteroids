@@ -40,10 +40,19 @@ class GameInfo:
 class PauseMenu:
     def __init__(self,app):
         clock = pygame.time.Clock()
-        self.display=True        
+        self.display=True
+        self.click=False
+        self.top=0
+        self.h_align=app.window_size[0]/2
+        self.v_align=app.window_size[1]/2        
 
         while self.display:
-            draw_text("Pause",menu_font,(255,255,255),app,app.window_size[0]/2,100)
+            if (self.top<720):
+                self.top+=36
+                pygame.draw.rect(app.window, (10,10,10),pygame.Rect(self.h_align-330,720-self.top,660,720)) 
+            else:
+                draw_text("PAUSE",text_font,(255,255,255),app,app.window_size[0]/2,100)
+                draw_text("Reprendre",button_font,(255,255,255),app,self.h_align,self.v_align)
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -56,7 +65,7 @@ class PauseMenu:
                     if event.button == 1:
                         pass
             pygame.display.update()
-            clock.tick(30)
+            clock.tick(120)
 
 class MainMenu:
     def __init__(self,app):
@@ -108,14 +117,28 @@ class Shop:
         clock = pygame.time.Clock()
         self.display=True        
         self.click=False
+        self.top=0
         self.h_align=game.app.window_size[0]/2
-        self.back_button=add_button(self.h_align,550,200,50)        
+        self.v_align=game.app.window_size[1]/2
+        self.back_button=add_button(self.h_align,550,200,50) 
+        self.background=pygame.Rect(self.h_align-320,self.v_align-85,640,170)
+        self.item1=pygame.Rect(self.h_align-310,self.v_align-75,200,150)
+        self.item2=pygame.Rect(self.h_align-100,self.v_align-75,200,150)
+        self.item3=pygame.Rect(self.h_align+110,self.v_align-75,200,150)
 
         while self.display:
-            game.app.window.blit(game.app.background,(0,0)) 
-            draw_text("Boutique",menu_font,(255,255,255),game.app,game.app.window_size[0]/2,100)
-            pygame.draw.rect(game.app.window, (10,0,16),self.back_button)
-            draw_text("Retour",button_font,(255,255,255),game.app,self.h_align,575)
+            if (self.top<720):
+                self.top+=36
+                pygame.draw.rect(game.app.window, (10,10,10),pygame.Rect(self.h_align-330,720-self.top,660,720)) 
+            else: 
+                pygame.draw.rect(game.app.window, (45,45,45),self.background) 
+                pygame.draw.rect(game.app.window, (10,10,10),self.item1) 
+                pygame.draw.rect(game.app.window, (10,10,10),self.item2)
+                pygame.draw.rect(game.app.window, (10,10,10),self.item3) 
+                draw_text("BOUTIQUE",text_font,(255,255,255),game.app,game.app.window_size[0]/2,100)
+                draw_text("Améliorations disponibles",text_font,(255,255,255),game.app,game.app.window_size[0]/2,self.v_align-110)
+                pygame.draw.rect(game.app.window, (10,0,16),self.back_button)
+                draw_text("Passer",button_font,(255,255,255),game.app,self.h_align,575)
 
             mouse_x,mouse_y=pygame.mouse.get_pos()
             if (self.back_button.collidepoint(mouse_x,mouse_y)):
@@ -126,14 +149,11 @@ class Shop:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.display=False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         self.click=True
             pygame.display.update()
-            clock.tick(30)
+            clock.tick(120)
 
 class GameIntro:
 
@@ -165,9 +185,6 @@ class Settings:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.display=False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         self.click=True

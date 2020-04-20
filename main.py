@@ -12,7 +12,7 @@ class Game: # La partie
     def __init__(self, app):
         self.app=app
         self.score = 0
-        self.level = 2
+        self.level = 1
         self.start_level(self.level)
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
@@ -32,20 +32,21 @@ class Game: # La partie
         self.player_space_ship.x=self.app.window_size[0]/2
         self.player_space_ship.y=self.app.window_size[1]/2
         self.score += 100
+        self.shop=interface.Shop(self)
         self.level += 1
         self.start_level(self.level)
 
     def update_loop(self,window,window_size):
-        self.game_events(window_size)#Gestion des évènements de la partie
-        self.game_collisions()#Gestion des collisions des objets
         self.game_draw(window) #Dessiner ce qu'elle contient dans la fenêtre
+        self.game_events(window_size)#Gestion des évènements de la partie
+        self.game_collisions()#Gestion des collisions des objets        
 
     def game_events(self,window_size):   #Gère les évènements de la partie en continu
-        self.border_wrapping(self.player_space_ship.rect,window_size)
+        self.border_wrapping(self.player_space_ship,window_size)
         for asteroid in self.asteroids:
-            self.border_wrapping(asteroid.rect,window_size)
+            self.border_wrapping(asteroid,window_size)
         for ennemyspaceship in self.ennemyspaceships:
-            self.border_wrapping(ennemyspaceship.rect,window_size)
+            self.border_wrapping(ennemyspaceship,window_size)
 
         if self.key_pressed.get(pygame.K_LEFT):
             self.player_space_ship.angle_orientation += 5
@@ -66,7 +67,6 @@ class Game: # La partie
         for asteroid in self.asteroids:
             if (self.player_space_ship.rect.collidepoint(asteroid.rect.x,asteroid.rect.y)):
                 print("echo")
-
 
     def border_wrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
         if (obj.x > window_size[0]):
@@ -101,9 +101,9 @@ class App: # Le programme
 
         self.running = True        
         while self.running:
-            self.events()                                       # Gestion des évènements/inputs/clics
             self.window.fill((0,0,0))                           # Vide l'affichage de la frame
             self.frame_draw()                                    # Appelle la fonction qui dessine les objets du jeu
+            self.events()                                       # Gestion des évènements/inputs/clics
             clock.tick(60)                                      # Met à jour l'affichage
         pygame.quit()
 
@@ -131,6 +131,8 @@ class App: # Le programme
                     if event.key == pygame.K_ESCAPE:
                         self.state="menu"
                         self.pause=interface.PauseMenu(self)
+                    elif event.key == pygame.K_SPACE:
+                        self.game.complete_level()
                     else:
                         self.game.key_pressed[event.key] = True
                 elif event.type == pygame.KEYUP:

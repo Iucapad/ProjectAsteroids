@@ -5,10 +5,10 @@ import pygame
 
 class PlayerSpaceShip:
     def __init__(self, sprite, x, y,size=50):   # Constructeur
+        self.x = x                              # Place le joueur à la position indiquée
+        self.y = y   
         self.sprite = sprite                    # L'image du vaisseau 
-        self.rect = self.sprite.get_rect()
-        self.rect.x = x-size/2                  # Place le joueur à la position indiquée
-        self.rect.y = y-size/2    
+        self.rect = self.sprite.get_rect(center=(self.x, self.y))
         self.angle_orientation = 0              # angle de vue
         self.angle_inertie = 0                  # angle de déplacement
         self.thrust = False                     # true = le vaisseau accélère
@@ -52,8 +52,8 @@ class PlayerSpaceShip:
                 self.vitesse_horizontale = 0
                 self.vitesse_verticale = 0
 
-        self.rect.x += self.vitesse_horizontale
-        self.rect.y -= self.vitesse_verticale
+        self.x += self.vitesse_horizontale
+        self.y -= self.vitesse_verticale
   
 
     def shoot(self): # Méthode pour le tir
@@ -75,19 +75,21 @@ class PlayerSpaceShip:
         return self.is_invincible
 
     def draw(self,window): # Méthode d'affichage
-        surface = pygame.transform.rotate(self.sprite,self.angle_orientation)     
+        surface = pygame.transform.rotate(self.sprite,self.angle_orientation)  
+        self.rect = surface.get_rect(center=(self.x, self.y))        
         window.blit(surface,self.rect)
 
 class EnnemySpaceShip:
     def __init__(self, sprite, space_ship_type, x, y): # Constructeur
+        self.x = x
+        self.y = y
         self.sprite = sprite
-        self.rect = self.sprite.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect = self.sprite.get_rect(center=(self.x, self.y))
         self.angle = 90
         self.max_vitesse = 15
         self.acceleration = 0 
         self.size = 50
+        self.angle_orientation=random.randint(0, 360)
         self.life = 2
         self.acceleration = 0.5
         self.deceleration = 0.1
@@ -95,39 +97,40 @@ class EnnemySpaceShip:
         self.type = space_ship_type
 
     def move(self):
-        print("todo")
-  
+        print("todo")  
 
     def shoot(self): # Méthode pour le tir
         pass
 
     def draw(self,window): # Méthode d'affichage
-        window.blit(self.sprite,self.rect)
+        surface = pygame.transform.rotate(self.sprite,self.angle_orientation)  
+        self.rect = surface.get_rect(center=(self.x, self.y))        
+        window.blit(surface,self.rect)
 
 
 class Asteroid:
     def __init__(self, sprite, window_size, asteroid_type, x=None, y=None): #Constructeur de l'objet
+        if (x is None): #Si on ne passe pas de paramètre, créé aléatoirement sur l'écran
+            self.x=random.randint(0, window_size[0])
+            self.y=random.randint(0, window_size[1])
+        else:   #Sinon on crée l'objet à la position demandée
+            self.x = x
+            self.y = y  
         self.sprite = sprite
-        self.rect = self.sprite.get_rect()
+        self.rect = self.sprite.get_rect(center=(self.x, self.y))
         self.type = asteroid_type
         self.vitesse=random.randint(7,10)
         self.size = 0
         self.angle=random.randint(0, 360)
         self.angle_orientation=random.randint(0, 360)
         self.rotation=random.randint(1,2)
-        if (x is None): #Si on ne passe pas de paramètre, créé aléatoirement sur l'écran
-            self.rect.x=random.randint(0, window_size[0])
-            self.rect.y=random.randint(0, window_size[1])
-        else:   #Sinon on crée l'objet à la position demandée
-            self.x = x
-            self.y = y    
         self.appearance(self.sprite)
         self.valX=(math.cos(self.angle)*self.vitesse)/5
         self.valY=(math.sin(self.angle)*self.vitesse)/5
 
     def move(self): #Méthode pour le déplacement des astéroïdes
-        self.rect.x += self.valX
-        self.rect.y += self.valY        
+        self.x += self.valX
+        self.y += self.valY        
         if self.rotation==1:                #Orientation du sprite
             self.angle_orientation+=0.1
         if self.rotation==2:
@@ -149,7 +152,8 @@ class Asteroid:
         pass
 
     def draw(self,window):  #Dessine l'objet présent à sa position
-        surface = pygame.transform.rotate(self.sprite,self.angle_orientation)
+        surface = pygame.transform.rotate(self.sprite,self.angle_orientation)  
+        self.rect = surface.get_rect(center=(self.x, self.y))
         window.blit(surface,self.rect)
 
 class LaserShot:
@@ -161,7 +165,9 @@ class LaserShot:
         self.type = laser_shot_type # Todo
 
 class BonusItem:
-    def __init__(self, sprite, bonus_type):
+    def __init__(self, sprite, bonus_type, x, y):
+        self.x=x
+        self.y=y
         self.sprite = sprite
         self.bonus_type = bonus_type
 
