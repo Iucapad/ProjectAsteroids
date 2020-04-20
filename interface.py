@@ -29,7 +29,6 @@ def CornerText(text,font,color,app,corner,padding):
     app.window.blit(text_obj,text_rect)
 
 class GameInfo:
-
     def __init__(self,app):
         self.app=app
 
@@ -60,7 +59,6 @@ class PauseMenu:
             clock.tick(30)
 
 class MainMenu:
-    
     def __init__(self,app):
         clock = pygame.time.Clock()
         self.display=True
@@ -102,3 +100,15 @@ class MainMenu:
                         self.click=True
             pygame.display.update()
             clock.tick(30)
+
+class Shop:
+    def __init__(self, game):
+        self.game = game
+
+class GameIntro:
+    def __init__(self, app):
+        pass
+
+class Settings:
+    def __init__(self, app):
+        self.app = app

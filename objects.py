@@ -4,23 +4,24 @@ import math
 
 class PlayerSpaceShip:
     def __init__(self, sprite, x, y,size=50):   # Constructeur
-        self.sprite = sprite           # L'image du vaisseau 
+        self.sprite = sprite                    # L'image du vaisseau 
         self.rect = self.sprite.get_rect()
-        self.rect.x = x-size/2                    # Place le joueur à la position indiquée
+        self.rect.x = x-size/2                  # Place le joueur à la position indiquée
         self.rect.y = y-size/2    
-        self.angle_orientation = 0      # angle de vue
-        self.angle_inertie = 0          # angle de déplacement
-        self.thrust = False             # true = le vaisseau accélère
-        self.vitesse = 1                # Vitesse actuelle
-        self.max_vitesse = 6            # Vitesse max
+        self.angle_orientation = 0              # angle de vue
+        self.angle_inertie = 0                  # angle de déplacement
+        self.thrust = False                     # true = le vaisseau accélère
+        self.vitesse = 1                        # Vitesse actuelle
+        self.max_vitesse = 6                    # Vitesse max
         self.vitesse_horizontale = 0
         self.vitesse_verticale = 0
-        self.acceleration = 0.5 		# Inertie
-        self.deceleration = 0.1			# Inertie                      
-        self.life = 3                   # Nombre de vie
-        self.shoot_rate = 1             # Cadence de tir  
-        self.type = 0                   
-              
+        self.acceleration = 0.5 		        # Inertie
+        self.deceleration = 0.1			        # Inertie                      
+        self.life = 3                           # Nombre de vie
+        self.shoot_rate = 1                     # Cadence de tir  
+        self.shoot_type = 0      
+        self.is_invincible = False
+
     def Move(self):
         self.vitesse = math.sqrt(self.vitesse_horizontale**2 + self.vitesse_verticale**2)     # Calcul de la vitesse actuelle
         
@@ -68,11 +69,19 @@ class PlayerSpaceShip:
     def GetLife(self):
         return self.life
 
+    @property
+    def GetInvincibilty(self):
+        return self.is_invincible
+
+    @is_invincible.setter
+    def SetInvincibility(self, value):
+        self.is_invincible = value
+
     def Draw(self,window): # Méthode d'affichage
         surface = pygame.transform.rotate(self.sprite,self.angle_orientation)     
         window.blit(surface,self.rect)
-class EnnemySpaceShip:
 
+class EnnemySpaceShip:
     def __init__(self, sprite, space_ship_type, x, y): # Constructeur
         self.sprite = sprite
         self.rect = self.sprite.get_rect()
@@ -107,7 +116,6 @@ class EnnemySpaceShip:
 
 
 class Asteroid:
-
     def __init__(self, sprite, window_size, asteroid_type, x=None, y=None): #Constructeur de l'objet
         self.sprite = sprite
         self.rect = self.sprite.get_rect()
@@ -155,10 +163,15 @@ class Asteroid:
         window.blit(surface,self.rect)
 
 class LaserShot:
-    
     def __init__(self, sprite, laser_shot_type, x, y):
         self.x = x 
         self.y = y 
         self.angle = 90
         self.vitesse = 1
         self.type = laser_shot_type # Todo
+
+class BonusItem:
+    def __init__(self, sprite, bonus_type):
+        self.sprite = sprite
+        self.bonus_type = bonus_type
+

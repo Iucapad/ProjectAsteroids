@@ -14,6 +14,7 @@ class Game: # La partie
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list["Player"], self.app.window_size[0]/2, self.app.window_size[1]/2)
+        self.coins = 0
 
     def StartLevel(self, level): # On instancie les objets au début de niveau
         self.asteroids = [] #Création d'un tableau qui contient tous les astéroides
@@ -97,10 +98,10 @@ class App: # Le programme
 
         self.running = True        
         while self.running:
-            self.Events()                   # Gestion des évènements/inputs/clics
-            self.window.fill((0,0,0))                          # Vide l'affichage de la frame
+            self.Events()                                       # Gestion des évènements/inputs/clics
+            self.window.fill((0,0,0))                           # Vide l'affichage de la frame
             self.FrameDraw()                                    # Appelle la fonction qui dessine les objets du jeu
-            clock.tick(60)                            # Met à jour l'affichage
+            clock.tick(60)                                      # Met à jour l'affichage
         pygame.quit()
 
     def StartGame(self):
