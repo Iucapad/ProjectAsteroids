@@ -1,6 +1,7 @@
-import pygame
 import random
 import math
+
+import pygame
 
 class PlayerSpaceShip:
     def __init__(self, sprite, x, y,size=50):   # Constructeur
@@ -22,7 +23,7 @@ class PlayerSpaceShip:
         self.shoot_type = 0      
         self.is_invincible = False
 
-    def Move(self):
+    def move(self):
         self.vitesse = math.sqrt(self.vitesse_horizontale**2 + self.vitesse_verticale**2)     # Calcul de la vitesse actuelle
         
         if self.thrust: # Si l'utilisateur appuie appuie sur ↑
@@ -55,25 +56,25 @@ class PlayerSpaceShip:
         self.rect.y -= self.vitesse_verticale
   
 
-    def Shoot(self): # Méthode pour le tir
+    def shoot(self): # Méthode pour le tir
         pass    # Todo
 
-    def Teleport(self): # Méthode pour la téléportaiton Todo
+    def teleport(self): # Méthode pour la téléportaiton Todo
         if (True) :
             #TP()
             pass
         else :
-            Teleport()
+            self.teleport()
 
     @property
-    def GetLife(self):
+    def get_life(self):
         return self.life
 
     @property
-    def GetInvincibilty(self):
+    def get_invincibilty(self):
         return self.is_invincible
 
-    def Draw(self,window): # Méthode d'affichage
+    def draw(self,window): # Méthode d'affichage
         surface = pygame.transform.rotate(self.sprite,self.angle_orientation)     
         window.blit(surface,self.rect)
 
@@ -93,21 +94,21 @@ class EnnemySpaceShip:
         self.shoot_rate = 1   
         self.type = space_ship_type
 
-    def Move(self):
+    def move(self):
         print("todo")
   
 
-    def Shoot(self): # Méthode pour le tir
+    def shoot(self): # Méthode pour le tir
         pass
 
-    def Teleport(self): # Méthode pour la téléportation
+    def teleport(self): # Méthode pour la téléportation
         if (True) :
             #TP()
             pass
         else :
-            Teleport()
+            teleport()
 
-    def Draw(self,window): # Méthode d'affichage
+    def draw(self,window): # Méthode d'affichage
         window.blit(self.sprite,self.rect)
 
 
@@ -127,11 +128,11 @@ class Asteroid:
         else:   #Sinon on crée l'objet à la position demandée
             self.x = x
             self.y = y    
-        self.Appearance(self.sprite)
+        self.appearance(self.sprite)
         self.valX=(math.cos(self.angle)*self.vitesse)/5
         self.valY=(math.sin(self.angle)*self.vitesse)/5
 
-    def Move(self): #Méthode pour le déplacement des astéroïdes
+    def move(self): #Méthode pour le déplacement des astéroïdes
         self.rect.x += self.valX
         self.rect.y += self.valY        
         if self.rotation==1:                #Orientation du sprite
@@ -139,7 +140,7 @@ class Asteroid:
         if self.rotation==2:
             self.angle_orientation-=0.1
 
-    def Appearance(self, sprite):    #Dimensionne l'asteroide selon son type et initialise un angle de déplacement
+    def appearance(self, sprite):    #Dimensionne l'asteroide selon son type et initialise un angle de déplacement
         if (self.type == 1):    #Type Grand
             size = 60
         elif (self.type == 2):  #Type Moyen
@@ -150,11 +151,11 @@ class Asteroid:
         self.size = int(scale*size) #Fait varier la dimension pour les rendre uniques
         self.sprite = pygame.transform.scale(sprite,(self.size,self.size))        
 
-    def Destroy(self):  #PAS CERTAIN QUE CE SOIT ICI
+    def destroy(self):  #PAS CERTAIN QUE CE SOIT ICI
         #create 2 new asteroids with type-=1 at self.x,self.y
         pass
 
-    def Draw(self,window):  #Dessine l'objet présent à sa position
+    def draw(self,window):  #Dessine l'objet présent à sa position
         surface = pygame.transform.rotate(self.sprite,self.angle_orientation)
         window.blit(surface,self.rect)
 

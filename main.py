@@ -1,6 +1,9 @@
-import pygame
-import random
 import os.path
+import random
+
+
+import pygame
+
 import objects, interface   #Import des modules contenant les classes que l'on va instancier
 
 pygame.init()
@@ -10,13 +13,13 @@ class Game: # La partie
         self.app=app
         self.score = 0
         self.level = 2
-        self.StartLevel(self.level)
+        self.start_level(self.level)
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list["Player"], self.app.window_size[0]/2, self.app.window_size[1]/2)
         self.coins = 0
 
-    def StartLevel(self, level): # On instancie les objets au début de niveau
+    def start_level(self, level): # On instancie les objets au début de niveau
         self.asteroids = [] #Création d'un tableau qui contient tous les astéroides
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         for i in range(level+1):
@@ -25,24 +28,24 @@ class Game: # La partie
         if (self.level>1):
             self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"],1,200,300))
 
-    def CompleteLevel(self):
+    def complete_level(self):
         self.player_space_ship.x=self.app.window_size[0]/2
         self.player_space_ship.y=self.app.window_size[1]/2
         self.score += 100
         self.level += 1
-        self.StartLevel(self.level)
+        self.start_level(self.level)
 
-    def UpdateLoop(self,window,window_size):
-        self.GameEvents(window_size)#Gestion des évènements de la partie
-        self.GameCollisions()#Gestion des collisions des objets
-        self.GameDraw(window) #Dessiner ce qu'elle contient dans la fenêtre
+    def update_loop(self,window,window_size):
+        self.game_events(window_size)#Gestion des évènements de la partie
+        self.game_collisions()#Gestion des collisions des objets
+        self.game_draw(window) #Dessiner ce qu'elle contient dans la fenêtre
 
-    def GameEvents(self,window_size):   #Gère les évènements de la partie en continu
-        self.BorderWrapping(self.player_space_ship.rect,window_size)
+    def game_events(self,window_size):   #Gère les évènements de la partie en continu
+        self.border_wrapping(self.player_space_ship.rect,window_size)
         for asteroid in self.asteroids:
-            self.BorderWrapping(asteroid.rect,window_size)
+            self.border_wrapping(asteroid.rect,window_size)
         for ennemyspaceship in self.ennemyspaceships:
-            self.BorderWrapping(ennemyspaceship.rect,window_size)
+            self.border_wrapping(ennemyspaceship.rect,window_size)
 
         if self.key_pressed.get(pygame.K_LEFT):
             self.player_space_ship.angle_orientation += 5
@@ -59,13 +62,13 @@ class Game: # La partie
         if self.key_pressed.get(pygame.K_SPACE):
             pass    #TIR
 
-    def GameCollisions(self):
+    def game_collisions(self):
         for asteroid in self.asteroids:
             if (self.player_space_ship.rect.collidepoint(asteroid.rect.x,asteroid.rect.y)):
                 print("echo")
 
 
-    def BorderWrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
+    def border_wrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
         if (obj.x > window_size[0]):
             obj.x = 0
         elif (obj.x < 0 ):
@@ -75,15 +78,15 @@ class Game: # La partie
         elif (obj.y < 0 ):
                 obj.y = window_size[1]
 
-    def GameDraw(self, win):    # Cette fonction va dessiner chaque élément du niveau
-        self.player_space_ship.Draw(win)
-        self.player_space_ship.Move()
+    def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
+        self.player_space_ship.draw(win)
+        self.player_space_ship.move()
         for asteroid in self.asteroids:
-            asteroid.Draw(win)
-            asteroid.Move()
+            asteroid.draw(win)
+            asteroid.move()
         for ennemyspaceship in self.ennemyspaceships:
-            ennemyspaceship.Draw(win)
-        self.game_info.DrawGameInfo(self.app,self.score,self.level,self.player_space_ship.GetLife)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
+            ennemyspaceship.draw(win)
+        self.game_info.draw_game_info(self.app,self.score,self.level,self.player_space_ship.get_life)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 
 class App: # Le programme
     def __init__(self):
@@ -92,23 +95,23 @@ class App: # Le programme
         self.window_size = [1280,720]
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
-        self.LoadSprites()
+        self.load_sprites()
         self.menu=interface.MainMenu(self)
         clock = pygame.time.Clock()
 
         self.running = True        
         while self.running:
-            self.Events()                                       # Gestion des évènements/inputs/clics
+            self.events()                                       # Gestion des évènements/inputs/clics
             self.window.fill((0,0,0))                           # Vide l'affichage de la frame
-            self.FrameDraw()                                    # Appelle la fonction qui dessine les objets du jeu
+            self.frame_draw()                                    # Appelle la fonction qui dessine les objets du jeu
             clock.tick(60)                                      # Met à jour l'affichage
         pygame.quit()
 
-    def StartGame(self):
+    def start_game(self):
         self.game = Game(self)
         self.state="game"
 
-    def LoadSprites(self):                                       # Va chercher les assets dans les fichiers du jeu
+    def load_sprites(self):                                       # Va chercher les assets dans les fichiers du jeu
         self.sprites_list = {
             "Player": pygame.image.load(os.path.join(self.folder, 'Assets/player.png')),
             "Asteroid1": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid1.png')),
@@ -119,7 +122,7 @@ class App: # Le programme
         background=pygame.image.load(os.path.join(self.folder, 'Assets/background.png'))
         self.background=pygame.transform.scale(background, (self.window_size[0], self.window_size[1]))
 
-    def Events(self):
+    def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:   #Lorsque l'on clique sur la croix pour quitter
                 self.running = False
@@ -134,9 +137,9 @@ class App: # Le programme
                     self.game.key_pressed[event.key] = False                   
 
 
-    def FrameDraw(self):    #Cette fonction va dessiner chaque élément du programme
+    def frame_draw(self):    #Cette fonction va dessiner chaque élément du programme
         if self.state=="game":
-            self.game.UpdateLoop(self.window,self.window_size) #Evènements de la partie à exécuter
+            self.game.update_loop(self.window,self.window_size) #Evènements de la partie à exécuter
             pygame.display.update() #Met à jour l'affichage
 
 if __name__ == "__main__":  #Instancie le programme
