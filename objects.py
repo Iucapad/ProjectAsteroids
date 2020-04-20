@@ -73,10 +73,6 @@ class PlayerSpaceShip:
     def GetInvincibilty(self):
         return self.is_invincible
 
-    @is_invincible.setter
-    def SetInvincibility(self, value):
-        self.is_invincible = value
-
     def Draw(self,window): # Méthode d'affichage
         surface = pygame.transform.rotate(self.sprite,self.angle_orientation)     
         window.blit(surface,self.rect)
