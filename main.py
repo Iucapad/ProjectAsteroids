@@ -130,6 +130,7 @@ class App: # Le programme
             "Asteroid2": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid2.png')),
             "Asteroid3": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid3.png')),
             "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png')),
+            "UI_Menu": pygame.image.load(os.path.join(self.folder, 'Assets/ui_menu.png')),
             "UI_Button": pygame.image.load(os.path.join(self.folder, 'Assets/ui_button.png'))
         }
         self.title_font = pygame.font.Font(os.path.join(self.folder, 'Assets/title_font.ttf'), 48)
