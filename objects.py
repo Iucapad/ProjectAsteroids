@@ -19,7 +19,7 @@ class PlayerSpaceShip:
         self.acceleration = 0.5 		        # Inertie
         self.deceleration = 0.1			        # Inertie                      
         self.life = 3                           # Nombre de vie
-        self.shoot_rate = 0.3                 # Cadence de tir  
+        self.shoot_rate = 0.3                   # Cadence de tir  
         self.shoot_type = 0   
         self.last_shot = time.time() 
         self.is_invincible = 60
@@ -83,32 +83,42 @@ class PlayerSpaceShip:
 
 class EnnemySpaceShip:
     def __init__(self, sprite, space_ship_type, x, y): # Constructeur
-        self.x = x
-        self.y = y
+        self.x = random.randint(100, 1180)
+        self.y = random.randint(50, 670)
         self.sprite = sprite
-        self.rect = self.sprite.get_rect(center=(self.x, self.y))
-        self.angle = 90
+        self.rect = self.sprite.get_rect(center=(self.x, self.y))                                     
         self.max_vitesse = 15
         self.acceleration = 0 
         self.size = 50
-        self.angle_orientation=random.randint(0, 360)
+        self.angle_orientation = 0
+        self.angle_direction = 0
         self.life = 2
         self.acceleration = 0.5
         self.deceleration = 0.1
         self.shoot_rate = 1   
         self.type = space_ship_type
 
-    def move(self):
-        print("todo")  
+    def move(self, player):
+        self.angle_direction = math.atan( (player.y - self.y)/(player.x - self.x) )    # L'angle est adapté en fct de la postion du vaisseau du joueur
 
-    def shoot(self): # Méthode pour le tir      ####DAMIEN: (sprite_list["LaserShot"])
+        if self.x > player.x:   
+            self.x -= math.cos(self.angle_direction)
+            self.y -= math.sin(self.angle_direction)
+        elif self.x < player.x:
+            if self.y > player.y:
+                self.x += math.cos(self.angle_direction)
+                self.y += math.sin(self.angle_direction)
+            elif self.y < player.y :
+                self.x += math.cos(self.angle_direction)
+                self.y += math.sin(self.angle_direction)
+
+    def shoot(self): # Méthode pour le tir  
         pass
 
     def draw(self,window): # Méthode d'affichage
         surface = pygame.transform.rotate(self.sprite,self.angle_orientation)  
         self.rect = surface.get_rect(center=(self.x, self.y))        
         window.blit(surface,self.rect)
-
 
 class Asteroid:
     def __init__(self, sprite, window_size, asteroid_type, x=None, y=None): # Constructeur de l'objet
@@ -123,7 +133,7 @@ class Asteroid:
         self.type = asteroid_type
         self.vitesse=random.randint(7,10)
         self.size = 0
-        self.angle = int(math.degrees( math.atan( ((window_size[1]/2)-self.y) / ((window_size[0]/2)-self.x))))                # L'angle est adapté en fct de la postion du vaisseau du joueur
+        self.angle = random.randint(0,360)
         self.angle_orientation=random.randint(0, 360)
         self.rotation=random.randint(1,2)
         self.appearance(self.sprite)
