@@ -59,7 +59,7 @@ class Game: # La partie
             self.player_space_ship.thrust = False
 
         if self.key_pressed.get(pygame.K_SPACE):    
-            tir = objects.LaserShot(1, self.player_space_ship.x, self.player_space_ship.y, self.player_space_ship.angle_orientation)
+            tir = objects.LaserShot(self.app.sprites_list["LaserShot"], 1, self.player_space_ship.x, self.player_space_ship.y, self.player_space_ship.angle_orientation)
             self.shots.append(tir)
 
     def game_collisions(self):
@@ -91,6 +91,7 @@ class Game: # La partie
         for shot in self.shots:
             shot.draw(win)
             shot.move()
+            print(shot.x)
             
         self.game_info.draw_game_info(self.app,self.score,self.level,self.player_space_ship.get_life)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 

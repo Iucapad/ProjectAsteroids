@@ -158,25 +158,22 @@ class Asteroid:
 
 class LaserShot:
 
-    def __init__(self, laser_shot_type, x, y, angle): # todo:  sprite
+    def __init__(self, sprite, laser_shot_type, x, y, angle): # todo:  sprite
         self.x = x 
         self.y = y 
         self.angle = angle
+        self.sprite = sprite
         self.vitesse = 10
         self.type = laser_shot_type # Todo
-        self.shots.append(self)
-
-    def shoot(self): # Méthode pour le tir
-        tir = LaserShot(1, self.x, self.y, self.angle_orientation)
-
 
     def move(self):
         self.x += math.cos(self.angle) * self.vitesse
         self.y += math.sin(self.angle) * self.vitesse
 
     def draw(self, window): 
-        
-
+        surface = pygame.transform.rotate(self.sprite,self.angle)  
+        self.rect = surface.get_rect(center=(self.x, self.y))
+        window.blit(surface, self.rect)
 
 class BonusItem:
     def __init__(self, sprite, bonus_type, x, y):
