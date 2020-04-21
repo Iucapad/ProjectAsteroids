@@ -20,13 +20,13 @@ class Game: # La partie
         self.coins = 0
 
     def start_level(self, level): # On instancie les objets au début de niveau
-        self.asteroids = [] #Création d'un tableau qui contient tous les astéroides
+        self.asteroids = [] # Création d'un tableau qui contient tous les astéroides
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         for i in range(level+1):
             alt_spr=random.randint(1,3)
-            self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid"+str(alt_spr)], self.app.window_size,1))
+            self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid"+str(alt_spr)], self.app.window_size, 1))         # Instanciation des objets asteroids
         if (self.level>1):
-            self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"],1,200,300))
+            self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))
 
     def complete_level(self):
         self.player_space_ship.x=self.app.window_size[0]/2

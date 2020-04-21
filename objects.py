@@ -114,11 +114,11 @@ class EnnemySpaceShip:
 
 
 class Asteroid:
-    def __init__(self, sprite, window_size, asteroid_type, x=None, y=None): #Constructeur de l'objet
+    def __init__(self, sprite, window_size, asteroid_type, x=None, y=None): # Constructeur de l'objet
         if (x is None): #Si on ne passe pas de paramètre, créé aléatoirement sur l'écran
             self.x=random.randint(0, window_size[0])
             self.y=random.randint(0, window_size[1])
-        else:   #Sinon on crée l'objet à la position demandée
+        else:   # Sinon on crée l'objet à la position demandée
             self.x = x
             self.y = y  
         self.sprite = sprite
@@ -126,16 +126,16 @@ class Asteroid:
         self.type = asteroid_type
         self.vitesse=random.randint(7,10)
         self.size = 0
-        self.angle=random.randint(0, 360)
+        self.angle = int(math.degrees( math.atan( ((window_size[1]/2)-self.y) / ((window_size[0]/2)-self.x))))                # L'angle est adapté en fct de la postion du vaisseau du joueur
         self.angle_orientation=random.randint(0, 360)
         self.rotation=random.randint(1,2)
         self.appearance(self.sprite)
-        self.valX=(math.cos(self.angle)*self.vitesse)/5
-        self.valY=(math.sin(self.angle)*self.vitesse)/5
+        self.valX = int((math.cos(math.radians(self.angle)) * self.vitesse) /5)
+        self.valY = int((math.sin(math.radians(self.angle)) * self.vitesse) /5)
 
     def move(self): #Méthode pour le déplacement des astéroïdes
         self.x += self.valX
-        self.y += self.valY        
+        self.y -= self.valY        
         if self.rotation==1:                #Orientation du sprite
             self.angle_orientation+=0.1
         if self.rotation==2:
