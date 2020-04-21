@@ -3,11 +3,11 @@ import math
 import pygame
 
 class PlayerSpaceShip:
-    def __init__(self, sprite, x, y,size=50):   # Constructeur
+    def __init__(self, sprite_list, x, y,size=50):   # Constructeur
         self.x = x                              # Place le joueur à la position indiquée
         self.y = y   
-        self.sprite = sprite                    # L'image du vaisseau 
-        self.rect = self.sprite.get_rect(center=(self.x, self.y))
+        self.sprite_list = sprite_list               # L'image du vaisseau 
+        self.rect = self.sprite_list["Player"].get_rect(center=(self.x, self.y))
         self.angle_orientation = 0              # angle de vue
         self.angle_inertie = 0                  # angle de déplacement
         self.thrust = False                     # true = le vaisseau accélère
@@ -20,7 +20,7 @@ class PlayerSpaceShip:
         self.life = 3                           # Nombre de vie
         self.shoot_rate = 1                     # Cadence de tir  
         self.shoot_type = 0      
-        self.is_invincible = False
+        self.is_invincible = 60
 
     def move(self):
         self.vitesse = math.sqrt(self.vitesse_horizontale**2 + self.vitesse_verticale**2)     # Calcul de la vitesse actuelle
@@ -65,13 +65,18 @@ class PlayerSpaceShip:
     def get_life(self):
         return self.life
 
-    @property
-    def get_invincibilty(self):
-        return self.is_invincible
+    def get_invincibility(self,time):
+        self.is_invincible=time
 
     def draw(self,window): # Méthode d'affichage
-        surface = pygame.transform.rotate(self.sprite,self.angle_orientation)  
-        self.rect = surface.get_rect(center=(self.x, self.y))        
+        if (self.is_invincible>0):
+            self.is_invincible-=1
+            sprite = self.sprite_list["Player1"]
+            surface = pygame.transform.rotate(sprite,self.angle_orientation)
+        else:
+            sprite = self.sprite_list["Player"]
+            surface = pygame.transform.rotate(sprite,self.angle_orientation)
+        self.rect = surface.get_rect(center=(self.x, self.y))
         window.blit(surface,self.rect)
 
 class EnnemySpaceShip:
@@ -94,7 +99,7 @@ class EnnemySpaceShip:
     def move(self):
         print("todo")  
 
-    def shoot(self): # Méthode pour le tir
+    def shoot(self): # Méthode pour le tir      ####DAMIEN: (sprite_list["LaserShot"])
         pass
 
     def draw(self,window): # Méthode d'affichage

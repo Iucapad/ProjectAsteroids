@@ -13,7 +13,7 @@ class Game: # La partie
         self.start_level(self.level)
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
-        self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list["Player"], self.app.window_size[0]/2, self.app.window_size[1]/2)
+        self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list, self.app.window_size[0]/2, self.app.window_size[1]/2)
         self.coins = 0
 
     def start_level(self, level): # On instancie les objets au début de niveau
@@ -64,8 +64,10 @@ class Game: # La partie
 
     def game_collisions(self):
         for asteroid in self.asteroids:
-            if (self.player_space_ship.rect.collidepoint(asteroid.rect.x,asteroid.rect.y)):
-                print("echo")
+            if (self.player_space_ship.is_invincible==0):
+                if (self.player_space_ship.rect.collidepoint(asteroid.rect.x,asteroid.rect.y)):
+                    self.player_space_ship.life-=1
+                    self.player_space_ship.get_invincibility(120)
 
     def border_wrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
         if (obj.x > window_size[0]):
@@ -118,11 +120,17 @@ class App: # Le programme
     def load_sprites(self):                                       # Va chercher les assets dans les fichiers du jeu
         self.sprites_list = {
             "Player": pygame.image.load(os.path.join(self.folder, 'Assets/player.png')),
+            "Player1": pygame.image.load(os.path.join(self.folder, 'Assets/player1.png')),
+            "LaserShot": pygame.image.load(os.path.join(self.folder, 'Assets/laser_shot.png')),
             "Asteroid1": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid1.png')),
             "Asteroid2": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid2.png')),
             "Asteroid3": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid3.png')),
-            "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png'))
+            "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png')),
+            "UI_Button": pygame.image.load(os.path.join(self.folder, 'Assets/ui_button.png'))
         }
+        self.title_font = pygame.font.Font(os.path.join(self.folder, 'Assets/title_font.ttf'), 48)
+        self.text_font = pygame.font.Font(os.path.join(self.folder, 'Assets/text_font.ttf'), 32)
+        self.button_font = pygame.font.Font(os.path.join(self.folder, 'Assets/text_font.ttf'), 26)
         background=pygame.image.load(os.path.join(self.folder, 'Assets/background.png'))
         self.background=pygame.transform.scale(background, (self.window_size[0], self.window_size[1]))
 
