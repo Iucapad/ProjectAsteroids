@@ -165,10 +165,11 @@ class App: # Le programme
                 elif event.type == pygame.KEYUP:
                     self.game.key_pressed[event.key] = False                   
 
-    def get_statistics(self):
-        print ("coucou") #test pour voir si je rentre dans la boucle
-        ### TIMMY : Aller chercher le fichier et définir une liste avec les statistiques
-        ### Puis dans game lors du game over il faudra le sauvegarder avec les nouvelles valeurs (nb de parties, nouveau meilleur score si > ancien)
+    def get_statistics(self,score):
+        f=open("stats.txt","w+")
+        #f.write(str(self.game.score)) <--- à mettre au point, provoque une erreur
+        #f.write(nomdujoueur) <------ nomdujoueur pas encore défini
+        f.close()
 
     def frame_draw(self):    #Cette fonction va dessiner chaque élément du programme
         if self.state=="game":
