@@ -117,6 +117,7 @@ class App: # Le programme
         self.sprites_list = {
             "Player": pygame.image.load(os.path.join(self.folder, 'Assets/player.png')),
             "Player1": pygame.image.load(os.path.join(self.folder, 'Assets/player1.png')),
+            "LaserShot": pygame.image.load(os.path.join(self.folder, 'Assets/laser_shot.png')),
             "Asteroid1": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid1.png')),
             "Asteroid2": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid2.png')),
             "Asteroid3": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid3.png')),
