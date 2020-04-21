@@ -9,6 +9,7 @@ class PlayerSpaceShip:
         self.y = y   
         self.sprite_list = sprite_list               # L'image du vaisseau 
         self.rect = self.sprite_list["Player"].get_rect(center=(self.x, self.y))
+        self.mask = pygame.mask.from_surface(self.sprite_list["Player"])
         self.angle_orientation = 0              # angle de vue
         self.angle_inertie = 0                  # angle de déplacement
         self.thrust = False                     # true = le vaisseau accélère
@@ -19,7 +20,7 @@ class PlayerSpaceShip:
         self.acceleration = 0.5 		        # Inertie
         self.deceleration = 0.1			        # Inertie                      
         self.life = 3                           # Nombre de vie
-        self.shoot_rate = 0.3                 # Cadence de tir  
+        self.shoot_rate = 0.3                   # Cadence de tir  
         self.shoot_type = 0   
         self.last_shot = time.time() 
         self.is_invincible = 60
@@ -79,36 +80,49 @@ class PlayerSpaceShip:
             sprite = self.sprite_list["Player"]
         surface = pygame.transform.rotate(sprite,self.angle_orientation)
         self.rect = surface.get_rect(center=(self.x, self.y))
-        window.blit(surface,self.rect)
+        self.mask = pygame.mask.from_surface(sprite)
+        window.blit(surface,self.rect)        
 
 class EnnemySpaceShip:
     def __init__(self, sprite, space_ship_type, x, y): # Constructeur
-        self.x = x
-        self.y = y
+        self.x = random.randint(100, 1180)
+        self.y = random.randint(50, 670)
         self.sprite = sprite
         self.rect = self.sprite.get_rect(center=(self.x, self.y))
-        self.angle = 90
+        self.mask = pygame.mask.from_surface(self.sprite)                                
         self.max_vitesse = 15
         self.acceleration = 0 
         self.size = 50
-        self.angle_orientation=random.randint(0, 360)
+        self.angle_orientation = 0
+        self.angle_direction = 0
         self.life = 2
         self.acceleration = 0.5
         self.deceleration = 0.1
         self.shoot_rate = 1   
         self.type = space_ship_type
 
-    def move(self):
-        print("todo")  
+    def move(self, player):
+        self.angle_direction = math.atan( (player.y - self.y)/(player.x - self.x) )    # L'angle est adapté en fct de la postion du vaisseau du joueur
 
-    def shoot(self): # Méthode pour le tir      ####DAMIEN: (sprite_list["LaserShot"])
+        if self.x > player.x:   
+            self.x -= math.cos(self.angle_direction)
+            self.y -= math.sin(self.angle_direction)
+        elif self.x < player.x:
+            if self.y > player.y:
+                self.x += math.cos(self.angle_direction)
+                self.y += math.sin(self.angle_direction)
+            elif self.y < player.y :
+                self.x += math.cos(self.angle_direction)
+                self.y += math.sin(self.angle_direction)
+
+    def shoot(self): # Méthode pour le tir  
         pass
 
     def draw(self,window): # Méthode d'affichage
         surface = pygame.transform.rotate(self.sprite,self.angle_orientation)  
-        self.rect = surface.get_rect(center=(self.x, self.y))        
+        self.rect = surface.get_rect(center=(self.x, self.y))
+        self.mask = pygame.mask.from_surface(surface)       
         window.blit(surface,self.rect)
-
 
 class Asteroid:
     def __init__(self, sprite, window_size, asteroid_type, x=None, y=None): # Constructeur de l'objet
@@ -120,6 +134,7 @@ class Asteroid:
             self.y = y  
         self.sprite = sprite
         self.rect = self.sprite.get_rect(center=(self.x, self.y))
+        self.mask = pygame.mask.from_surface(self.sprite)
         self.type = asteroid_type
         self.vitesse=random.randint(7,10)
         self.size = 0
@@ -152,6 +167,7 @@ class Asteroid:
     def draw(self,window):  #Dessine l'objet présent à sa position
         surface = pygame.transform.rotate(self.sprite,self.angle_orientation)  
         self.rect = surface.get_rect(center=(self.x, self.y))
+        self.mask = pygame.mask.from_surface(surface)
         window.blit(surface,self.rect)
 
 class LaserShot:
@@ -162,6 +178,7 @@ class LaserShot:
         self.angle = math.radians(angle)
         self.sprite = sprite
         self.rect = sprite.get_rect(center=(self.x, self.y))
+        self.mask = pygame.mask.from_surface(self.sprite)
         self.vitesse = 10
         self.type = laser_shot_type # Todo
 
@@ -172,6 +189,7 @@ class LaserShot:
     def draw(self, window): 
         surface = pygame.transform.rotate(self.sprite,self.angle)  
         self.rect = surface.get_rect(center=(self.x, self.y))
+        self.mask = pygame.mask.from_surface(surface)
         window.blit(surface, self.rect)
 
 class BonusItem:
