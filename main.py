@@ -68,6 +68,9 @@ class Game: # La partie
                 if (self.player_space_ship.rect.collidepoint(asteroid.rect.x,asteroid.rect.y)):
                     self.player_space_ship.life-=1
                     self.player_space_ship.get_invincibility(120)
+        for shot in self.shots:
+            if (shot.x<0 or shot.x>self.app.window_size[0] or shot.y<0 or shot.y>self.app.window_size[1]):
+                self.shots.remove(shot)
 
     def border_wrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
         if (obj.x > window_size[0]):
