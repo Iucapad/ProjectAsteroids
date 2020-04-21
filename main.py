@@ -98,6 +98,7 @@ class App: # Le programme
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
         self.load_sprites()
+        self.get_statistics()
         self.menu=interface.MainMenu(self)
         clock = pygame.time.Clock()
 
@@ -146,6 +147,10 @@ class App: # Le programme
                 elif event.type == pygame.KEYUP:
                     self.game.key_pressed[event.key] = False                   
 
+    def get_statistics(self):
+        self.best_score = 0 
+        ### TIMMY : Aller chercher le fichier et définir une liste avec les statistiques
+        ### Puis dans game lors du game over il faudra le sauvegarder avec les nouvelles valeurs (nb de parties, nouveau meilleur score si > ancien)
 
     def frame_draw(self):    #Cette fonction va dessiner chaque élément du programme
         if self.state=="game":

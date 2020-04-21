@@ -43,7 +43,7 @@ class PauseMenu:
         self.h_align=app.window_size[0]/2
         self.v_align=app.window_size[1]/2
         self.ui_button=app.sprites_list["UI_Button"]
-        self.button1=add_button(self.h_align,self.v_align,200,50)
+        self.resume=add_button(self.h_align,self.v_align-25,200,50)
 
         while self.display:
             if (self.top<720):
@@ -51,8 +51,15 @@ class PauseMenu:
                 pygame.draw.rect(app.window, (10,10,10),pygame.Rect(self.h_align-330,720-self.top,660,720)) 
             else:
                 draw_text("PAUSE",app.text_font,(255,255,255),app,app.window_size[0]/2,100)
-                app.window.blit(self.ui_button,self.button1)
-                draw_text("Reprendre",app.button_font,(255,255,255),app,self.h_align,self.v_align)
+                app.window.blit(self.ui_button,self.resume)
+                draw_text("Reprendre",app.button_font,(127,0,0),app,self.h_align,self.v_align)
+            
+            mouse_x,mouse_y=pygame.mouse.get_pos()
+            if (self.resume.collidepoint(mouse_x,mouse_y)):
+                if (self.click):
+                    self.display=False
+                    app.state="game"
+            self.click=False
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -63,7 +70,7 @@ class PauseMenu:
                         app.state="game"
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        pass
+                        self.click=True
             pygame.display.update()
             clock.tick(120)
 
@@ -81,7 +88,7 @@ class MainMenu:
         while self.display:
             app.window.blit(app.background,(0,0)) 
             draw_text("Menu principal",app.title_font,(255,255,255),app,self.h_align,100)
-            draw_text("Meilleur score: x",app.text_font,(255,255,255),app,self.h_align,125) 
+            draw_text("Meilleur score: "+str(app.best_score),app.text_font,(255,255,255),app,self.h_align,150) 
                        
             app.window.blit(self.ui_button,self.button1)
             app.window.blit(self.ui_button,self.button2)
@@ -177,8 +184,8 @@ class Settings:
         while self.display:
             app.window.blit(app.background,(0,0)) 
             draw_text("Options",app.title_font,(255,255,255),app,app.window_size[0]/2,100)
-            pygame.blit(self.ui_button,self.back_button)
-            draw_text("Retour",app.button_font,(255,255,255),app,self.h_align,575)
+            app.window.blit(self.ui_button,self.back_button)
+            draw_text("Retour",app.button_font,(127,0,0),app,self.h_align,575)
 
             mouse_x,mouse_y=pygame.mouse.get_pos()
             if (self.back_button.collidepoint(mouse_x,mouse_y)):

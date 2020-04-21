@@ -77,10 +77,9 @@ class PlayerSpaceShip:
         if (self.is_invincible>0):
             self.is_invincible-=1
             sprite = self.sprite_list["Player1"]
-            surface = pygame.transform.rotate(sprite,self.angle_orientation)
         else:
             sprite = self.sprite_list["Player"]
-            surface = pygame.transform.rotate(sprite,self.angle_orientation)
+        surface = pygame.transform.rotate(sprite,self.angle_orientation)
         self.rect = surface.get_rect(center=(self.x, self.y))
         window.blit(surface,self.rect)
 
