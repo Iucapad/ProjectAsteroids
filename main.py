@@ -88,9 +88,9 @@ class Game: # La partie
 
     def player_death(self):
         if (self.player_space_ship.life==0): #détecte la mort du joueur
-            print ("game over") #test pour voir si je rentre dans la fonction
-            #fermer le jeu et retour à l'écran titre
-            #récupérer les statistiques --> self.app.get_statistics ?  (ligne 162)
+            print ("game over") # à remplacer par un écran de game over qui s'affichera quelques secondes (4, 5 ?)
+            self.app.get_statistics #appel des statistiques 
+            self.app.menu=interface.MainMenu(self.app) #retour à l'écran titre
 
     def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
         self.player_space_ship.draw(win)
@@ -167,7 +167,6 @@ class App: # Le programme
 
     def get_statistics(self):
         print ("coucou") #test pour voir si je rentre dans la boucle
-        self.best_score = 0 
         ### TIMMY : Aller chercher le fichier et définir une liste avec les statistiques
         ### Puis dans game lors du game over il faudra le sauvegarder avec les nouvelles valeurs (nb de parties, nouveau meilleur score si > ancien)
 

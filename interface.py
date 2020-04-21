@@ -98,7 +98,7 @@ class MainMenu:
         while self.display:
             app.window.blit(app.background,(0,0)) 
             draw_text("Menu principal",app.title_font,(255,255,255),app,self.h_align,100)
-            draw_text("Meilleur score: "+str(app.best_score),app.text_font,(255,255,255),app,self.h_align,150) 
+            #draw_text("Meilleur score: "+str(app.best_score),app.text_font,(255,255,255),app,self.h_align,150) 
                        
             app.window.blit(self.ui_button,self.button1)
             app.window.blit(self.ui_button,self.button2)
