@@ -43,7 +43,8 @@ class PauseMenu:
         self.h_align=app.window_size[0]/2
         self.v_align=app.window_size[1]/2
         self.ui_button=app.sprites_list["UI_Button"]
-        self.resume=add_button(self.h_align,self.v_align-25,200,50)
+        self.resume=add_button(self.h_align,self.v_align-30,200,50)
+        self.quit=add_button(self.h_align,self.v_align+30,200,50)
 
         while self.display:
             if (self.top<720):
@@ -52,13 +53,20 @@ class PauseMenu:
             else:
                 draw_text("PAUSE",app.text_font,(255,255,255),app,app.window_size[0]/2,100)
                 app.window.blit(self.ui_button,self.resume)
-                draw_text("Reprendre",app.button_font,(127,0,0),app,self.h_align,self.v_align)
+                app.window.blit(self.ui_button,self.quit)
+                draw_text("Reprendre",app.button_font,(127,0,0),app,self.h_align,self.v_align-5)
+                draw_text("Quitter",app.button_font,(127,0,0),app,self.h_align,self.v_align+55)
             
             mouse_x,mouse_y=pygame.mouse.get_pos()
             if (self.resume.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
                     self.display=False
                     app.state="game"
+            elif (self.quit.collidepoint(mouse_x,mouse_y)):
+                if (self.click):
+                    self.display=False
+                    app.state="menu"
+                    app.menu=MainMenu(app)                    
             self.click=False
             
             for event in pygame.event.get():
@@ -82,7 +90,8 @@ class MainMenu:
         self.h_align=app.window_size[0]/2
         self.button1=add_button(self.h_align,325,200,50)
         self.button2=add_button(self.h_align,400,200,50)   
-        self.button3=add_button(self.h_align,475,200,50)  
+        self.button3=add_button(self.h_align,475,200,50)
+        self.statsbtn=add_button(app.window_size[0]-110,10,200,50) 
         self.ui_button=app.sprites_list["UI_Button"] 
 
         while self.display:
@@ -93,9 +102,11 @@ class MainMenu:
             app.window.blit(self.ui_button,self.button1)
             app.window.blit(self.ui_button,self.button2)
             app.window.blit(self.ui_button,self.button3)
+            app.window.blit(self.ui_button,self.statsbtn)
             draw_text("Jouer",app.button_font,(127,0,0),app,self.h_align,350)
             draw_text("Options",app.button_font,(127,0,0),app,self.h_align,425)
             draw_text("Quitter",app.button_font,(127,0,0),app,self.h_align,500)
+            draw_text("Statistiques",app.button_font,(127,0,0),app,app.window_size[0]-110,35)
 
             mouse_x,mouse_y=pygame.mouse.get_pos()
             if (self.button1.collidepoint(mouse_x,mouse_y)):
@@ -108,6 +119,30 @@ class MainMenu:
             elif (self.button3.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
                     pygame.quit()
+            self.click=False
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.click=True
+            pygame.display.update()
+            clock.tick(30)
+
+class ViewStatistics:
+
+    def __init__(self,player):
+        self.player=player
+        clock = pygame.time.Clock()
+        self.display=True
+        self.click=False
+
+        while self.display:
+            mouse_x,mouse_y=pygame.mouse.get_pos()
+            if (self.close.collidepoint(mouse_x,mouse_y)):
+                if (self.click):
+                    pass
             self.click=False
 
             for event in pygame.event.get():
