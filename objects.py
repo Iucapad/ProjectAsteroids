@@ -123,7 +123,6 @@ class Asteroid:
         self.type = asteroid_type
         self.vitesse=random.randint(7,10)
         self.size = 0
-        print('test')
         self.angle = int(math.degrees( math.atan( ((window_size[1]/2)-self.y) / ((window_size[0]/2)-self.x))))                # L'angle est adapté en fct de la postion du vaisseau du joueur
         self.angle_orientation=random.randint(0, 360)
         self.rotation=random.randint(1,2)
