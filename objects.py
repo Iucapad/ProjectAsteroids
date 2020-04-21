@@ -102,10 +102,14 @@ class EnnemySpaceShip:
         self.last_shot = time.time() 
         self.type = space_ship_type
 
-    def move(self, player):
-        print((player.y - self.y)/(player.x - self.x))
-        self.angle_direction = math.atan( (player.y - self.y)/(player.x - self.x) )    # L'angle est adapté en fct de la postion du vaisseau du joueur
-        self.angle_orientation = ((self.angle_direction*180)/math.pi)
+    def move(self, player):        
+        opp=player.y - self.y
+        adj=player.x - self.x
+        self.angle_direction = -math.atan((opp)/(adj))   # L'angle est adapté en fct de la postion du vaisseau du joueur
+        if (adj<0):
+            self.angle_orientation = ((self.angle_direction*180)/math.pi)+180
+        else:
+            self.angle_orientation = ((self.angle_direction*180)/math.pi)
         #print ((self.angle_direction*180)/math.pi)
         if self.x > player.x:   
             self.x -= math.cos(self.angle_direction)
