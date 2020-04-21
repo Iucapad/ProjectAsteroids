@@ -150,18 +150,14 @@ class Asteroid:
 
     def appearance(self, sprite):    #Dimensionne l'asteroide selon son type et initialise un angle de déplacement
         if (self.type == 1):    #Type Grand
-            size = 60
+            size = 120
         elif (self.type == 2):  #Type Moyen
-            size = 30
+            size = 100
         elif (self.type == 3):  #Type Petit
-            size = 15
+            size = 60
         scale=random.uniform(0.7,1) 
         self.size = int(scale*size) # Fait varier la dimension pour les rendre uniques
-        self.sprite = pygame.transform.scale(sprite,(self.size,self.size))        
-
-    def destroy(self):  #PAS CERTAIN QUE CE SOIT ICI
-        #create 2 new asteroids with type-=1 at self.x,self.y
-        pass
+        self.sprite = pygame.transform.scale(sprite,(self.size,self.size))  
 
     def draw(self,window):  #Dessine l'objet présent à sa position
         surface = pygame.transform.rotate(self.sprite,self.angle_orientation)  
@@ -175,6 +171,7 @@ class LaserShot:
         self.y = y 
         self.angle = math.radians(angle)
         self.sprite = sprite
+        self.rect = sprite.get_rect(center=(self.x, self.y))
         self.vitesse = 10
         self.type = laser_shot_type # Todo
 

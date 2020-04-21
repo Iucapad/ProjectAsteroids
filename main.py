@@ -21,7 +21,7 @@ class Game: # La partie
         self.asteroids = [] # Création d'un tableau qui contient tous les astéroides
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         self.shots = [] # Création d'un tableau contenant tout les tirs
-        for i in range(level+1):
+        for i in range(level+3):
             alt_spr=random.randint(1,3)
             self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid"+str(alt_spr)], self.app.window_size, 1))          # Instanciation des objets asteroids
         if (self.level>1):
@@ -42,6 +42,8 @@ class Game: # La partie
 
     def game_events(self,window_size):   #Gère les évènements de la partie en continu
         self.border_wrapping(self.player_space_ship,window_size)
+        if (len(self.asteroids)==0 and len(self.ennemyspaceships)==0):      #Si le niveau est finie
+            self.complete_level()
         for asteroid in self.asteroids:
             self.border_wrapping(asteroid,window_size)
         for ennemyspaceship in self.ennemyspaceships:
@@ -72,7 +74,17 @@ class Game: # La partie
                     self.player_space_ship.life-=1
                     self.player_space_ship.get_invincibility(120)
                     self.player_death()
+
         for shot in self.shots:
+            for asteroid in self.asteroids:
+                if (shot.rect.collidepoint(asteroid.rect.x,asteroid.rect.y)): 
+                    if (asteroid.type<3):                   
+                        alt_spr=random.randint(1,3)                    
+                        self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid1"], self.app.window_size, asteroid.type+1,asteroid.x,asteroid.y))
+                        self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid2"], self.app.window_size, asteroid.type+1,asteroid.x,asteroid.y))
+                    self.asteroids.remove(asteroid)
+                    self.shots.remove(shot)
+                    break
             if (shot.x<0 or shot.x>self.app.window_size[0] or shot.y<0 or shot.y>self.app.window_size[1]):  # Suppression des tirs si ils sortent de l'écran (optimisation)
                 self.shots.remove(shot)
 
@@ -88,9 +100,9 @@ class Game: # La partie
 
     def player_death(self):
         if (self.player_space_ship.life==0): #détecte la mort du joueur
-            print ("game over") #test pour voir si je rentre dans la fonction
-            #fermer le jeu et retour à l'écran titre
-            #récupérer les statistiques --> self.app.get_statistics ?  (ligne 162)
+            print ("game over") # à remplacer par un écran de game over qui s'affichera quelques secondes (4, 5 ?)
+            self.app.get_statistics #appel des statistiques 
+            self.app.menu=interface.MainMenu(self.app) #retour à l'écran titre
 
     def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
         self.player_space_ship.draw(win)
@@ -168,7 +180,6 @@ class App: # Le programme
 
     def get_statistics(self):
         print ("coucou") #test pour voir si je rentre dans la boucle
-        self.best_score = 0 
         ### TIMMY : Aller chercher le fichier et définir une liste avec les statistiques
         ### Puis dans game lors du game over il faudra le sauvegarder avec les nouvelles valeurs (nb de parties, nouveau meilleur score si > ancien)
 
