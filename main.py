@@ -74,7 +74,17 @@ class Game: # La partie
                     self.player_space_ship.life-=1
                     self.player_space_ship.get_invincibility(120)
                     self.player_death()
+
         for shot in self.shots:
+            for asteroid in self.asteroids:
+                if (shot.rect.collidepoint(asteroid.rect.x,asteroid.rect.y)): 
+                    if (asteroid.type<3):                   
+                        alt_spr=random.randint(1,3)                    
+                        self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid1"], self.app.window_size, asteroid.type+1,asteroid.x,asteroid.y))
+                        self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid2"], self.app.window_size, asteroid.type+1,asteroid.x,asteroid.y))
+                    self.asteroids.remove(asteroid)
+                    self.shots.remove(shot)
+                    break
             if (shot.x<0 or shot.x>self.app.window_size[0] or shot.y<0 or shot.y>self.app.window_size[1]):  # Suppression des tirs si ils sortent de l'écran (optimisation)
                 self.shots.remove(shot)
 
