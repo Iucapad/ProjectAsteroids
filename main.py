@@ -177,7 +177,7 @@ class App: # Le programme
                 elif event.type == pygame.KEYUP:
                     self.game.key_pressed[event.key] = False                   
 
-    def get_statistics(self,score):
+    def get_statistics(self):
         f=open("stats.txt","w+")
         #f.write(str(self.game.score)) <--- à mettre au point, provoque une erreur
         #f.write(nomdujoueur) <------ nomdujoueur pas encore défini
