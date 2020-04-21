@@ -71,6 +71,7 @@ class Game: # La partie
                 if (self.player_space_ship.rect.collidepoint(asteroid.rect.x,asteroid.rect.y)):
                     self.player_space_ship.life-=1
                     self.player_space_ship.get_invincibility(120)
+                    self.player_death()
         for shot in self.shots:
             if (shot.x<0 or shot.x>self.app.window_size[0] or shot.y<0 or shot.y>self.app.window_size[1]):  # Suppression des tirs si ils sortent de l'écran (optimisation)
                 self.shots.remove(shot)
@@ -84,6 +85,12 @@ class Game: # La partie
             obj.y = 0
         elif (obj.y < 0 ):
                 obj.y = window_size[1]
+
+    def player_death(self):
+        if (self.player_space_ship.life==0): #détecte la mort du joueur
+            print ("game over") #test pour voir si je rentre dans la fonction
+            #fermer le jeu et retour à l'écran titre
+            #récupérer les statistiques --> self.app.get_statistics ?  (ligne 162)
 
     def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
         self.player_space_ship.draw(win)
@@ -133,6 +140,7 @@ class App: # Le programme
             "Asteroid2": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid2.png')),
             "Asteroid3": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid3.png')),
             "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png')),
+            "UI_Menu": pygame.image.load(os.path.join(self.folder, 'Assets/ui_menu.png')),
             "UI_Button": pygame.image.load(os.path.join(self.folder, 'Assets/ui_button.png'))
         }
         self.title_font = pygame.font.Font(os.path.join(self.folder, 'Assets/title_font.ttf'), 48)
@@ -158,6 +166,7 @@ class App: # Le programme
                     self.game.key_pressed[event.key] = False                   
 
     def get_statistics(self):
+        print ("coucou") #test pour voir si je rentre dans la boucle
         self.best_score = 0 
         ### TIMMY : Aller chercher le fichier et définir une liste avec les statistiques
         ### Puis dans game lors du game over il faudra le sauvegarder avec les nouvelles valeurs (nb de parties, nouveau meilleur score si > ancien)
