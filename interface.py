@@ -212,17 +212,36 @@ class Settings:
         clock = pygame.time.Clock()
         self.display=True
         self.click=False
-        self.h_align=app.window_size[0]/2
-        self.back_button=add_button(self.h_align,550,200,50) 
-        self.ui_button=app.sprites_list["UI_Button"]        
+        self.h_align=app.window_size[0]/2        
+        self.ui_button=app.sprites_list["UI_Button"]
+        self.settings_list = {
+            "Player_Name":"playername",
+            "Sounds":True,
+            "Skin_Pack":0
+        }   
+
+        self.back_button=add_button(self.h_align,550,200,50)
+        self.sounds_button=add_button(self.h_align,300,100,50) 
+        self.skin_button=add_button(self.h_align,400,100,50)   
 
         while self.display:
             app.window.blit(app.background,(0,0)) 
             draw_text("Options",app.title_font,(255,255,255),app,app.window_size[0]/2,100)
+            if (self.settings_list["Sounds"]):
+                pygame.draw.rect(app.window, (10,10,10),self.sounds_button)
+            else:
+                pygame.draw.rect(app.window, (45,45,45),self.sounds_button)
+            pygame.draw.rect(app.window, (10,10,10),self.skin_button)
             app.window.blit(self.ui_button,self.back_button)
             draw_text("Retour",app.button_font,(127,0,0),app,self.h_align,575)
 
             mouse_x,mouse_y=pygame.mouse.get_pos()
+            if (self.sounds_button.collidepoint(mouse_x,mouse_y)):
+                if (self.click):
+                    self.settings_list["Sounds"]= not (self.settings_list["Sounds"])
+            if (self.skin_button.collidepoint(mouse_x,mouse_y)):
+                if (self.click):
+                    self.settings_list["Skin_Pack"]+=1
             if (self.back_button.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
                     self.display=False
