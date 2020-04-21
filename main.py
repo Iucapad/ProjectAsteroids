@@ -1,6 +1,7 @@
 import os.path
 import random
 import pygame 
+import time
 import objects, interface   #Import des modules contenant les classes que l'on va instancier
 
 pygame.init()
@@ -58,9 +59,11 @@ class Game: # La partie
         else:
             self.player_space_ship.thrust = False
 
-        if self.key_pressed.get(pygame.K_SPACE):    
-            tir = objects.LaserShot(self.app.sprites_list["LaserShot"], 1, self.player_space_ship.x, self.player_space_ship.y, self.player_space_ship.angle_orientation)
-            self.shots.append(tir)
+        if self.key_pressed.get(pygame.K_SPACE):
+            if time.time() > self.player_space_ship.last_shot + self.player_space_ship.shoot_rate: 
+                tir = objects.LaserShot(self.app.sprites_list["LaserShot"], 1, self.player_space_ship.x, self.player_space_ship.y, self.player_space_ship.angle_orientation)
+                self.shots.append(tir)
+                self.player_space_ship.last_shot = time.time()
 
     def game_collisions(self):
         for asteroid in self.asteroids:
@@ -69,7 +72,7 @@ class Game: # La partie
                     self.player_space_ship.life-=1
                     self.player_space_ship.get_invincibility(120)
         for shot in self.shots:
-            if (shot.x<0 or shot.x>self.app.window_size[0] or shot.y<0 or shot.y>self.app.window_size[1]):
+            if (shot.x<0 or shot.x>self.app.window_size[0] or shot.y<0 or shot.y>self.app.window_size[1]):  # Suppression des tirs si ils sortent de l'écran (optimisation)
                 self.shots.remove(shot)
 
     def border_wrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé

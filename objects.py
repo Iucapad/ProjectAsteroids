@@ -1,6 +1,7 @@
 import random
 import math
 import pygame
+import time
 
 class PlayerSpaceShip:
     def __init__(self, sprite_list, x, y,size=50):   # Constructeur
@@ -18,9 +19,11 @@ class PlayerSpaceShip:
         self.acceleration = 0.5 		        # Inertie
         self.deceleration = 0.1			        # Inertie                      
         self.life = 3                           # Nombre de vie
-        self.shoot_rate = 1                     # Cadence de tir  
-        self.shoot_type = 0      
+        self.shoot_rate = 0.3                 # Cadence de tir  
+        self.shoot_type = 0   
+        self.last_shot = time.time() 
         self.is_invincible = 60
+
 
     def move(self):
         self.vitesse = math.sqrt(self.vitesse_horizontale**2 + self.vitesse_verticale**2)     # Calcul de la vitesse actuelle
