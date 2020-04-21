@@ -113,14 +113,14 @@ class EnnemySpaceShip:
         #print ((self.angle_direction*180)/math.pi)
         if self.x > player.x:   
             self.x -= math.cos(self.angle_direction)
-            self.y -= math.sin(self.angle_direction)
+            self.y += math.sin(self.angle_direction)
         elif self.x < player.x:
             if self.y > player.y:
                 self.x += math.cos(self.angle_direction)
-                self.y += math.sin(self.angle_direction)
+                self.y -= math.sin(self.angle_direction)
             elif self.y < player.y :
                 self.x += math.cos(self.angle_direction)
-                self.y += math.sin(self.angle_direction)
+                self.y -= math.sin(self.angle_direction)
 
     def draw(self,window): # Méthode d'affichage
         surface = pygame.transform.rotate(self.sprite,self.angle_orientation)  

@@ -90,15 +90,16 @@ class Game: # La partie
                 self.player_death()                    
 
         for asteroid in self.asteroids:
-            if pygame.sprite.spritecollide(asteroid, self.shots, False, pygame.sprite.collide_mask):
-                if (asteroid.type<3):
-                    alt_spr=random.randint(1,3)                    
-                    self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid1"], self.app.window_size, asteroid.type+1,asteroid.x+random.randint(10,20),asteroid.y+random.randint(10,20)))
-                    self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid2"], self.app.window_size, asteroid.type+1,asteroid.x-random.randint(10,20),asteroid.y-random.randint(10,20)))
-                self.asteroids.remove(asteroid)
-        for shot in self.shots:
-            if pygame.sprite.spritecollide(shot, self.asteroids, False, pygame.sprite.collide_mask):
-                self.shots.remove(shot)
+            collisions =  pygame.sprite.spritecollide(asteroid, self.shots, False, pygame.sprite.collide_mask)
+            for key in collisions:
+                if (key.type==1):
+                    self.shots.remove(key)
+                    if (asteroid.type<3):
+                        alt_spr=random.randint(1,3)                    
+                        self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid1"], self.app.window_size, asteroid.type+1,asteroid.x+random.randint(10,20),asteroid.y+random.randint(10,20)))
+                        self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid2"], self.app.window_size, asteroid.type+1,asteroid.x-random.randint(10,20),asteroid.y-random.randint(10,20)))
+                    self.asteroids.remove(asteroid)
+        for shot in self.shots:                
             if (shot.x<0 or shot.x>self.app.window_size[0] or shot.y<0 or shot.y>self.app.window_size[1]):  # Suppression des tirs si ils sortent de l'écran (optimisation)
                 self.shots.remove(shot)
 
