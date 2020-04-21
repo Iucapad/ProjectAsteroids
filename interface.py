@@ -83,6 +83,57 @@ class PauseMenu:
             pygame.display.update()
             clock.tick(120)
 
+class GameOver:
+    def __init__(self,game):
+        clock = pygame.time.Clock()
+        self.display=True
+        self.click=False
+        self.top=0
+        self.h_align=game.app.window_size[0]/2
+        self.v_align=game.app.window_size[1]/2
+        self.ui_menu=game.app.sprites_list["UI_Menu"]
+        self.ui_button=game.app.sprites_list["UI_Button"]
+        self.resume=add_button(self.h_align,self.v_align-30,200,50)
+        self.quit=add_button(self.h_align,self.v_align+30,200,50)
+
+        while self.display:
+            game.app.window.fill((0,0,0))
+            if (self.top<720):
+                self.top+=36
+                game.app.window.blit(self.ui_menu,pygame.Rect(self.h_align-250,720-self.top,500,720)) 
+            else:
+                game.app.window.blit(self.ui_menu,pygame.Rect(self.h_align-250,0,500,720)) 
+                draw_text("GAME OVER",game.app.text_font,(255,255,255),game.app,game.app.window_size[0]/2,100)
+                game.app.window.blit(self.ui_button,self.resume)
+                game.app.window.blit(self.ui_button,self.quit)
+                draw_text("Recommencer",game.app.button_font,(127,0,0),game.app,self.h_align,self.v_align-5)
+                draw_text("Quitter",game.app.button_font,(127,0,0),game.app,self.h_align,self.v_align+55)
+            
+            mouse_x,mouse_y=pygame.mouse.get_pos()
+            if (self.resume.collidepoint(mouse_x,mouse_y)):
+                if (self.click):
+                    self.display=False
+                    game.app.start_game()
+            elif (self.quit.collidepoint(mouse_x,mouse_y)):
+                if (self.click):
+                    self.display=False
+                    game.app.state="menu"
+                    game.app.menu=MainMenu(game.app)                    
+            self.click=False
+            
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.display=False
+                        app.state="game"
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.click=True
+            pygame.display.update()
+            clock.tick(120)
+
 class MainMenu:
     def __init__(self,app):
         clock = pygame.time.Clock()
@@ -165,6 +216,7 @@ class Shop:
         self.top=0
         self.h_align=game.app.window_size[0]/2
         self.v_align=game.app.window_size[1]/2
+        self.ui_menu=game.app.sprites_list["UI_Menu"]
         self.back_button=add_button(self.h_align,550,200,50) 
         self.background=pygame.Rect(self.h_align-320,self.v_align-85,640,170)
         self.item1=pygame.Rect(self.h_align-310,self.v_align-75,200,150)
@@ -175,7 +227,7 @@ class Shop:
         while self.display:
             if (self.top<720):
                 self.top+=36
-                pygame.draw.rect(game.app.window, (10,10,10),pygame.Rect(self.h_align-330,720-self.top,660,720)) 
+                game.app.window.blit(self.ui_menu,pygame.Rect(self.h_align-330,720-self.top,500,720)) 
             else: 
                 pygame.draw.rect(game.app.window, (45,45,45),self.background) 
                 pygame.draw.rect(game.app.window, (10,10,10),self.item1) 

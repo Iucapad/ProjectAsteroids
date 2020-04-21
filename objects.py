@@ -23,7 +23,7 @@ class PlayerSpaceShip:
         self.shoot_rate = 0.3                   # Cadence de tir  
         self.shoot_type = 0   
         self.last_shot = time.time() 
-        self.is_invincible = 60
+        self.is_invincible = 120
 
 
     def move(self):

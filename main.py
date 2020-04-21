@@ -116,8 +116,8 @@ class Game: # La partie
     def player_death(self):
         if (self.player_space_ship.life==0): #détecte la mort du joueur
             print ("game over") # à remplacer par un écran de game over qui s'affichera quelques secondes (4, 5 ?)
-            self.app.get_statistics(self.score) #appel des statistiques 
-            self.app.menu=interface.MainMenu(self.app) #retour à l'écran titre
+            self.app.get_statistics() #appel des statistiques 
+            game_over=interface.GameOver(self)
 
     def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
         self.player_space_ship.draw(win)
@@ -143,7 +143,6 @@ class App: # Le programme
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
         self.load_sprites()
-        self.get_statistics(0)
         self.menu=interface.MainMenu(self)
         clock = pygame.time.Clock()
 
