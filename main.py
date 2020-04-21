@@ -85,9 +85,12 @@ class Game: # La partie
     def game_collisions(self):
         if (self.player_space_ship.is_invincible==0):
             if pygame.sprite.spritecollide(self.player_space_ship, self.asteroids, False, pygame.sprite.collide_mask):
-                self.player_space_ship.life-=1
-                self.player_space_ship.get_invincibility(120)
-                self.player_death()                    
+                self.loose_life()
+            collisions =  pygame.sprite.spritecollide(self.player_space_ship, self.shots, False, pygame.sprite.collide_mask)
+            for key in collisions:
+                if (key.type==2):
+                    self.shots.remove(key)
+                    self.loose_life()
 
         for asteroid in self.asteroids:
             collisions =  pygame.sprite.spritecollide(asteroid, self.shots, False, pygame.sprite.collide_mask)
@@ -113,8 +116,11 @@ class Game: # La partie
         elif (obj.y < 0 ):
                 obj.y = window_size[1]
 
-    def player_death(self):
-        if (self.player_space_ship.life==0): #détecte la mort du joueur
+    def loose_life(self):
+        if (self.player_space_ship.life>1): #Vérifie que le joueur ait + d'une vie
+            self.player_space_ship.life-=1
+            self.player_space_ship.get_invincibility(120)
+        else:
             print ("game over") # à remplacer par un écran de game over qui s'affichera quelques secondes (4, 5 ?)
             self.app.get_statistics() #appel des statistiques 
             game_over=interface.GameOver(self)
