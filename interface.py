@@ -227,7 +227,7 @@ class Shop:
         while self.display:
             if (self.top<720):
                 self.top+=36
-                game.app.window.blit(self.ui_menu,pygame.Rect(self.h_align-330,720-self.top,500,720)) 
+                game.app.window.blit(self.ui_menu,pygame.Rect(self.h_align-250,720-self.top,500,720)) 
             else: 
                 pygame.draw.rect(game.app.window, (45,45,45),self.background) 
                 pygame.draw.rect(game.app.window, (10,10,10),self.item1) 

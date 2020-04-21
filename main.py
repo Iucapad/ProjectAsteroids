@@ -11,13 +11,13 @@ class Game: # La partie
     def __init__(self, app):
         self.app=app
         self.score = 0
-        self.level = 1
-        self.start_level(self.level)
+        self.level = 2        
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list, self.app.window_size[0]/2, self.app.window_size[1]/2)
         self.coins = 0
         self.ennemy_number = 0
+        self.start_level(self.level)
 
     def start_level(self, level): # On instancie les objets au début de niveau
         self.asteroids = [] # Création d'un tableau qui contient tous les astéroides
@@ -60,10 +60,9 @@ class Game: # La partie
             self.border_wrapping(ennemy_space_ship, window_size)
             if math.sqrt( ( (ennemy_space_ship.x - self.player_space_ship.x)**2 )+ ( (ennemy_space_ship.y - self.player_space_ship.y )**2) ) < 400:                                   
                 if time.time() > ennemy_space_ship.last_shot + ennemy_space_ship.shoot_rate: 
-                    tir = objects.LaserShot(self.app.sprites_list["LaserShot"], 1, ennemy_space_ship.x, ennemy_space_ship.y, ennemy_space_ship.angle_direction)    # Instanciation du tir
+                    tir = objects.LaserShot(self.app.sprites_list["LaserShot2"], 2, ennemy_space_ship.x, ennemy_space_ship.y, ennemy_space_ship.angle_orientation)    # Instanciation du tir
                     self.shots.append(tir)
-                    ennemy_space_ship.last_shot = time.time()   
-                    print(math.degrees(ennemy_space_ship.angle_direction))
+                    ennemy_space_ship.last_shot = time.time() 
 
         if self.key_pressed.get(pygame.K_LEFT):                             # Les input        
             self.player_space_ship.angle_orientation += 5
@@ -163,6 +162,7 @@ class App: # Le programme
             "Player": pygame.image.load(os.path.join(self.folder, 'Assets/player.png')),
             "Player1": pygame.image.load(os.path.join(self.folder, 'Assets/player1.png')),
             "LaserShot": pygame.image.load(os.path.join(self.folder, 'Assets/laser_shot.png')),
+            "LaserShot2": pygame.image.load(os.path.join(self.folder, 'Assets/laser_shot2.png')),
             "Asteroid1": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid1.png')),
             "Asteroid2": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid2.png')),
             "Asteroid3": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid3.png')),
@@ -185,8 +185,6 @@ class App: # Le programme
                     if event.key == pygame.K_ESCAPE:
                         self.state="menu"
                         self.pause=interface.PauseMenu(self)
-                    elif event.key == pygame.K_b:
-                        self.game.complete_level()
                     else:
                         self.game.key_pressed[event.key] = True
                 elif event.type == pygame.KEYUP:
