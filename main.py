@@ -91,7 +91,6 @@ class Game: # La partie
         for shot in self.shots:
             shot.draw(win)
             shot.move()
-            print(shot.x)
             
         self.game_info.draw_game_info(self.app,self.score,self.level,self.player_space_ship.get_life)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 
