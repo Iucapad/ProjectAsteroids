@@ -21,7 +21,7 @@ class Game: # La partie
         self.asteroids = [] # Création d'un tableau qui contient tous les astéroides
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         self.shots = [] # Création d'un tableau contenant tout les tirs
-        for i in range(level+1):
+        for i in range(level+3):
             alt_spr=random.randint(1,3)
             self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid"+str(alt_spr)], self.app.window_size, 1))         # Instanciation des objets asteroids
         if (self.level>1):
@@ -42,6 +42,8 @@ class Game: # La partie
 
     def game_events(self,window_size):   #Gère les évènements de la partie en continu
         self.border_wrapping(self.player_space_ship,window_size)
+        if (len(self.asteroids)==0 and len(self.ennemyspaceships)==0):      #Si le niveau est finie
+            self.complete_level()
         for asteroid in self.asteroids:
             self.border_wrapping(asteroid,window_size)
         for ennemyspaceship in self.ennemyspaceships:
