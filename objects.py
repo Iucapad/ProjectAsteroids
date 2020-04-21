@@ -161,14 +161,14 @@ class LaserShot:
     def __init__(self, sprite, laser_shot_type, x, y, angle): # todo:  sprite
         self.x = x 
         self.y = y 
-        self.angle = angle
+        self.angle = math.radians(angle)
         self.sprite = sprite
         self.vitesse = 10
         self.type = laser_shot_type # Todo
 
     def move(self):
         self.x += math.cos(self.angle) * self.vitesse
-        self.y += math.sin(self.angle) * self.vitesse
+        self.y -= math.sin(self.angle) * self.vitesse
 
     def draw(self, window): 
         surface = pygame.transform.rotate(self.sprite,self.angle)  
