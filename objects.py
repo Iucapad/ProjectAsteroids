@@ -96,6 +96,7 @@ class EnnemySpaceShip:
         self.acceleration = 0.5
         self.deceleration = 0.1
         self.shoot_rate = 1   
+        self.last_shot = time.time() 
         self.type = space_ship_type
 
     def move(self, player):
@@ -111,9 +112,6 @@ class EnnemySpaceShip:
             elif self.y < player.y :
                 self.x += math.cos(self.angle_direction)
                 self.y += math.sin(self.angle_direction)
-
-    def shoot(self): # Méthode pour le tir  
-        pass
 
     def draw(self,window): # Méthode d'affichage
         surface = pygame.transform.rotate(self.sprite,self.angle_orientation)  
@@ -135,7 +133,7 @@ class Asteroid:
         self.size = 0
         self.angle = random.randint(0,360)
         self.angle_orientation=random.randint(0, 360)
-        self.rotation=random.randint(1,2)
+        self.rotation=random.randint(1,2) 
         self.appearance(self.sprite)
         self.valX = int((math.cos(math.radians(self.angle)) * self.vitesse) /5)
         self.valY = int((math.sin(math.radians(self.angle)) * self.vitesse) /5)

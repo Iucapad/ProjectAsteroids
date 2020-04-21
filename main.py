@@ -1,6 +1,7 @@
 import os.path
 import random
 import pygame 
+import math
 import time
 import objects, interface   #Import des modules contenant les classes que l'on va instancier
 
@@ -16,17 +17,25 @@ class Game: # La partie
         self.key_pressed = {}
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list, self.app.window_size[0]/2, self.app.window_size[1]/2)
         self.coins = 0
+        self.ennemy_number = 0
 
     def start_level(self, level): # On instancie les objets au début de niveau
         self.asteroids = [] # Création d'un tableau qui contient tous les astéroides
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         self.shots = [] # Création d'un tableau contenant tout les tirs
-        for i in range(level+3):
-            alt_spr=random.randint(1,3)
-            self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid"+str(alt_spr)], self.app.window_size, 1))          # Instanciation des objets asteroids
-        if (self.level>1):
-            self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))                       # Instanciation des vaisseaux ennemis  
 
+        for i in range(level+3):
+            alt_spr = random.randint(1,3)
+            self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid"+str(alt_spr)], self.app.window_size, 1))          # Instanciation des objets asteroids
+
+        if self.level > 1 :
+            if self.ennemy_number == 0:
+                self.ennemy_number += 1
+            if self.level % 5 == 0:
+                    self.ennemy_number += 1
+            for i in range(self.ennemy_number):
+                self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))
+            
     def complete_level(self):
         self.player_space_ship.x=self.app.window_size[0]/2
         self.player_space_ship.y=self.app.window_size[1]/2
@@ -40,16 +49,23 @@ class Game: # La partie
         self.game_events(window_size)#Gestion des évènements de la partie
         self.game_collisions()#Gestion des collisions des objets        
 
-    def game_events(self,window_size):   #Gère les évènements de la partie en continu
+    def game_events(self,window_size):   # Gère les évènements de la partie en continu
         self.border_wrapping(self.player_space_ship,window_size)
-        if (len(self.asteroids)==0 and len(self.ennemyspaceships)==0):      #Si le niveau est finie
+        if (len(self.asteroids)==0 and len(self.ennemyspaceships)==0):      #Si le niveau est fini
             self.complete_level()
         for asteroid in self.asteroids:
             self.border_wrapping(asteroid,window_size)
-        for ennemyspaceship in self.ennemyspaceships:
-            self.border_wrapping(ennemyspaceship,window_size)
 
-        if self.key_pressed.get(pygame.K_LEFT):
+        for ennemy_space_ship in self.ennemyspaceships:                       # Les vaisseaux ennemis
+            self.border_wrapping(ennemy_space_ship, window_size)
+            if math.sqrt( ( (ennemy_space_ship.x - self.player_space_ship.x)**2 )+ ( (ennemy_space_ship.y - self.player_space_ship.y )**2) ) < 400:                                   
+                if time.time() > ennemy_space_ship.last_shot + ennemy_space_ship.shoot_rate: 
+                    tir = objects.LaserShot(self.app.sprites_list["LaserShot"], 1, ennemy_space_ship.x, ennemy_space_ship.y, ennemy_space_ship.angle_direction)    # Instanciation du tir
+                    self.shots.append(tir)
+                    ennemy_space_ship.last_shot = time.time()   
+                    print(math.degrees(ennemy_space_ship.angle_direction))
+
+        if self.key_pressed.get(pygame.K_LEFT):                             # Les input        
             self.player_space_ship.angle_orientation += 5
 
         if self.key_pressed.get(pygame.K_RIGHT):
