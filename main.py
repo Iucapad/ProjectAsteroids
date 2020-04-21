@@ -1,9 +1,6 @@
 import os.path
 import random
-
-
-import pygame
-
+import pygame 
 import objects, interface   #Import des modules contenant les classes que l'on va instancier
 
 pygame.init()
@@ -22,6 +19,7 @@ class Game: # La partie
     def start_level(self, level): # On instancie les objets au début de niveau
         self.asteroids = [] # Création d'un tableau qui contient tous les astéroides
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
+        self.shots = [] # Création d'un tableau contenant tout les tirs
         for i in range(level+1):
             alt_spr=random.randint(1,3)
             self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid"+str(alt_spr)], self.app.window_size, 1))         # Instanciation des objets asteroids
@@ -60,8 +58,9 @@ class Game: # La partie
         else:
             self.player_space_ship.thrust = False
 
-        if self.key_pressed.get(pygame.K_SPACE):
-            pass    #TIR
+        if self.key_pressed.get(pygame.K_SPACE):    
+            tir = objects.LaserShot(1, self.player_space_ship.x, self.player_space_ship.y, self.player_space_ship.angle_orientation)
+            self.shots.append(tir)
 
     def game_collisions(self):
         for asteroid in self.asteroids:
@@ -81,11 +80,16 @@ class Game: # La partie
     def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
         self.player_space_ship.draw(win)
         self.player_space_ship.move()
+
         for asteroid in self.asteroids:
             asteroid.draw(win)
             asteroid.move()
         for ennemyspaceship in self.ennemyspaceships:
             ennemyspaceship.draw(win)
+        for shot in self.shots:
+            shot.draw(win)
+            shot.move()
+            
         self.game_info.draw_game_info(self.app,self.score,self.level,self.player_space_ship.get_life)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 
 class App: # Le programme
@@ -131,13 +135,12 @@ class App: # Le programme
                     if event.key == pygame.K_ESCAPE:
                         self.state="menu"
                         self.pause=interface.PauseMenu(self)
-                    elif event.key == pygame.K_SPACE:
+                    elif event.key == pygame.K_b:
                         self.game.complete_level()
                     else:
                         self.game.key_pressed[event.key] = True
                 elif event.type == pygame.KEYUP:
                     self.game.key_pressed[event.key] = False                   
-
 
     def frame_draw(self):    #Cette fonction va dessiner chaque élément du programme
         if self.state=="game":

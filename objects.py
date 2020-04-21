@@ -1,6 +1,5 @@
 import random
 import math
-
 import pygame
 
 class PlayerSpaceShip:
@@ -54,10 +53,6 @@ class PlayerSpaceShip:
 
         self.x += self.vitesse_horizontale
         self.y -= self.vitesse_verticale
-  
-
-    def shoot(self): # Méthode pour le tir
-        pass    # Todo
 
     def teleport(self): # Méthode pour la téléportaiton Todo
         if (True) :
@@ -143,8 +138,8 @@ class Asteroid:
             size = 30
         elif (self.type == 3):  #Type Petit
             size = 15
-        scale=random.uniform(0.7,1) #Donne un angle aléatoire pour son mouvement initial
-        self.size = int(scale*size) #Fait varier la dimension pour les rendre uniques
+        scale=random.uniform(0.7,1) 
+        self.size = int(scale*size) # Fait varier la dimension pour les rendre uniques
         self.sprite = pygame.transform.scale(sprite,(self.size,self.size))        
 
     def destroy(self):  #PAS CERTAIN QUE CE SOIT ICI
@@ -157,12 +152,26 @@ class Asteroid:
         window.blit(surface,self.rect)
 
 class LaserShot:
-    def __init__(self, sprite, laser_shot_type, x, y):
+
+    def __init__(self, laser_shot_type, x, y, angle): # todo:  sprite
         self.x = x 
         self.y = y 
-        self.angle = 90
-        self.vitesse = 1
+        self.angle = angle
+        self.vitesse = 10
         self.type = laser_shot_type # Todo
+        self.shots.append(self)
+
+    def shoot(self): # Méthode pour le tir
+        tir = LaserShot(1, self.x, self.y, self.angle_orientation)
+
+
+    def move(self):
+        self.x += math.cos(self.angle) * self.vitesse
+        self.y += math.sin(self.angle) * self.vitesse
+
+    def draw(self, window): 
+        
+
 
 class BonusItem:
     def __init__(self, sprite, bonus_type, x, y):
