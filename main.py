@@ -84,23 +84,22 @@ class Game: # La partie
                 self.player_space_ship.last_shot = time.time()
 
     def game_collisions(self):
-        for asteroid in self.asteroids:
-            if (self.player_space_ship.is_invincible==0):
-                if (self.player_space_ship.rect.collidepoint(asteroid.rect.x,asteroid.rect.y)):
-                    self.player_space_ship.life-=1
-                    self.player_space_ship.get_invincibility(120)
-                    self.player_death()
+        if (self.player_space_ship.is_invincible==0):
+            if pygame.sprite.spritecollide(self.player_space_ship, self.asteroids, False, pygame.sprite.collide_mask):
+                self.player_space_ship.life-=1
+                self.player_space_ship.get_invincibility(120)
+                self.player_death()                    
 
+        for asteroid in self.asteroids:
+            if pygame.sprite.spritecollide(asteroid, self.shots, False, pygame.sprite.collide_mask):
+                if (asteroid.type<3):
+                    alt_spr=random.randint(1,3)                    
+                    self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid1"], self.app.window_size, asteroid.type+1,asteroid.x+random.randint(10,20),asteroid.y+random.randint(10,20)))
+                    self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid2"], self.app.window_size, asteroid.type+1,asteroid.x-random.randint(10,20),asteroid.y-random.randint(10,20)))
+                self.asteroids.remove(asteroid)
         for shot in self.shots:
-            for asteroid in self.asteroids:
-                if (shot.rect.collidepoint(asteroid.rect.x,asteroid.rect.y)): 
-                    if (asteroid.type<3):                   
-                        alt_spr=random.randint(1,3)                    
-                        self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid1"], self.app.window_size, asteroid.type+1,asteroid.x,asteroid.y))
-                        self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid2"], self.app.window_size, asteroid.type+1,asteroid.x,asteroid.y))
-                    self.asteroids.remove(asteroid)
-                    self.shots.remove(shot)
-                    break
+            if pygame.sprite.spritecollide(shot, self.asteroids, False, pygame.sprite.collide_mask):
+                self.shots.remove(shot)
             if (shot.x<0 or shot.x>self.app.window_size[0] or shot.y<0 or shot.y>self.app.window_size[1]):  # Suppression des tirs si ils sortent de l'écran (optimisation)
                 self.shots.remove(shot)
 
@@ -117,7 +116,7 @@ class Game: # La partie
     def player_death(self):
         if (self.player_space_ship.life==0): #détecte la mort du joueur
             print ("game over") # à remplacer par un écran de game over qui s'affichera quelques secondes (4, 5 ?)
-            self.app.get_statistics #appel des statistiques 
+            self.app.get_statistics(self.score) #appel des statistiques 
             self.app.menu=interface.MainMenu(self.app) #retour à l'écran titre
 
     def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
@@ -144,7 +143,7 @@ class App: # Le programme
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
         self.load_sprites()
-        self.get_statistics()
+        self.get_statistics(0)
         self.menu=interface.MainMenu(self)
         clock = pygame.time.Clock()
 
@@ -195,9 +194,10 @@ class App: # Le programme
                     self.game.key_pressed[event.key] = False                   
 
     def get_statistics(self):
-        print ("coucou") #test pour voir si je rentre dans la boucle
-        ### TIMMY : Aller chercher le fichier et définir une liste avec les statistiques
-        ### Puis dans game lors du game over il faudra le sauvegarder avec les nouvelles valeurs (nb de parties, nouveau meilleur score si > ancien)
+        f=open("stats.txt","w+")
+        #f.write(str(self.game.score)) <--- à mettre au point, provoque une erreur
+        #f.write(nomdujoueur) <------ nomdujoueur pas encore défini
+        f.close()
 
     def frame_draw(self):    #Cette fonction va dessiner chaque élément du programme
         if self.state=="game":
