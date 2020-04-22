@@ -10,7 +10,9 @@ pygame.init()
 class Game: # La partie 
     def __init__(self, app):
         self.son_tir_laser = pygame.mixer.Sound("Assets/asteroids-ship-shoot.wav")
+        self.son_tir_ennemy = pygame.mixer.Sound("Assets/fire.wav")
         self.son_gameover = pygame.mixer.Sound("Assets/boom.wav")
+        self.son_dmg = pygame.mixer.Sound("Assets/beep-03.wav")
         #self.musique = pygame.mixer.Sound("Assets/musique_ambiance.mp3")
         self.app=app
         self.score = 0
@@ -77,7 +79,8 @@ class Game: # La partie
                 self.border_wrapping(ennemy_space_ship, window_size)
                 if math.sqrt( ( (ennemy_space_ship.x - self.player_space_ship.x)**2 )+ ( (ennemy_space_ship.y - self.player_space_ship.y )**2) ) < 400:                                   
                     if time.time() > ennemy_space_ship.last_shot + ennemy_space_ship.shoot_rate: 
-                        tir = objects.LaserShot(self.app.sprites_list["LaserShot2"], 2, ennemy_space_ship.x, ennemy_space_ship.y, ennemy_space_ship.angle_orientation)    # Instanciation du tir
+                        tir = objects.LaserShot(self.app.sprites_list["LaserShot2"], 2, ennemy_space_ship.x, ennemy_space_ship.y, ennemy_space_ship.angle_orientation)    # Instanciation du tir des vaisseaux ennemis
+                        self.son_tir_ennemy.play()
                         self.shots.append(tir)
                         ennemy_space_ship.last_shot = time.time() 
             if ennemy_space_ship.life == 0:                
@@ -110,13 +113,16 @@ class Game: # La partie
         if (self.player_space_ship.is_invincible==0):
             if pygame.sprite.spritecollide(self.player_space_ship, self.asteroids, False, pygame.sprite.collide_mask):
                 self.loose_life()
+                self.son_dmg.play()
             collisions =  pygame.sprite.spritecollide(self.player_space_ship, self.shots, False, pygame.sprite.collide_mask)
             for key in collisions:
                 if (key.type==2):
                     self.shots.remove(key)
                     self.loose_life()
+                    self.son_dmg.play()
             if pygame.sprite.spritecollide(self.player_space_ship, self.ennemyspaceships, False, pygame.sprite.collide_mask):
                 self.loose_life()
+                self.son_dmg.play()
         for ennemyspaceship in self.ennemyspaceships:
             collisions =  pygame.sprite.spritecollide(ennemyspaceship, self.shots, False, pygame.sprite.collide_mask)
             for key in collisions:
