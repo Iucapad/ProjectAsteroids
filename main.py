@@ -137,7 +137,7 @@ class Game: # La partie
                     if (asteroid.type==3):
                         luck=random.randint(0,10)
                         if (luck > 3):
-                            if (luck >8):
+                            if (luck >9):
                                 self.bonus_list.append(objects.BonusItem(self.app.sprites_list["Bonus2"],2,asteroid.x,asteroid.y))
                             else:
                                 self.bonus_list.append(objects.BonusItem(self.app.sprites_list["Bonus1"],1,asteroid.x,asteroid.y))                  
