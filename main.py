@@ -16,7 +16,7 @@ class Game: # La partie
         self.son_teleport = pygame.mixer.Sound(os.path.join(app.folder, "Assets/teleport.wav"))
         self.app=app
         self.score = 0
-        self.level = 1        
+        self.level = 5 
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list, self.app.window_size[0]/2, self.app.window_size[1]/2)
@@ -30,6 +30,7 @@ class Game: # La partie
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         self.shots = [] # Création d'un tableau contenant tout les tirs
         self.bonus_list = [] #Création d'un tableau contenant les bonus apparus
+        self.black_hole = []
         
 
         for i in range(level+3):
@@ -41,6 +42,9 @@ class Game: # La partie
                 self.ennemy_number += 1
             if self.level % 5 == 0:
                     self.ennemy_number += 1
+                    self.black_hole_number = 1
+            else :
+                self.black_hole_number = 0
             for i in range(self.ennemy_number):
                 if (self.difficulty==0):
                     self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))
@@ -49,6 +53,8 @@ class Game: # La partie
                 if (self.difficulty==2):
                     self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))
                     self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy1"], 2, 200, 300))
+            if self.black_hole_number == 1:
+                self.black_hole.append( objects.BlackHole(self.app.sprites_list["BlackHole"], random.randint(100, self.app.window_size[0]-100), random.randint(100, self.app.window_size[1]-100)))  # Instanciation du trou noir
             
     def complete_level(self):
         self.player_space_ship.x=self.app.window_size[0]/2
@@ -84,7 +90,7 @@ class Game: # La partie
                         self.shots.append(tir)
                         ennemy_space_ship.last_shot = time.time() 
             if ennemy_space_ship.life == 0:                
-                self.coins+=20
+                self.coins += 20
                 self.score+=ennemy_space_ship.type*25
                 self.ennemyspaceships.remove(ennemy_space_ship)
 
@@ -100,7 +106,7 @@ class Game: # La partie
         else:
             self.player_space_ship.thrust = False
         if self.key_pressed.get(pygame.K_DOWN):
-            self.player_space_ship.teleport(self.asteroids, self.ennemyspaceships, self.son_teleport)
+            self.player_space_ship.teleport(self.asteroids, self.ennemyspaceships, self.son_teleport, self.black_hole)
 
         if self.key_pressed.get(pygame.K_SPACE):
             if time.time() > self.player_space_ship.last_shot + self.player_space_ship.shoot_rate: 
@@ -109,28 +115,41 @@ class Game: # La partie
                 self.shots.append(tir)
                 self.player_space_ship.last_shot = time.time()
 
-    def game_collisions(self):
+    def game_collisions(self): 
         if (self.player_space_ship.is_invincible==0):
-            if pygame.sprite.spritecollide(self.player_space_ship, self.asteroids, False, pygame.sprite.collide_mask):
+            if pygame.sprite.spritecollide(self.player_space_ship, self.asteroids, False, pygame.sprite.collide_mask):  # Collision entre le joueur et les astéroids
                 self.loose_life()
                 self.son_dmg.play()
-            collisions =  pygame.sprite.spritecollide(self.player_space_ship, self.shots, False, pygame.sprite.collide_mask)
+            collisions =  pygame.sprite.spritecollide(self.player_space_ship, self.shots, False, pygame.sprite.collide_mask)    # Collision entre le joueur et les tirs ennemis
             for key in collisions:
-                if (key.type==2):
+                if (key.type==2):   # Type = 1 tir de joueur, 2 tir ennemis
                     self.shots.remove(key)
                     self.loose_life()
                     self.son_dmg.play()
-            if pygame.sprite.spritecollide(self.player_space_ship, self.ennemyspaceships, False, pygame.sprite.collide_mask):
+            if pygame.sprite.spritecollide(self.player_space_ship, self.ennemyspaceships, False, pygame.sprite.collide_mask): # Collision entre  le joueur et les vaisseaux ennemis
                 self.loose_life()
                 self.son_dmg.play()
+            if pygame.sprite.spritecollide(self.player_space_ship, self.black_hole,  False, pygame.sprite.collide_mask):
+                while self.player_space_ship.life > 0 : 
+                    self.player_space_ship.life -= 1
+                    self.loose_life()
+                
         for ennemyspaceship in self.ennemyspaceships:
-            collisions =  pygame.sprite.spritecollide(ennemyspaceship, self.shots, False, pygame.sprite.collide_mask)
+            collisions =  pygame.sprite.spritecollide(ennemyspaceship, self.shots, False, pygame.sprite.collide_mask) # Collision entre les vaisseaux ennemis et les tirs
             for key in collisions:
                 if (key.type==1):
                     self.shots.remove(key)
                     ennemyspaceship.life-=1
+
+        for black_hole in self.black_hole:
+            collisions = pygame.sprite.spritecollide(black_hole, self.shots, False, pygame.sprite.collide_mask)
+            for key in collisions:
+                if key.type == 1:
+                    self.shots.remove(key)
+        
+        
         for asteroid in self.asteroids:
-            collisions =  pygame.sprite.spritecollide(asteroid, self.shots, False, pygame.sprite.collide_mask)
+            collisions =  pygame.sprite.spritecollide(asteroid, self.shots, False, pygame.sprite.collide_mask)  # Collision entre les astéroids et les tirs 
             for key in collisions:
                 if (key.type==1):
                     self.shots.remove(key)  
@@ -174,8 +193,7 @@ class Game: # La partie
             self.player_space_ship.get_invincibility(120)
         else:
             self.son_gameover.play()
-            print ("game over") # à remplacer par un écran de game over qui s'affichera quelques secondes (4, 5 ?)
-            self.app.get_statistics() #appel des statistiques 
+            self.app.get_statistics() # Appel des statistiques 
             game_over=interface.GameOver(self)
 
     def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
@@ -192,6 +210,8 @@ class Game: # La partie
         for asteroid in self.asteroids:
             asteroid.draw(win)
             asteroid.move()
+        for black_hole in self.black_hole:
+            black_hole.draw(win)
             
         self.game_info.draw_game_info(self.app,self.score,self.coins,self.level,self.player_space_ship.get_life)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 
@@ -232,7 +252,8 @@ class App: # Le programme
             "Bonus1": pygame.image.load(os.path.join(self.folder, 'Assets/bonuscoin.png')),
             "Bonus2": pygame.image.load(os.path.join(self.folder, 'Assets/bonuslife.png')),
             "UI_Menu": pygame.image.load(os.path.join(self.folder, 'Assets/ui_menu.png')),
-            "UI_Button": pygame.image.load(os.path.join(self.folder, 'Assets/ui_button.png'))
+            "UI_Button": pygame.image.load(os.path.join(self.folder, 'Assets/ui_button.png')),
+            "BlackHole" : pygame.image.load(os.path.join(self.folder, 'Assets/Black_hole.png'))
         }
         self.title_font = pygame.font.Font(os.path.join(self.folder, 'Assets/title_font.ttf'), 48)
         self.text_font = pygame.font.Font(os.path.join(self.folder, 'Assets/text_font.ttf'), 32)

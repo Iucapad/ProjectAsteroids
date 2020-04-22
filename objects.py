@@ -59,11 +59,11 @@ class PlayerSpaceShip:
         self.x += self.vitesse_horizontale
         self.y -= self.vitesse_verticale
 
-    def teleport(self, asteroids, vaisseaux, son_teleport): # Méthode pour la téléportaiton Todo
+    def teleport(self, asteroids, vaisseaux, son_teleport, black_hole): # Méthode pour la téléportaiton Todo
         if self.teleported == 0:
             self.x = random.randint(200, 1080)
             self.y = random.randint(120, 620)
-            if not(pygame.sprite.spritecollide(self, asteroids, False, pygame.sprite.collide_mask)) :
+            if not( pygame.sprite.spritecollide(self, asteroids, False, pygame.sprite.collide_mask) and pygame.sprite.spritecollide(self, black_hole, pygame.sprite.collide_mask) ) :
                 self.teleported = 1
                 son_teleport.play()
                 self.is_invincible = 120
@@ -209,7 +209,6 @@ class BonusItem:
         self.rect = self.sprite.get_rect(center=(self.x, self.y))
         self.mask = pygame.mask.from_surface(self.sprite)
         self.bonus_type = bonus_type
-        print (self.bonus_type)
 
     def draw(self,window):
         self.rect = self.sprite.get_rect(center=(self.x, self.y))
@@ -217,4 +216,15 @@ class BonusItem:
         window.blit(self.sprite, self.rect)
 
 class BlackHole:
-    pass
+    def __init__(self, sprite, x, y):
+        self.x = x
+        self.y = y
+        self.angle = math.radians(random.randint(0, 360))
+        self.vitesse = 1
+        self.sprite = sprite
+
+    def draw(self, window):
+        surface = pygame.transform.rotate(self.sprite, self.angle)
+        self.rect = surface.get_rect(center=(self.x, self.y))
+        self.mask = pygame.mask.from_surface(surface)
+        window.blit(surface, self.rect)
