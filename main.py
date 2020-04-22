@@ -74,6 +74,8 @@ class Game: # La partie
                         tir = objects.LaserShot(self.app.sprites_list["LaserShot2"], 2, ennemy_space_ship.x, ennemy_space_ship.y, ennemy_space_ship.angle_orientation)    # Instanciation du tir
                         self.shots.append(tir)
                         ennemy_space_ship.last_shot = time.time() 
+            if ennemy_space_ship.life == 0:
+                self.ennemyspaceships.remove(ennemy_space_ship)
 
         if self.key_pressed.get(pygame.K_LEFT):                             # Les input        
             self.player_space_ship.angle_orientation += 5
