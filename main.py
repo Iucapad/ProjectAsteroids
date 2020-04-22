@@ -11,7 +11,7 @@ class Game: # La partie
     def __init__(self, app):
         self.app=app
         self.score = 0
-        self.level = 2        
+        self.level = 1        
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list, self.app.window_size[0]/2, self.app.window_size[1]/2)
@@ -23,6 +23,7 @@ class Game: # La partie
         self.asteroids = [] # Création d'un tableau qui contient tous les astéroides
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         self.shots = [] # Création d'un tableau contenant tout les tirs
+        
 
         for i in range(level+3):
             alt_spr = random.randint(1,3)
@@ -34,7 +35,7 @@ class Game: # La partie
             if self.level % 5 == 0:
                     self.ennemy_number += 1
             for i in range(self.ennemy_number):
-                self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))
+                self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))                    # Instanciation des vaisseaux ennemis
                 self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy1"], 2, 200, 300))
             
     def complete_level(self):
@@ -44,6 +45,8 @@ class Game: # La partie
         self.shop=interface.Shop(self)
         self.level += 1
         self.start_level(self.level)
+        self.player_space_ship.teleported = 0
+        self.player_space_ship.is_invincible = 120
 
     def update_loop(self,window,window_size):
         self.game_draw(window) #Dessiner ce qu'elle contient dans la fenêtre
@@ -77,6 +80,8 @@ class Game: # La partie
             self.player_space_ship.angle_inertie = self.player_space_ship.angle_orientation
         else:
             self.player_space_ship.thrust = False
+        if self.key_pressed.get(pygame.K_DOWN):
+            self.player_space_ship.teleport(self.asteroids, self.ennemyspaceships)
 
         if self.key_pressed.get(pygame.K_SPACE):
             if time.time() > self.player_space_ship.last_shot + self.player_space_ship.shoot_rate: 

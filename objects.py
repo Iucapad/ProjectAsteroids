@@ -24,6 +24,7 @@ class PlayerSpaceShip:
         self.shoot_type = 0   
         self.last_shot = time.time() 
         self.is_invincible = 120
+        self.teleported = 0
 
 
     def move(self):
@@ -58,12 +59,15 @@ class PlayerSpaceShip:
         self.x += self.vitesse_horizontale
         self.y -= self.vitesse_verticale
 
-    def teleport(self): # Méthode pour la téléportaiton Todo
-        if (True) :
-            #TP()
-            pass
-        else :
-            self.teleport()
+    def teleport(self, asteroids, vaisseaux): # Méthode pour la téléportaiton Todo
+        if self.teleported == 0:
+            self.x = random.randint(200, 1080)
+            self.y = random.randint(120, 620)
+            if not(pygame.sprite.spritecollide(self, asteroids, False, pygame.sprite.collide_mask)) :
+                self.teleported = 1
+                self.is_invincible = 120
+            else :
+                self.teleport(asteroids, vaisseaux)
 
     @property
     def get_life(self):
