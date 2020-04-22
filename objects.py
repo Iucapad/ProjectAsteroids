@@ -103,27 +103,27 @@ class EnnemySpaceShip:
         self.type = space_ship_type
 
     def move(self, player):        
-        opp=player.y - self.y
-        adj=player.x - self.x
-        self.angle_direction = -math.atan((opp)/(adj))   # L'angle est adapté en fct de la postion du vaisseau du joueur
-        if (adj<0):
-            self.angle_orientation = ((self.angle_direction*180)/math.pi)+180
-        else:
-            self.angle_orientation = ((self.angle_direction*180)/math.pi)
-        #print ((self.angle_direction*180)/math.pi)
-        if self.x > player.x:   
-            self.x -= math.cos(self.angle_direction)
-            self.y += math.sin(self.angle_direction)
-        elif self.x < player.x:
-            if self.y > player.y:
-                self.x += math.cos(self.angle_direction)
-                self.y -= math.sin(self.angle_direction)
-            elif self.y < player.y :
-                self.x += math.cos(self.angle_direction)
-                self.y -= math.sin(self.angle_direction)
+        if not(self.rect.colliderect(player.rect)):
+            opp=player.y - self.y
+            adj=player.x - self.x
+            self.angle_direction = -math.atan((opp)/(adj))   # L'angle est adapté en fct de la postion du vaisseau du joueur
+            if (adj<0):
+                self.angle_orientation = ((self.angle_direction*180)/math.pi)+180
+            else:
+                self.angle_orientation = ((self.angle_direction*180)/math.pi)
+            if self.x > player.x:   
+                self.x -= math.cos(self.angle_direction)
+                self.y += math.sin(self.angle_direction)
+            elif self.x < player.x:
+                if self.y > player.y:
+                    self.x += math.cos(self.angle_direction)
+                    self.y -= math.sin(self.angle_direction)
+                elif self.y < player.y :
+                    self.x += math.cos(self.angle_direction)
+                    self.y -= math.sin(self.angle_direction)
 
     def draw(self,window): # Méthode d'affichage
-        surface = pygame.transform.rotate(self.sprite,self.angle_orientation)  
+        surface = pygame.transform.rotate(self.sprite,self.angle_direction)  
         self.rect = surface.get_rect(center=(self.x, self.y))
         self.mask = pygame.mask.from_surface(surface)       
         window.blit(surface,self.rect)
@@ -161,10 +161,10 @@ class Asteroid:
         if (self.type == 1):    #Type Grand
             size = 120
         elif (self.type == 2):  #Type Moyen
-            size = 100
+            size = 90
         elif (self.type == 3):  #Type Petit
             size = 60
-        scale=random.uniform(0.7,1) 
+        scale=random.uniform(0.8,1) 
         self.size = int(scale*size) # Fait varier la dimension pour les rendre uniques
         self.sprite = pygame.transform.scale(sprite,(self.size,self.size))  
 

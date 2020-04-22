@@ -35,6 +35,7 @@ class Game: # La partie
                     self.ennemy_number += 1
             for i in range(self.ennemy_number):
                 self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))
+                self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy1"], 2, 200, 300))
             
     def complete_level(self):
         self.player_space_ship.x=self.app.window_size[0]/2
@@ -57,12 +58,13 @@ class Game: # La partie
             self.border_wrapping(asteroid,window_size)
 
         for ennemy_space_ship in self.ennemyspaceships:                       # Les vaisseaux ennemis
-            self.border_wrapping(ennemy_space_ship, window_size)
-            if math.sqrt( ( (ennemy_space_ship.x - self.player_space_ship.x)**2 )+ ( (ennemy_space_ship.y - self.player_space_ship.y )**2) ) < 400:                                   
-                if time.time() > ennemy_space_ship.last_shot + ennemy_space_ship.shoot_rate: 
-                    tir = objects.LaserShot(self.app.sprites_list["LaserShot2"], 2, ennemy_space_ship.x, ennemy_space_ship.y, ennemy_space_ship.angle_orientation)    # Instanciation du tir
-                    self.shots.append(tir)
-                    ennemy_space_ship.last_shot = time.time() 
+            if (ennemy_space_ship.type==2):
+                self.border_wrapping(ennemy_space_ship, window_size)
+                if math.sqrt( ( (ennemy_space_ship.x - self.player_space_ship.x)**2 )+ ( (ennemy_space_ship.y - self.player_space_ship.y )**2) ) < 400:                                   
+                    if time.time() > ennemy_space_ship.last_shot + ennemy_space_ship.shoot_rate: 
+                        tir = objects.LaserShot(self.app.sprites_list["LaserShot2"], 2, ennemy_space_ship.x, ennemy_space_ship.y, ennemy_space_ship.angle_orientation)    # Instanciation du tir
+                        self.shots.append(tir)
+                        ennemy_space_ship.last_shot = time.time() 
 
         if self.key_pressed.get(pygame.K_LEFT):                             # Les input        
             self.player_space_ship.angle_orientation += 5
@@ -91,7 +93,14 @@ class Game: # La partie
                 if (key.type==2):
                     self.shots.remove(key)
                     self.loose_life()
-
+            if pygame.sprite.spritecollide(self.player_space_ship, self.ennemyspaceships, False, pygame.sprite.collide_mask):
+                self.loose_life()
+        for ennemyspaceship in self.ennemyspaceships:
+            collisions =  pygame.sprite.spritecollide(ennemyspaceship, self.shots, False, pygame.sprite.collide_mask)
+            for key in collisions:
+                if (key.type==1):
+                    self.shots.remove(key)
+                    ennemyspaceship.life-=1
         for asteroid in self.asteroids:
             collisions =  pygame.sprite.spritecollide(asteroid, self.shots, False, pygame.sprite.collide_mask)
             for key in collisions:
@@ -174,6 +183,7 @@ class App: # Le programme
             "Asteroid2": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid2.png')),
             "Asteroid3": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid3.png')),
             "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png')),
+            "Ennemy1": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy1.png')),
             "UI_Menu": pygame.image.load(os.path.join(self.folder, 'Assets/ui_menu.png')),
             "UI_Button": pygame.image.load(os.path.join(self.folder, 'Assets/ui_button.png'))
         }
