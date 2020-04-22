@@ -1,4 +1,5 @@
 import pygame
+import random
 
 pygame.init()
 
@@ -223,7 +224,15 @@ class Shop:
         self.item1=pygame.Rect(self.h_align-310,self.v_align-75,200,150)
         self.item2=pygame.Rect(self.h_align-100,self.v_align-75,200,150)
         self.item3=pygame.Rect(self.h_align+110,self.v_align-75,200,150)
-        self.ui_button=game.app.sprites_list["UI_Button"] 
+        self.ui_button=game.app.sprites_list["UI_Button"]
+        self.items={
+            0:"5 Vies",
+            1:"Bouclier",
+            2:"Amélioration Vaisseau",
+            3:"Test"
+        }
+        self.prices=[50,100,250,15]
+        self.generate_sale()
 
         while self.display:
             if (self.top<720):
@@ -244,6 +253,18 @@ class Shop:
             if (self.back_button.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
                     self.display=False
+            if (self.item1.collidepoint(mouse_x,mouse_y)):
+                if (self.click):
+                    print("Achat de "+str(self.items[self.item_1]+"pour un prix de "+str(self.prices[self.item_1])))
+                    self.display=False
+            if (self.item2.collidepoint(mouse_x,mouse_y)):
+                if (self.click):
+                    print("Achat de "+str(self.items[self.item_2]+"pour un prix de "+str(self.prices[self.item_2])))
+                    self.display=False
+            if (self.item3.collidepoint(mouse_x,mouse_y)):
+                if (self.click):
+                    print("Achat de "+str(self.items[self.item_3]+"pour un prix de "+str(self.prices[self.item_3])))
+                    self.display=False
             self.click=False
             
             for event in pygame.event.get():
@@ -254,6 +275,17 @@ class Shop:
                         self.click=True
             pygame.display.update()
             clock.tick(120)
+
+    def generate_sale(self):
+        it1=random.randint(0,3)
+        it2=random.randint(0,3)
+        it3=random.randint(0,3)
+        if (it3!=it1 and it3!=it2 and it1!=it2):
+            self.item_1=it1
+            self.item_2=it2
+            self.item_3=it3
+        else:
+            self.generate_sale()
 
 class GameIntro:
 
