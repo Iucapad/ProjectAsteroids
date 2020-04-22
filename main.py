@@ -17,6 +17,7 @@ class Game: # La partie
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list, self.app.window_size[0]/2, self.app.window_size[1]/2)
         self.coins = 0
         self.ennemy_number = 0
+        self.difficulty=2
         self.start_level(self.level)
 
     def start_level(self, level): # On instancie les objets au début de niveau
@@ -35,8 +36,13 @@ class Game: # La partie
             if self.level % 5 == 0:
                     self.ennemy_number += 1
             for i in range(self.ennemy_number):
-                self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))                    # Instanciation des vaisseaux ennemis
-                self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy1"], 2, 200, 300))
+                if (self.difficulty==0):
+                    self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))
+                if (self.difficulty==1):
+                    self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy1"], 2, 200, 300))
+                if (self.difficulty==2):
+                    self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))
+                    self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy1"], 2, 200, 300))
             
     def complete_level(self):
         self.player_space_ship.x=self.app.window_size[0]/2
