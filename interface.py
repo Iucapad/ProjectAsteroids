@@ -220,18 +220,18 @@ class Shop:
         self.v_align=game.app.window_size[1]/2
         self.ui_menu=game.app.sprites_list["UI_Menu"]
         self.back_button=add_button(self.h_align,550,200,50) 
-        self.background=pygame.Rect(self.h_align-320,self.v_align-85,640,170)
-        self.item1=pygame.Rect(self.h_align-310,self.v_align-75,200,150)
-        self.item2=pygame.Rect(self.h_align-100,self.v_align-75,200,150)
-        self.item3=pygame.Rect(self.h_align+110,self.v_align-75,200,150)
+        self.background=pygame.Rect(self.h_align-250,self.v_align-85,500,170)
+        self.item1=pygame.Rect(self.h_align-260,self.v_align-75,150,150)
+        self.item2=pygame.Rect(self.h_align-100,self.v_align-75,150,150)
+        self.item3=pygame.Rect(self.h_align+60,self.v_align-75,150,150)
         self.ui_button=game.app.sprites_list["UI_Button"]
         self.items={
             0:"5 Vies",
-            1:"Bouclier",
-            2:"Amélioration Vaisseau",
-            3:"Test"
+            1:"Inertie --",
+            2:"Tir ++",
+            3:"Bouclier"
         }
-        self.prices=[50,100,250,15]
+        self.prices=[50,100,250,1000]
         self.generate_sale()
 
         while self.display:
@@ -242,10 +242,16 @@ class Shop:
                 pygame.draw.rect(game.app.window, (45,45,45),self.background) 
                 pygame.draw.rect(game.app.window, (10,10,10),self.item1) 
                 pygame.draw.rect(game.app.window, (10,10,10),self.item2)
-                pygame.draw.rect(game.app.window, (10,10,10),self.item3) 
+                pygame.draw.rect(game.app.window, (10,10,10),self.item3)
+                draw_text(self.items[self.item_1],game.app.button_font,(127,0,0),game.app,self.item1.x+75,self.item1.y+15)
+                draw_text(self.items[self.item_2],game.app.button_font,(127,0,0),game.app,self.item2.x+75,self.item2.y+15)
+                draw_text(self.items[self.item_3],game.app.button_font,(127,0,0),game.app,self.item3.x+75,self.item3.y+15)
+                draw_text(str(self.prices[self.item_1]),game.app.button_font,(127,0,0),game.app,self.item1.x+75,self.item1.y+130)
+                draw_text(str(self.prices[self.item_2]),game.app.button_font,(127,0,0),game.app,self.item2.x+75,self.item2.y+130)
+                draw_text(str(self.prices[self.item_3]),game.app.button_font,(127,0,0),game.app,self.item3.x+75,self.item2.y+130)
                 draw_text("BOUTIQUE",game.app.text_font,(255,255,255),game.app,game.app.window_size[0]/2,100)
                 draw_text("Améliorations disponibles",game.app.text_font,(255,255,255),game.app,game.app.window_size[0]/2,self.v_align-140)
-                draw_text("Vous avez "+str(game.coins)+"$",game.app.text_font,(255,255,255),game.app,game.app.window_size[0]/2,self.v_align-110)
+                draw_text("Vous avez "+str(game.coins)+"$",game.app.button_font,(255,255,255),game.app,game.app.window_size[0]/2,self.v_align-105)
                 game.app.window.blit(self.ui_button,self.back_button)
                 draw_text("Passer",game.app.button_font,(127,0,0),game.app,self.h_align,575)
 
@@ -255,16 +261,26 @@ class Shop:
                     self.display=False
             if (self.item1.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
-                    print("Achat de "+str(self.items[self.item_1]+"pour un prix de "+str(self.prices[self.item_1])))
-                    self.display=False
+                    if (game.coins>self.prices[self.item_1]):
+                        self.transaction(self.item_1)
+                        print("Achat de "+str(self.items[self.item_1]+"pour un prix de "+str(self.prices[self.item_1])))
+                        self.display=False
+                    else:
+                        print('t pauvre')
             if (self.item2.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
-                    print("Achat de "+str(self.items[self.item_2]+"pour un prix de "+str(self.prices[self.item_2])))
-                    self.display=False
+                    if (game.coins>self.prices[self.item_2]):
+                        self.transaction(self.item_2)
+                        self.display=False
+                    else:
+                        print('t pauvre')
             if (self.item3.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
-                    print("Achat de "+str(self.items[self.item_3]+"pour un prix de "+str(self.prices[self.item_3])))
-                    self.display=False
+                    if (game.coins>self.prices[self.item_3]):
+                        self.transaction(self.item_3)
+                        self.display=False
+                    else:
+                        print('t pauvre')
             self.click=False
             
             for event in pygame.event.get():
@@ -275,6 +291,17 @@ class Shop:
                         self.click=True
             pygame.display.update()
             clock.tick(120)
+
+    def transaction(self,item):
+        self.game.coins-=self.prices[item]
+        if (item==0):            
+            self.game.player_space_ship.life+=5
+        elif (item==1):
+            pass
+        elif (item==2):
+            pass
+        elif (item==3):
+            self.game.player_space_ship.is_invincible = 1800
 
     def generate_sale(self):
         it1=random.randint(0,3)
