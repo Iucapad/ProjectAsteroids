@@ -24,7 +24,6 @@ class Game: # La partie
         self.asteroids = [] # Création d'un tableau qui contient tous les astéroides
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         self.shots = [] # Création d'un tableau contenant tout les tirs
-        
 
         for i in range(level+3):
             alt_spr = random.randint(1,3)
@@ -53,6 +52,8 @@ class Game: # La partie
         self.start_level(self.level)
         self.player_space_ship.teleported = 0
         self.player_space_ship.is_invincible = 120
+        if self.player_space_ship.life < 3:
+            self.player_space_ship.life += 1
 
     def update_loop(self,window,window_size):
         self.game_draw(window) #Dessiner ce qu'elle contient dans la fenêtre
@@ -61,7 +62,7 @@ class Game: # La partie
 
     def game_events(self,window_size):   # Gère les évènements de la partie en continu
         self.border_wrapping(self.player_space_ship,window_size)
-        if (len(self.asteroids)==0 and len(self.ennemyspaceships)==0):      #Si le niveau est fini
+        if (len(self.asteroids) == 0 and len(self.ennemyspaceships) == 0):      # Si le niveau est fini
             self.complete_level()
         for asteroid in self.asteroids:
             self.border_wrapping(asteroid,window_size)
@@ -139,7 +140,7 @@ class Game: # La partie
                 obj.y = window_size[1]
 
     def loose_life(self):
-        if (self.player_space_ship.life>1): #Vérifie que le joueur ait + d'une vie
+        if  self.player_space_ship.life > 1: #Vérifie que le joueur ait + d'une vie
             self.player_space_ship.life-=1
             self.player_space_ship.get_invincibility(120)
         else:
