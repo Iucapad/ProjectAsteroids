@@ -118,17 +118,17 @@ class Game: # La partie
     def game_collisions(self): 
         if (self.player_space_ship.is_invincible==0):
             if pygame.sprite.spritecollide(self.player_space_ship, self.asteroids, False, pygame.sprite.collide_mask):  # Collision entre le joueur et les astéroids
-                self.loose_life()
                 self.son_dmg.play()
+                self.loose_life()                
             collisions =  pygame.sprite.spritecollide(self.player_space_ship, self.shots, False, pygame.sprite.collide_mask)    # Collision entre le joueur et les tirs ennemis
             for key in collisions:
                 if (key.type==2):   # Type = 1 tir de joueur, 2 tir ennemis
-                    self.shots.remove(key)
-                    self.loose_life()
+                    self.shots.remove(key)                    
                     self.son_dmg.play()
+                    self.loose_life()
             if pygame.sprite.spritecollide(self.player_space_ship, self.ennemyspaceships, False, pygame.sprite.collide_mask): # Collision entre  le joueur et les vaisseaux ennemis
-                self.loose_life()
                 self.son_dmg.play()
+                self.loose_life()
             if pygame.sprite.spritecollide(self.player_space_ship, self.black_hole,  False, pygame.sprite.collide_mask):
                 while self.player_space_ship.life > 0 : 
                     self.player_space_ship.life -= 1
@@ -197,6 +197,8 @@ class Game: # La partie
             game_over=interface.GameOver(self)
 
     def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
+        for black_hole in self.black_hole:
+            black_hole.draw(win)
         for shot in self.shots:
             shot.draw(win)
             shot.move()
@@ -209,9 +211,7 @@ class Game: # La partie
             ennemyspaceship.move(self.player_space_ship)
         for asteroid in self.asteroids:
             asteroid.draw(win)
-            asteroid.move()
-        for black_hole in self.black_hole:
-            black_hole.draw(win)
+            asteroid.move()        
             
         self.game_info.draw_game_info(self.app,self.score,self.coins,self.level,self.player_space_ship.get_life)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 
