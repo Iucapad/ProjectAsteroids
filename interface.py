@@ -343,12 +343,7 @@ class Settings:
         self.click=False
         self.h_align=app.window_size[0]/2        
         self.ui_button=app.sprites_list["UI_Button"]
-        self.settings_list = {
-            "Difficulty":0,
-            "Player_Name":"playername",
-            "Sounds":True,
-            "Skin_Pack":0
-        }   
+        self.settings_list = app.settings_list
 
         self.back_button=add_button(self.h_align,550,200,50)
         self.difficulty_button=add_button(self.h_align,200,100,50) 

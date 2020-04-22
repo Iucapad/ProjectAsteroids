@@ -20,9 +20,9 @@ class Game: # La partie
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list, self.app.window_size[0]/2, self.app.window_size[1]/2)
-        self.coins = 0
+        self.coins = 50000
         self.ennemy_number = 0
-        self.difficulty=2
+        self.difficulty=int(app.settings_list["Difficulty"])
         self.start_level(self.level)
 
     def start_level(self, level): # On instancie les objets au début de niveau
@@ -46,13 +46,12 @@ class Game: # La partie
             else :
                 self.black_hole_number = 0
             for i in range(self.ennemy_number):
-                if (self.difficulty==0):
+                if (self.difficulty>=0):
                     self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))
-                if (self.difficulty==1):
+                if (self.difficulty>=1):
                     self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy1"], 2, 200, 300))
                 if (self.difficulty==2):
                     self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))
-                    self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy1"], 2, 200, 300))
             if self.black_hole_number == 1:
                 self.black_hole.append( objects.BlackHole(self.app.sprites_list["BlackHole"], random.randint(100, self.app.window_size[0]-100), random.randint(100, self.app.window_size[1]-100)))  # Instanciation du trou noir
             
@@ -86,7 +85,8 @@ class Game: # La partie
                 if math.sqrt( ( (ennemy_space_ship.x - self.player_space_ship.x)**2 )+ ( (ennemy_space_ship.y - self.player_space_ship.y )**2) ) < 400:                                   
                     if time.time() > ennemy_space_ship.last_shot + ennemy_space_ship.shoot_rate: 
                         tir = objects.LaserShot(self.app.sprites_list["LaserShot2"], 2, ennemy_space_ship.x, ennemy_space_ship.y, ennemy_space_ship.angle_orientation)    # Instanciation du tir des vaisseaux ennemis
-                        self.son_tir_ennemy.play()
+                        if (self.app.settings_list["Sounds"]):
+                            self.son_tir_ennemy.play()
                         self.shots.append(tir)
                         ennemy_space_ship.last_shot = time.time() 
             if ennemy_space_ship.life == 0:                
@@ -108,26 +108,33 @@ class Game: # La partie
         if self.key_pressed.get(pygame.K_DOWN):
             self.player_space_ship.teleport(self.asteroids, self.ennemyspaceships, self.son_teleport, self.black_hole)
 
+        if self.key_pressed.get(pygame.K_b):
+            shop=interface.Shop(self)
+
         if self.key_pressed.get(pygame.K_SPACE):
             if time.time() > self.player_space_ship.last_shot + self.player_space_ship.shoot_rate: 
                 tir = objects.LaserShot(self.app.sprites_list["LaserShot"], 1, self.player_space_ship.x, self.player_space_ship.y, self.player_space_ship.angle_orientation)
-                self.son_tir_laser.play()
+                if (self.app.settings_list["Sounds"]):
+                    self.son_tir_laser.play()
                 self.shots.append(tir)
                 self.player_space_ship.last_shot = time.time()
 
     def game_collisions(self): 
         if (self.player_space_ship.is_invincible==0):
             if pygame.sprite.spritecollide(self.player_space_ship, self.asteroids, False, pygame.sprite.collide_mask):  # Collision entre le joueur et les astéroids
-                self.son_dmg.play()
+                if (self.app.settings_list["Sounds"]):
+                    self.son_dmg.play()
                 self.loose_life()                
             collisions =  pygame.sprite.spritecollide(self.player_space_ship, self.shots, False, pygame.sprite.collide_mask)    # Collision entre le joueur et les tirs ennemis
             for key in collisions:
                 if (key.type==2):   # Type = 1 tir de joueur, 2 tir ennemis
                     self.shots.remove(key)                    
-                    self.son_dmg.play()
+                    if (self.app.settings_list["Sounds"]):
+                        self.son_dmg.play()
                     self.loose_life()
             if pygame.sprite.spritecollide(self.player_space_ship, self.ennemyspaceships, False, pygame.sprite.collide_mask): # Collision entre  le joueur et les vaisseaux ennemis
-                self.son_dmg.play()
+                if (self.app.settings_list["Sounds"]):
+                    self.son_dmg.play()
                 self.loose_life()
             if pygame.sprite.spritecollide(self.player_space_ship, self.black_hole,  False, pygame.sprite.collide_mask):
                 while self.player_space_ship.life > 0 : 
@@ -192,8 +199,8 @@ class Game: # La partie
             self.player_space_ship.life-=1
             self.player_space_ship.get_invincibility(120)
         else:
-            self.son_gameover.play()
-            self.app.get_statistics() # Appel des statistiques 
+            if (self.app.settings_list["Sounds"]):
+                self.son_gameover.play()
             game_over=interface.GameOver(self)
 
     def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
@@ -222,7 +229,14 @@ class App: # Le programme
         self.window_size = [1280,720]
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
-        self.load_sprites()
+        self.settings_list={}
+        try:                        # Si le fichier n'est pas présent ou corrompu, on aura une erreur plutôt qu'un plantage
+            self.load_settings()
+            self.load_sprites()
+            self.load_statistics()
+        except:
+            print("except")         #todo afficher une erreur
+
         self.menu=interface.MainMenu(self)
         clock = pygame.time.Clock()
 
@@ -237,6 +251,18 @@ class App: # Le programme
     def start_game(self):
         self.game = Game(self)
         self.state="game"
+
+    def load_settings(self):
+        file = open(os.path.join(self.folder,'Files/settings.txt'), 'r')    #Charge le fichier de settings
+        lines = file.readlines() 
+        for line in lines: 
+            if line.strip():                 
+                key,value = line.split(":")          
+                self.settings_list[key]=value.strip()          # Affecte la valeur à la clé correspondante dans le dictionnaire
+        self.settings_list["Sounds"]=int(self.settings_list["Sounds"])
+
+    def load_statistics(self):
+        pass 
 
     def load_sprites(self):                                       # Va chercher les assets dans les fichiers du jeu
         self.sprites_list = {
@@ -274,12 +300,6 @@ class App: # Le programme
                         self.game.key_pressed[event.key] = True
                 elif event.type == pygame.KEYUP:
                     self.game.key_pressed[event.key] = False                   
-
-    def get_statistics(self):
-        f=open("stats.txt","w+")
-        #f.write(str(self.game.score)) <--- à mettre au point, provoque une erreur
-        #f.write(nomdujoueur) <------ nomdujoueur pas encore défini
-        f.close()
 
     def frame_draw(self):    #Cette fonction va dessiner chaque élément du programme
         if self.state=="game":
