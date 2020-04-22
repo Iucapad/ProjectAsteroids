@@ -20,7 +20,7 @@ class PlayerSpaceShip:
         self.acceleration = 0.5 		        # Inertie
         self.deceleration = 0.1			        # Inertie                      
         self.life = 3                           # Nombre de vie
-        self.shoot_rate = 0.3                   # Cadence de tir  
+        self.shoot_rate = 0.3                   # Cadence de tir  (délai entre chaque tir en seconde)
         self.shoot_type = 0   
         self.last_shot = time.time() 
         self.is_invincible = 120
@@ -102,7 +102,7 @@ class EnnemySpaceShip:
         self.life = 2
         self.acceleration = 0.5
         self.deceleration = 0.1
-        self.shoot_rate = 1   
+        self.shoot_rate = 1.5    # Cadence de tir  (délai entre chaque tir en seconde)
         self.last_shot = time.time() 
         self.type = space_ship_type
 
