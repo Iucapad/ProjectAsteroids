@@ -18,7 +18,7 @@ class PlayerSpaceShip:
         self.vitesse_horizontale = 0
         self.vitesse_verticale = 0
         self.acceleration = 0.5 		        # Inertie
-        self.deceleration = 0.1			        # Inertie                      
+        self.deceleration = 0.07			        # Inertie                      
         self.life = 3                           # Nombre de vie
         self.shoot_rate = 0.3                   # Cadence de tir  (délai entre chaque tir en seconde)
         self.shoot_type = 0   
