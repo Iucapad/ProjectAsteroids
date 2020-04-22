@@ -27,6 +27,8 @@ class Game: # La partie
         self.asteroids = [] # Création d'un tableau qui contient tous les astéroides
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         self.shots = [] # Création d'un tableau contenant tout les tirs
+        self.bonus_list = [] #Création d'un tableau contenant les bonus apparus
+        
 
         for i in range(level+3):
             alt_spr = random.randint(1,3)
@@ -78,9 +80,10 @@ class Game: # La partie
                         tir = objects.LaserShot(self.app.sprites_list["LaserShot2"], 2, ennemy_space_ship.x, ennemy_space_ship.y, ennemy_space_ship.angle_orientation)    # Instanciation du tir
                         self.shots.append(tir)
                         ennemy_space_ship.last_shot = time.time() 
-            if ennemy_space_ship.life == 0:
-                self.ennemyspaceships.remove(ennemy_space_ship)
+            if ennemy_space_ship.life == 0:                
                 self.coins+=20
+                self.score+=ennemy_space_ship.type*25
+                self.ennemyspaceships.remove(ennemy_space_ship)
 
         if self.key_pressed.get(pygame.K_LEFT):                             # Les input        
             self.player_space_ship.angle_orientation += 5
@@ -124,15 +127,30 @@ class Game: # La partie
             collisions =  pygame.sprite.spritecollide(asteroid, self.shots, False, pygame.sprite.collide_mask)
             for key in collisions:
                 if (key.type==1):
-                    self.shots.remove(key)
+                    self.shots.remove(key)  
+                    if (asteroid.type==3):
+                        luck=random.randint(0,10)
+                        if (luck > 3):
+                            if (luck >8):
+                                self.bonus_list.append(objects.BonusItem(self.app.sprites_list["Bonus2"],2,asteroid.x,asteroid.y))
+                            else:
+                                self.bonus_list.append(objects.BonusItem(self.app.sprites_list["Bonus1"],1,asteroid.x,asteroid.y))                  
                     if (asteroid.type<3):
                         alt_spr=random.randint(1,3)                    
                         self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid1"], self.app.window_size, asteroid.type+1,asteroid.x+random.randint(10,20),asteroid.y+random.randint(10,20)))
                         self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid2"], self.app.window_size, asteroid.type+1,asteroid.x-random.randint(10,20),asteroid.y-random.randint(10,20)))
+                    self.score+=asteroid.type*10
                     self.asteroids.remove(asteroid)
         for shot in self.shots:                
             if (shot.x<0 or shot.x>self.app.window_size[0] or shot.y<0 or shot.y>self.app.window_size[1]):  # Suppression des tirs si ils sortent de l'écran (optimisation)
                 self.shots.remove(shot)
+        collisionbonus = pygame.sprite.spritecollide(self.player_space_ship, self.bonus_list, False, pygame.sprite.collide_mask)
+        for key in collisionbonus:
+            if (key.bonus_type==1):           
+                self.coins+=5
+            elif (key.bonus_type==2): 
+                self.player_space_ship.life+=1
+            self.bonus_list.remove(key)
 
     def border_wrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
         if (obj.x > window_size[0]):
@@ -155,18 +173,19 @@ class Game: # La partie
             game_over=interface.GameOver(self)
 
     def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
-        self.player_space_ship.draw(win)
-        self.player_space_ship.move()
-
-        for asteroid in self.asteroids:
-            asteroid.draw(win)
-            asteroid.move()
-        for ennemyspaceship in self.ennemyspaceships:
-            ennemyspaceship.draw(win)
-            ennemyspaceship.move(self.player_space_ship)
         for shot in self.shots:
             shot.draw(win)
             shot.move()
+        for bonus in self.bonus_list:
+            bonus.draw(win)
+        self.player_space_ship.draw(win)
+        self.player_space_ship.move()
+        for ennemyspaceship in self.ennemyspaceships:
+            ennemyspaceship.draw(win)
+            ennemyspaceship.move(self.player_space_ship)
+        for asteroid in self.asteroids:
+            asteroid.draw(win)
+            asteroid.move()
             
         self.game_info.draw_game_info(self.app,self.score,self.coins,self.level,self.player_space_ship.get_life)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 
@@ -204,6 +223,8 @@ class App: # Le programme
             "Asteroid3": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid3.png')),
             "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png')),
             "Ennemy1": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy1.png')),
+            "Bonus1": pygame.image.load(os.path.join(self.folder, 'Assets/bonuscoin.png')),
+            "Bonus2": pygame.image.load(os.path.join(self.folder, 'Assets/bonuslife.png')),
             "UI_Menu": pygame.image.load(os.path.join(self.folder, 'Assets/ui_menu.png')),
             "UI_Button": pygame.image.load(os.path.join(self.folder, 'Assets/ui_button.png'))
         }
