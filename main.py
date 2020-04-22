@@ -16,13 +16,13 @@ class Game: # La partie
         self.son_teleport = pygame.mixer.Sound(os.path.join(app.folder, "Assets/teleport.wav"))
         self.app=app
         self.score = 0
-        self.level = 5 
+        self.level = 1
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list, self.app.window_size[0]/2, self.app.window_size[1]/2)
-        self.coins = 50000
+        self.coins = 5000
         self.ennemy_number = 0
-        self.difficulty=int(app.settings_list["Difficulty"])
+        self.difficulty=app.settings_list["Difficulty"]
         self.start_level(self.level)
 
     def start_level(self, level): # On instancie les objets au début de niveau
@@ -230,7 +230,7 @@ class App: # Le programme
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
         self.settings_list={}
-        try:                        # Si le fichier n'est pas présent ou corrompu, on aura une erreur plutôt qu'un plantage
+        try:                       # Si le fichier n'est pas présent ou corrompu, on aura une erreur plutôt qu'un plantage
             self.load_settings()
             self.load_sprites()
             self.load_statistics()
@@ -259,32 +259,35 @@ class App: # Le programme
             if line.strip():                 
                 key,value = line.split(":")          
                 self.settings_list[key]=value.strip()          # Affecte la valeur à la clé correspondante dans le dictionnaire
+        self.settings_list["Difficulty"]=int(self.settings_list["Difficulty"])
         self.settings_list["Sounds"]=int(self.settings_list["Sounds"])
+        self.settings_list["Skin_Pack"]=int(self.settings_list["Skin_Pack"])
 
     def load_statistics(self):
         pass 
 
     def load_sprites(self):                                       # Va chercher les assets dans les fichiers du jeu
+        pack=str(self.settings_list["Skin_Pack"])
         self.sprites_list = {
-            "Player": pygame.image.load(os.path.join(self.folder, 'Assets/player.png')),
-            "Player1": pygame.image.load(os.path.join(self.folder, 'Assets/player1.png')),
-            "LaserShot": pygame.image.load(os.path.join(self.folder, 'Assets/laser_shot.png')),
-            "LaserShot2": pygame.image.load(os.path.join(self.folder, 'Assets/laser_shot2.png')),
-            "Asteroid1": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid1.png')),
-            "Asteroid2": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid2.png')),
-            "Asteroid3": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid3.png')),
-            "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png')),
-            "Ennemy1": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy1.png')),
-            "Bonus1": pygame.image.load(os.path.join(self.folder, 'Assets/bonuscoin.png')),
-            "Bonus2": pygame.image.load(os.path.join(self.folder, 'Assets/bonuslife.png')),
-            "UI_Menu": pygame.image.load(os.path.join(self.folder, 'Assets/ui_menu.png')),
-            "UI_Button": pygame.image.load(os.path.join(self.folder, 'Assets/ui_button.png')),
-            "BlackHole" : pygame.image.load(os.path.join(self.folder, 'Assets/Black_hole.png'))
+            "Player": pygame.image.load(os.path.join(self.folder, "Assets/Pack_"+pack+"/player.png")),
+            "Player1": pygame.image.load(os.path.join(self.folder, "Assets/Pack_"+pack+"/player1.png")),
+            "LaserShot": pygame.image.load(os.path.join(self.folder, "Assets/laser_shot.png")),
+            "LaserShot2": pygame.image.load(os.path.join(self.folder, "Assets/laser_shot2.png")),
+            "Asteroid1": pygame.image.load(os.path.join(self.folder, "Assets/asteroid1.png")),
+            "Asteroid2": pygame.image.load(os.path.join(self.folder, "Assets/asteroid2.png")),
+            "Asteroid3": pygame.image.load(os.path.join(self.folder, "Assets/asteroid3.png")),
+            "Ennemy": pygame.image.load(os.path.join(self.folder, "Assets/Pack_"+pack+"/ennemy.png")),
+            "Ennemy1": pygame.image.load(os.path.join(self.folder, "Assets/Pack_"+pack+"/ennemy1.png")),
+            "Bonus1": pygame.image.load(os.path.join(self.folder, "Assets/bonuscoin.png")),
+            "Bonus2": pygame.image.load(os.path.join(self.folder, "Assets/bonuslife.png")),
+            "UI_Menu": pygame.image.load(os.path.join(self.folder, "Assets/ui_menu.png")),
+            "UI_Button": pygame.image.load(os.path.join(self.folder, "Assets/Pack_"+pack+"/ui_button.png")),
+            "BlackHole" : pygame.image.load(os.path.join(self.folder, "Assets/Black_hole.png"))
         }
         self.title_font = pygame.font.Font(os.path.join(self.folder, 'Assets/title_font.ttf'), 48)
         self.text_font = pygame.font.Font(os.path.join(self.folder, 'Assets/text_font.ttf'), 32)
         self.button_font = pygame.font.Font(os.path.join(self.folder, 'Assets/text_font.ttf'), 26)
-        background=pygame.image.load(os.path.join(self.folder, 'Assets/background.png'))
+        background=pygame.image.load(os.path.join(self.folder, "Assets/Pack_"+pack+"/background.png"))
         self.background=pygame.transform.scale(background, (self.window_size[0], self.window_size[1]))
 
     def events(self):

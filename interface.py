@@ -1,3 +1,4 @@
+import os.path
 import pygame
 import random
 
@@ -343,7 +344,7 @@ class Settings:
         self.click=False
         self.h_align=app.window_size[0]/2        
         self.ui_button=app.sprites_list["UI_Button"]
-        self.settings_list = app.settings_list
+        self.settings_list = app.settings_list        
 
         self.back_button=add_button(self.h_align,550,200,50)
         self.difficulty_button=add_button(self.h_align,200,100,50) 
@@ -367,14 +368,18 @@ class Settings:
                 if (self.click):
                     self.settings_list["Difficulty"]+=1
                     self.settings_list["Difficulty"]%=3
-                    print (self.settings_list["Difficulty"])
+                    self.save_options()
             if (self.sounds_button.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
-                    self.settings_list["Sounds"]= not (self.settings_list["Sounds"])
+                    self.settings_list["Sounds"]+=1
+                    self.settings_list["Sounds"]%=2
+                    self.save_options()
             if (self.skin_button.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
                     self.settings_list["Skin_Pack"]+=1
                     self.settings_list["Skin_Pack"]%=2 #A mettre le nombre de packs de skins
+                    self.save_options()
+                    self.app.load_sprites()
             if (self.back_button.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
                     self.display=False
@@ -388,3 +393,10 @@ class Settings:
                         self.click=True
             pygame.display.update()
             clock.tick(30)
+
+    def save_options(self):
+        f = open(os.path.join(self.app.folder,"Files/settings.txt"),"w")
+        f.write(
+            "Player_Name:"+str(self.settings_list["Player_Name"])+"\nDifficulty:"+str(self.settings_list["Difficulty"])+"\nSounds:"+str(self.settings_list["Sounds"])+"\nSkin_Pack:"+str(self.settings_list["Skin_Pack"])
+        )
+        f.close()

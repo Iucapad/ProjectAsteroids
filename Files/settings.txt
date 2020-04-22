@@ -1,3 +1,4 @@
 Player_Name:playername
-Difficulty:2
-Sounds:1
+Difficulty:0
+Sounds:0
+Skin_Pack:0
