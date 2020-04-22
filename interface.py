@@ -305,7 +305,7 @@ class Shop:
                 self.game.player_space_ship.deceleration=0.13
         elif (item==2):
             if (self.game.player_space_ship.shoot_rate>0.05):
-                self.game.player_space_ship.shoot_rate-=0.005
+                self.game.player_space_ship.shoot_rate-=0.05
         elif (item==3):
             self.game.player_space_ship.is_invincible = 1800
 
@@ -313,12 +313,21 @@ class Shop:
         it1=random.randint(0,3)
         it2=random.randint(0,3)
         it3=random.randint(0,3)
-        if (it3!=it1 and it3!=it2 and it1!=it2):
+        if (it3!=it1 and it3!=it2 and it1!=it2 and self.is_available(it1) and self.is_available(it2) and self.is_available(it3)):
             self.item_1=it1
             self.item_2=it2
             self.item_3=it3
         else:
             self.generate_sale()
+
+    def is_available(self,item):
+        if (item==1):
+            return not self.game.player_space_ship.deceleration==0.13
+        elif (item==2):
+            print(self.game.player_space_ship.shoot_rate)
+            return not self.game.player_space_ship.shoot_rate==0.05 #todo fix
+        else:
+            return True
 
 class GameIntro:
 
