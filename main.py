@@ -13,6 +13,7 @@ class Game: # La partie
         self.son_tir_ennemy = pygame.mixer.Sound("Assets/fire.wav")
         self.son_gameover = pygame.mixer.Sound("Assets/boom.wav")
         self.son_dmg = pygame.mixer.Sound("Assets/beep-03.wav")
+        self.son_teleport = pygame.mixer.Sound("Assets/teleport.wav")
         #self.musique = pygame.mixer.Sound("Assets/musique_ambiance.mp3")
         self.app=app
         self.score = 0
@@ -100,7 +101,7 @@ class Game: # La partie
         else:
             self.player_space_ship.thrust = False
         if self.key_pressed.get(pygame.K_DOWN):
-            self.player_space_ship.teleport(self.asteroids, self.ennemyspaceships)
+            self.player_space_ship.teleport(self.asteroids, self.ennemyspaceships, self.son_teleport)
 
         if self.key_pressed.get(pygame.K_SPACE):
             if time.time() > self.player_space_ship.last_shot + self.player_space_ship.shoot_rate: 
