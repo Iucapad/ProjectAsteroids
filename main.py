@@ -9,12 +9,11 @@ pygame.init()
 
 class Game: # La partie 
     def __init__(self, app):
-        self.son_tir_laser = pygame.mixer.Sound("Assets/asteroids-ship-shoot.wav")
-        self.son_tir_ennemy = pygame.mixer.Sound("Assets/fire.wav")
-        self.son_gameover = pygame.mixer.Sound("Assets/boom.wav")
-        self.son_dmg = pygame.mixer.Sound("Assets/beep-03.wav")
-        self.son_teleport = pygame.mixer.Sound("Assets/teleport.wav")
-        #self.musique = pygame.mixer.Sound("Assets/musique_ambiance.mp3")
+        self.son_tir_laser = pygame.mixer.Sound(os.path.join(app.folder,"Assets/asteroids-ship-shoot.wav"))
+        self.son_tir_ennemy = pygame.mixer.Sound(os.path.join(app.folder,"Assets/fire.wav"))
+        self.son_gameover = pygame.mixer.Sound(os.path.join(app.folder,"Assets/boom.wav"))
+        self.son_dmg = pygame.mixer.Sound(os.path.join(app.folder,"Assets/beep-03.wav"))
+        self.son_teleport = pygame.mixer.Sound(os.path.join(app.folder, "Assets/teleport.wav"))
         self.app=app
         self.score = 0
         self.level = 1        
