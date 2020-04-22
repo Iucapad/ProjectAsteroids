@@ -220,10 +220,10 @@ class Shop:
         self.v_align=game.app.window_size[1]/2
         self.ui_menu=game.app.sprites_list["UI_Menu"]
         self.back_button=add_button(self.h_align,550,200,50) 
-        self.background=pygame.Rect(self.h_align-250,self.v_align-85,500,170)
-        self.item1=pygame.Rect(self.h_align-235,self.v_align-75,150,150)
-        self.item2=pygame.Rect(self.h_align-75,self.v_align-75,150,150)
-        self.item3=pygame.Rect(self.h_align+85,self.v_align-75,150,150)
+        self.background=pygame.Rect(self.h_align-240,self.v_align-85,490,170)
+        self.item1=pygame.Rect(self.h_align-230,self.v_align-75,150,150)
+        self.item2=pygame.Rect(self.h_align-70,self.v_align-75,150,150)
+        self.item3=pygame.Rect(self.h_align+90,self.v_align-75,150,150)
         self.ui_button=game.app.sprites_list["UI_Button"]
         self.items={
             0:"5 Vies",
@@ -304,8 +304,8 @@ class Shop:
             elif (self.game.player_space_ship.deceleration==0.11):
                 self.game.player_space_ship.deceleration=0.13
         elif (item==2):
-            if (self.game.player_space_ship.shoot_rate>0.01):
-                self.game.player_space_ship.shoot_rate-=0.01
+            if (self.game.player_space_ship.shoot_rate>0.05):
+                self.game.player_space_ship.shoot_rate-=0.005
         elif (item==3):
             self.game.player_space_ship.is_invincible = 1800
 
