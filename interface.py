@@ -221,13 +221,13 @@ class Shop:
         self.ui_menu=game.app.sprites_list["UI_Menu"]
         self.back_button=add_button(self.h_align,550,200,50) 
         self.background=pygame.Rect(self.h_align-250,self.v_align-85,500,170)
-        self.item1=pygame.Rect(self.h_align-260,self.v_align-75,150,150)
-        self.item2=pygame.Rect(self.h_align-100,self.v_align-75,150,150)
-        self.item3=pygame.Rect(self.h_align+60,self.v_align-75,150,150)
+        self.item1=pygame.Rect(self.h_align-235,self.v_align-75,150,150)
+        self.item2=pygame.Rect(self.h_align-75,self.v_align-75,150,150)
+        self.item3=pygame.Rect(self.h_align+85,self.v_align-75,150,150)
         self.ui_button=game.app.sprites_list["UI_Button"]
         self.items={
             0:"5 Vies",
-            1:"Inertie --",
+            1:"Stabilité ++",
             2:"Tir ++",
             3:"Bouclier"
         }
@@ -237,7 +237,7 @@ class Shop:
         while self.display:
             if (self.top<720):
                 self.top+=36
-                game.app.window.blit(self.ui_menu,pygame.Rect(self.h_align-250,720-self.top,500,720)) 
+                game.app.window.blit(self.ui_menu,pygame.Rect(self.h_align-245,720-self.top,490,720)) 
             else: 
                 pygame.draw.rect(game.app.window, (45,45,45),self.background) 
                 pygame.draw.rect(game.app.window, (10,10,10),self.item1) 
