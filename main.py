@@ -77,9 +77,10 @@ class Game: # La partie
                         tir = objects.LaserShot(self.app.sprites_list["LaserShot2"], 2, ennemy_space_ship.x, ennemy_space_ship.y, ennemy_space_ship.angle_orientation)    # Instanciation du tir
                         self.shots.append(tir)
                         ennemy_space_ship.last_shot = time.time() 
-            if ennemy_space_ship.life == 0:
-                self.ennemyspaceships.remove(ennemy_space_ship)
+            if ennemy_space_ship.life == 0:                
                 self.coins+=20
+                self.score+=ennemy_space_ship.type*25
+                self.ennemyspaceships.remove(ennemy_space_ship)
 
         if self.key_pressed.get(pygame.K_LEFT):                             # Les input        
             self.player_space_ship.angle_orientation += 5
@@ -134,6 +135,7 @@ class Game: # La partie
                         alt_spr=random.randint(1,3)                    
                         self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid1"], self.app.window_size, asteroid.type+1,asteroid.x+random.randint(10,20),asteroid.y+random.randint(10,20)))
                         self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid2"], self.app.window_size, asteroid.type+1,asteroid.x-random.randint(10,20),asteroid.y-random.randint(10,20)))
+                    self.score+=asteroid.type*10
                     self.asteroids.remove(asteroid)
         for shot in self.shots:                
             if (shot.x<0 or shot.x>self.app.window_size[0] or shot.y<0 or shot.y>self.app.window_size[1]):  # Suppression des tirs si ils sortent de l'écran (optimisation)
