@@ -76,6 +76,7 @@ class Game: # La partie
                         ennemy_space_ship.last_shot = time.time() 
             if ennemy_space_ship.life == 0:
                 self.ennemyspaceships.remove(ennemy_space_ship)
+                self.coins+=20
 
         if self.key_pressed.get(pygame.K_LEFT):                             # Les input        
             self.player_space_ship.angle_orientation += 5
@@ -161,7 +162,7 @@ class Game: # La partie
             shot.draw(win)
             shot.move()
             
-        self.game_info.draw_game_info(self.app,self.score,self.level,self.player_space_ship.get_life)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
+        self.game_info.draw_game_info(self.app,self.score,self.coins,self.level,self.player_space_ship.get_life)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
 
 class App: # Le programme
     def __init__(self):
