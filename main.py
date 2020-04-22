@@ -13,7 +13,7 @@ class Game: # La partie
         self.son_tir_ennemy = pygame.mixer.Sound(os.path.join(app.folder,"Assets/fire.wav"))
         self.son_gameover = pygame.mixer.Sound(os.path.join(app.folder,"Assets/boom.wav"))
         self.son_dmg = pygame.mixer.Sound(os.path.join(app.folder,"Assets/beep-03.wav"))
-        #self.musique = pygame.mixer.Sound("Assets/musique_ambiance.mp3")
+        self.son_teleport = pygame.mixer.Sound(os.path.join(app.folder, "Assets/teleport.wav"))
         self.app=app
         self.score = 0
         self.level = 1        
@@ -100,7 +100,7 @@ class Game: # La partie
         else:
             self.player_space_ship.thrust = False
         if self.key_pressed.get(pygame.K_DOWN):
-            self.player_space_ship.teleport(self.asteroids, self.ennemyspaceships)
+            self.player_space_ship.teleport(self.asteroids, self.ennemyspaceships, self.son_teleport)
 
         if self.key_pressed.get(pygame.K_SPACE):
             if time.time() > self.player_space_ship.last_shot + self.player_space_ship.shoot_rate: 
@@ -137,7 +137,7 @@ class Game: # La partie
                     if (asteroid.type==3):
                         luck=random.randint(0,10)
                         if (luck > 3):
-                            if (luck >8):
+                            if (luck >9):
                                 self.bonus_list.append(objects.BonusItem(self.app.sprites_list["Bonus2"],2,asteroid.x,asteroid.y))
                             else:
                                 self.bonus_list.append(objects.BonusItem(self.app.sprites_list["Bonus1"],1,asteroid.x,asteroid.y))                  
