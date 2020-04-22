@@ -208,6 +208,7 @@ class BonusItem:
         self.rect = self.sprite.get_rect(center=(self.x, self.y))
         self.mask = pygame.mask.from_surface(self.sprite)
         self.bonus_type = bonus_type
+        print (self.bonus_type)
 
     def draw(self,window):
         self.rect = self.sprite.get_rect(center=(self.x, self.y))

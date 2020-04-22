@@ -125,8 +125,11 @@ class Game: # La partie
                     self.shots.remove(key)  
                     if (asteroid.type==3):
                         luck=random.randint(0,10)
-                        if (luck > 2):
-                            self.bonus_list.append(objects.BonusItem(self.app.sprites_list["BonusCoin"],1,asteroid.x,asteroid.y))                  
+                        if (luck > 3):
+                            if (luck >8):
+                                self.bonus_list.append(objects.BonusItem(self.app.sprites_list["Bonus2"],2,asteroid.x,asteroid.y))
+                            else:
+                                self.bonus_list.append(objects.BonusItem(self.app.sprites_list["Bonus1"],1,asteroid.x,asteroid.y))                  
                     if (asteroid.type<3):
                         alt_spr=random.randint(1,3)                    
                         self.asteroids.append(objects.Asteroid(self.app.sprites_list["Asteroid1"], self.app.window_size, asteroid.type+1,asteroid.x+random.randint(10,20),asteroid.y+random.randint(10,20)))
@@ -137,8 +140,11 @@ class Game: # La partie
                 self.shots.remove(shot)
         collisionbonus = pygame.sprite.spritecollide(self.player_space_ship, self.bonus_list, False, pygame.sprite.collide_mask)
         for key in collisionbonus:
+            if (key.bonus_type==1):           
+                self.coins+=5
+            elif (key.bonus_type==2): 
+                self.player_space_ship.life+=1
             self.bonus_list.remove(key)
-            self.coins+=5
 
     def border_wrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
         if (obj.x > window_size[0]):
@@ -210,7 +216,8 @@ class App: # Le programme
             "Asteroid3": pygame.image.load(os.path.join(self.folder, 'Assets/asteroid3.png')),
             "Ennemy": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy.png')),
             "Ennemy1": pygame.image.load(os.path.join(self.folder, 'Assets/ennemy1.png')),
-            "BonusCoin": pygame.image.load(os.path.join(self.folder, 'Assets/bonuscoin.png')),
+            "Bonus1": pygame.image.load(os.path.join(self.folder, 'Assets/bonuscoin.png')),
+            "Bonus2": pygame.image.load(os.path.join(self.folder, 'Assets/bonuslife.png')),
             "UI_Menu": pygame.image.load(os.path.join(self.folder, 'Assets/ui_menu.png')),
             "UI_Button": pygame.image.load(os.path.join(self.folder, 'Assets/ui_button.png'))
         }
