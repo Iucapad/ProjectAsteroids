@@ -9,6 +9,9 @@ pygame.init()
 
 class Game: # La partie 
     def __init__(self, app):
+        self.son_tir_laser = pygame.mixer.Sound("Assets/asteroids-ship-shoot.wav")
+        self.son_gameover = pygame.mixer.Sound("Assets/boom.wav")
+        #self.musique = pygame.mixer.Sound("Assets/musique_ambiance.mp3")
         self.app=app
         self.score = 0
         self.level = 1        
@@ -99,6 +102,7 @@ class Game: # La partie
         if self.key_pressed.get(pygame.K_SPACE):
             if time.time() > self.player_space_ship.last_shot + self.player_space_ship.shoot_rate: 
                 tir = objects.LaserShot(self.app.sprites_list["LaserShot"], 1, self.player_space_ship.x, self.player_space_ship.y, self.player_space_ship.angle_orientation)
+                self.son_tir_laser.play()
                 self.shots.append(tir)
                 self.player_space_ship.last_shot = time.time()
 
@@ -163,6 +167,7 @@ class Game: # La partie
             self.player_space_ship.life-=1
             self.player_space_ship.get_invincibility(120)
         else:
+            self.son_gameover.play()
             print ("game over") # à remplacer par un écran de game over qui s'affichera quelques secondes (4, 5 ?)
             self.app.get_statistics() #appel des statistiques 
             game_over=interface.GameOver(self)
