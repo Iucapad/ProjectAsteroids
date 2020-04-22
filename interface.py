@@ -29,9 +29,10 @@ class GameInfo:
     def __init__(self,app):
         self.app=app
 
-    def draw_game_info(self,app,score,level,life):
+    def draw_game_info(self,app,score,coins,level,life):
         corner_text((" Niveau: "+str(level)),app.text_font,(255,255,255),app,1,25)
         corner_text((" Score: "+str(score)),app.text_font,(255,255,255),app,2,25)
+        corner_text((" $: "+str(coins)),app.text_font,(255,255,255),app,1,60)
         corner_text((" Vies: "+str(life)),app.text_font,(255,255,255),app,3,25)
 
 class PauseMenu:
@@ -234,7 +235,8 @@ class Shop:
                 pygame.draw.rect(game.app.window, (10,10,10),self.item2)
                 pygame.draw.rect(game.app.window, (10,10,10),self.item3) 
                 draw_text("BOUTIQUE",game.app.text_font,(255,255,255),game.app,game.app.window_size[0]/2,100)
-                draw_text("Améliorations disponibles",game.app.text_font,(255,255,255),game.app,game.app.window_size[0]/2,self.v_align-110)
+                draw_text("Améliorations disponibles",game.app.text_font,(255,255,255),game.app,game.app.window_size[0]/2,self.v_align-140)
+                draw_text("Vous avez "+str(game.coins)+"$",game.app.text_font,(255,255,255),game.app,game.app.window_size[0]/2,self.v_align-110)
                 game.app.window.blit(self.ui_button,self.back_button)
                 draw_text("Passer",game.app.button_font,(127,0,0),game.app,self.h_align,575)
 
