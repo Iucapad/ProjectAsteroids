@@ -297,9 +297,9 @@ class Shop:
         if (item==0):            
             self.game.player_space_ship.life+=5
         elif (item==1):
-            if (self.game.player_space_ship.deceleration==0.7):
-                self.game.player_space_ship.deceleration=0.9
-            elif (self.game.player_space_ship.deceleration==0.9):
+            if (self.game.player_space_ship.deceleration==0.07):
+                self.game.player_space_ship.deceleration=0.09
+            elif (self.game.player_space_ship.deceleration==0.09):
                 self.game.player_space_ship.deceleration=0.11
             elif (self.game.player_space_ship.deceleration==0.11):
                 self.game.player_space_ship.deceleration=0.13
