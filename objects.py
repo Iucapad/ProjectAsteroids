@@ -251,6 +251,8 @@ class BlackHole:
         self.angle = 0
         self.vitesse = 1
         self.sprite = sprite
+        self.rect = self.sprite.get_rect(center=(self.x, self.y))
+        self.mask = pygame.mask.from_surface(self.sprite)
 
     def draw(self, window):
         self.angle+=1
