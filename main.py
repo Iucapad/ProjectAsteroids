@@ -213,6 +213,18 @@ class Game: # La partie
         else:
             if (self.app.settings_list["Sounds"]):
                 self.son_gameover.play()
+            if (self.score>int(self.app.best_list[self.app.settings_list["Player_Name"]])):  #Vérifie si le score est un nouveau record personnel
+                    f = open(os.path.join(self.app.folder,"Files/stats.txt"),"w")
+                    for key in self.app.best_list:
+                        if (key==str(self.app.settings_list["Player_Name"])):
+                            f.write(
+                            str(key)+":"+str(self.score)+"\n"
+                            )
+                        else:
+                            f.write(
+                            str(key)+":"+str(self.app.best_list[key])+"\n"
+                            )
+                    f.close()
             game_over=interface.GameOver(self)
 
     def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
@@ -242,6 +254,7 @@ class App: # Le programme
         self.window_size = [1280,720]
         pygame.display.set_caption("Asteroids")
         self.window = pygame.display.set_mode((self.window_size[0],self.window_size[1]),pygame.DOUBLEBUF)        
+        self.best_list={}
         self.settings_list={}
         try:                       # Si le fichier n'est pas présent ou corrompu, on aura une erreur plutôt qu'un plantage
             self.load_settings()
@@ -277,7 +290,12 @@ class App: # Le programme
         self.settings_list["Skin_Pack"]=int(self.settings_list["Skin_Pack"])
 
     def load_statistics(self):
-        pass 
+        file = open(os.path.join(self.folder,'Files/stats.txt'), 'r')    #Charge le fichier de settings
+        lines = file.readlines() 
+        for line in lines: 
+            if line.strip():                 
+                key,value = line.split(":")          
+                self.best_list[key]=value.strip()          # Affecte la valeur à la clé correspondante dans le dictionnaire
 
     def load_sprites(self):                                       # Va chercher les assets dans les fichiers du jeu
         pack=str(self.settings_list["Skin_Pack"])

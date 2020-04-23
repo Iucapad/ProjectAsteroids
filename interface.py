@@ -152,8 +152,10 @@ class MainMenu:
             self.ui_button=app.sprites_list["UI_Button"]
             app.window.blit(app.background,(0,0)) 
             draw_text("Menu principal",app.title_font,(255,255,255),app,self.h_align,100)
-            #draw_text("Meilleur score: "+str(app.best_score),app.text_font,(255,255,255),app,self.h_align,150) 
-                       
+            try:
+                draw_text("Meilleur score: "+str(app.best_list[app.settings_list["Player_Name"]]),app.text_font,(255,255,255),app,self.h_align,150) 
+            except:
+                app.best_list[app.settings_list["Player_Name"]]=0
             app.window.blit(self.ui_button,self.button1)
             app.window.blit(self.ui_button,self.button2)
             app.window.blit(self.ui_button,self.button3)
@@ -161,7 +163,7 @@ class MainMenu:
             draw_text("Jouer",app.button_font,(127,0,0),app,self.h_align,350)
             draw_text("Options",app.button_font,(127,0,0),app,self.h_align,425)
             draw_text("Quitter",app.button_font,(127,0,0),app,self.h_align,500)
-            draw_text("Statistiques",app.button_font,(127,0,0),app,app.window_size[0]-110,35)
+            draw_text("Classement",app.button_font,(127,0,0),app,app.window_size[0]-110,35)
             draw_text(app.settings_list["Player_Name"],app.button_font,(127,0,0),app,110,35)
             draw_text("Asteroids ©2020 HeH, developed by Vitali L., Belga D., De Troch T., Lambrecht B., Vlassembrouck M.",app.mini_font,(255,255,255),app,app.window_size[0]/2,app.window_size[1]-35)
 
@@ -405,6 +407,7 @@ class Settings:
                     self.app.load_sprites()
             if (self.back_button.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
+                    self.app.load_statistics()
                     self.save_options()
                     self.display=False
             self.click=False            
