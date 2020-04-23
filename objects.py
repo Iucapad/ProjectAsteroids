@@ -248,11 +248,12 @@ class BlackHole:
     def __init__(self, sprite, x, y):
         self.x = x
         self.y = y
-        self.angle = math.radians(random.randint(0, 360))
+        self.angle = 0
         self.vitesse = 1
         self.sprite = sprite
 
     def draw(self, window):
+        self.angle+=1
         surface = pygame.transform.rotate(self.sprite, self.angle)
         self.rect = surface.get_rect(center=(self.x, self.y))
         self.mask = pygame.mask.from_surface(surface)
