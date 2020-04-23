@@ -206,6 +206,9 @@ class BonusItem:
         self.x=x
         self.y=y
         self.sprite = sprite
+        self.speed = 1
+        self.angle_direction = 0
+        self.acceleration_item = 2
         self.rect = self.sprite.get_rect(center=(self.x, self.y))
         self.mask = pygame.mask.from_surface(self.sprite)
         self.bonus_type = bonus_type
@@ -214,6 +217,31 @@ class BonusItem:
         self.rect = self.sprite.get_rect(center=(self.x, self.y))
         self.mask = pygame.mask.from_surface(self.sprite)
         window.blit(self.sprite, self.rect)
+
+    def move(self, trou_noir):
+        if len(trou_noir) == 1:
+            for black_hole in trou_noir:
+                opp = black_hole.y - self.y
+                adj = black_hole.x - self.x
+                self.angle_direction = -math.atan((opp)/(adj))
+                distance = math.sqrt(opp**2 + adj**2)
+                self.acceleration_item = 10 / (distance / 100 )
+
+                if (adj<0):
+                    self.angle_orientation = ((self.angle_direction*180)/math.pi)+180
+                else:
+                    self.angle_orientation = ((self.angle_direction*180)/math.pi)
+
+                if self.x > black_hole.x:   
+                    self.x -= math.cos(self.angle_direction) * self.acceleration_item
+                    self.y += math.sin(self.angle_direction) * self.acceleration_item
+                elif self.x < black_hole.x:
+                    if self.y > black_hole.y:
+                        self.x += math.cos(self.angle_direction) * self.acceleration_item
+                        self.y -= math.sin(self.angle_direction) * self.acceleration_item
+                    elif self.y < black_hole.y :
+                        self.x += math.cos(self.angle_direction) * self.acceleration_item
+                        self.y -= math.sin(self.angle_direction) * self.acceleration_item
 
 class BlackHole:
     def __init__(self, sprite, x, y):

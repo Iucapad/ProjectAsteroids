@@ -16,7 +16,7 @@ class Game: # La partie
         self.son_teleport = pygame.mixer.Sound(os.path.join(app.folder, "Assets/teleport.wav"))
         self.app=app
         self.score = 0
-        self.level = 1
+        self.level = 5
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list, self.app.window_size[0]/2, self.app.window_size[1]/2)
@@ -53,7 +53,18 @@ class Game: # La partie
                 if (self.difficulty==2):
                     self.ennemyspaceships.append(objects.EnnemySpaceShip(self.app.sprites_list["Ennemy"], 1, 200, 300))
             if self.black_hole_number == 1:
-                self.black_hole.append( objects.BlackHole(self.app.sprites_list["BlackHole"], random.randint(100, self.app.window_size[0]-100), random.randint(100, self.app.window_size[1]-100)))  # Instanciation du trou noir
+                tmp_x = random.randint(0, 1)
+                tmp_y = random.randint(0, 1)
+                if tmp_x == 0:
+                    if tmp_y == 0:
+                        self.black_hole.append( objects.BlackHole(self.app.sprites_list["BlackHole"], random.randint(100, (self.app.window_size[0]/2)-200), random.randint(100, (self.app.window_size[1]/2)-100)))  # Instanciation du trou noir
+                    else:
+                        self.black_hole.append( objects.BlackHole(self.app.sprites_list["BlackHole"], random.randint(100, (self.app.window_size[0]/2)-200), random.randint(100, (self.app.window_size[1]/2)+100)))
+                else :
+                    if tmp_y == 0:
+                        self.black_hole.append( objects.BlackHole(self.app.sprites_list["BlackHole"], random.randint(100, (self.app.window_size[0]/2)+200), random.randint(100, (self.app.window_size[1]/2)-100)))
+                    else:
+                       self.black_hole.append( objects.BlackHole(self.app.sprites_list["BlackHole"], random.randint(100, (self.app.window_size[0]/2)+200), random.randint(100, (self.app.window_size[1]/2)+100)))
             
     def complete_level(self):
         self.player_space_ship.x=self.app.window_size[0]/2
@@ -136,7 +147,7 @@ class Game: # La partie
                 if (self.app.settings_list["Sounds"]):
                     self.son_dmg.play()
                 self.loose_life()
-            if pygame.sprite.spritecollide(self.player_space_ship, self.black_hole,  False, pygame.sprite.collide_mask):
+            if pygame.sprite.spritecollide(self.player_space_ship, self.black_hole,  False, pygame.sprite.collide_mask):    # Collision entre le joueuer et le trou noir
                 while self.player_space_ship.life > 0 : 
                     self.player_space_ship.life -= 1
                     self.loose_life()
@@ -149,7 +160,7 @@ class Game: # La partie
                     ennemyspaceship.life-=1
 
         for black_hole in self.black_hole:
-            collisions = pygame.sprite.spritecollide(black_hole, self.shots, False, pygame.sprite.collide_mask)
+            collisions = pygame.sprite.spritecollide(black_hole, self.shots, False, pygame.sprite.collide_mask) # Collision entre le trou noir et les tirs
             for key in collisions:
                 if key.type == 1:
                     self.shots.remove(key)
@@ -176,12 +187,17 @@ class Game: # La partie
         for shot in self.shots:                
             if (shot.x<0 or shot.x>self.app.window_size[0] or shot.y<0 or shot.y>self.app.window_size[1]):  # Suppression des tirs si ils sortent de l'écran (optimisation)
                 self.shots.remove(shot)
-        collisionbonus = pygame.sprite.spritecollide(self.player_space_ship, self.bonus_list, False, pygame.sprite.collide_mask)
+
+        collisionbonus = pygame.sprite.spritecollide(self.player_space_ship, self.bonus_list, False, pygame.sprite.collide_mask)    # Collision entre le joueur et les items bonus
         for key in collisionbonus:
             if (key.bonus_type==1):           
                 self.coins+=5
             elif (key.bonus_type==2): 
                 self.player_space_ship.life+=1
+            self.bonus_list.remove(key)
+
+        collisionbonus_trou_noir = pygame.sprite.spritecollide(black_hole, self.bonus_list, False, pygame.sprite.collide_mask)    # Collision entre les items et le trou noir
+        for key in collisionbonus_trou_noir:
             self.bonus_list.remove(key)
 
     def border_wrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
@@ -211,6 +227,7 @@ class Game: # La partie
             shot.move()
         for bonus in self.bonus_list:
             bonus.draw(win)
+            bonus.move(self.black_hole)
         self.player_space_ship.draw(win)
         self.player_space_ship.move()
         for ennemyspaceship in self.ennemyspaceships:
