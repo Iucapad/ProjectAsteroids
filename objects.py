@@ -226,7 +226,7 @@ class BonusItem:
                 adj = black_hole.x - self.x
                 self.angle_direction = -math.atan((opp)/(adj))
                 distance = math.sqrt(opp**2 + adj**2)
-                self.acceleration_item = 10 / (distance / 100 )
+                self.acceleration_item = 8 / ( distance / 100 )
 
                 if (adj<0):
                     self.angle_orientation = ((self.angle_direction*180)/math.pi)+180
