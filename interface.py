@@ -147,7 +147,7 @@ class MainMenu:
         self.button1=add_button(self.h_align,325,200,50)
         self.button2=add_button(self.h_align,400,200,50)   
         self.button3=add_button(self.h_align,475,200,50)
-        self.statsbtn=add_button(app.window_size[0]-110,10,200,50)
+        #self.statsbtn=add_button(app.window_size[0]-110,10,200,50)
 
         while self.display:
             self.ui_button=app.sprites_list["UI_Button"]
@@ -157,16 +157,15 @@ class MainMenu:
                 draw_text("Meilleur score: "+str(app.best_list[app.settings_list["Player_Name"]]),app.text_font,(255,255,255),app,self.h_align,150) 
             except:
                 app.best_list[app.settings_list["Player_Name"]]=0
-            print(app.best_list)
-            draw_text("1000"+"pseudo",app.text_font,(255,255,255),app,self.h_align,150)
+            #print(app.best_list)
             app.window.blit(self.ui_button,self.button1)
             app.window.blit(self.ui_button,self.button2)
             app.window.blit(self.ui_button,self.button3)
-            app.window.blit(self.ui_button,self.statsbtn)
+            #app.window.blit(self.ui_button,self.statsbtn)
             draw_text("Jouer",app.button_font,(127,0,0),app,self.h_align,350)
             draw_text("Options",app.button_font,(127,0,0),app,self.h_align,425)
             draw_text("Quitter",app.button_font,(127,0,0),app,self.h_align,500)
-            draw_text("Classement",app.button_font,(127,0,0),app,app.window_size[0]-110,35)
+            #draw_text("Classement",app.button_font,(127,0,0),app,app.window_size[0]-110,35)
             draw_text(app.settings_list["Player_Name"],app.button_font,(127,0,0),app,110,35)
             draw_text("Asteroids ©2020 HeH, developed by Vitali L., Belga D., De Troch T., Lambrecht B., Vlassembrouck M.",app.mini_font,(255,255,255),app,app.window_size[0]/2,app.window_size[1]-35)
 
