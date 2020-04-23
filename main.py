@@ -20,7 +20,7 @@ class Game: # La partie
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list, self.app.window_size[0]/2, self.app.window_size[1]/2)
-        self.coins = 5000
+        self.coins = 0
         self.ennemy_number = 0
         self.difficulty=app.settings_list["Difficulty"]
         self.start_level(self.level)
@@ -117,10 +117,7 @@ class Game: # La partie
         else:
             self.player_space_ship.thrust = False
         if self.key_pressed.get(pygame.K_DOWN):
-            self.player_space_ship.teleport(self.asteroids, self.ennemyspaceships, self.son_teleport, self.black_hole)
-
-        if self.key_pressed.get(pygame.K_b):
-            shop=interface.Shop(self)
+            self.player_space_ship.teleport(self.asteroids, self.ennemyspaceships, self.son_teleport, self.black_hole,self.app.settings_list["Sounds"])
 
         if self.key_pressed.get(pygame.K_SPACE):
             if time.time() > self.player_space_ship.last_shot + self.player_space_ship.shoot_rate: 
@@ -305,6 +302,7 @@ class App: # Le programme
         self.title_font = pygame.font.Font(os.path.join(self.folder, 'Assets/title_font.ttf'), 48)
         self.text_font = pygame.font.Font(os.path.join(self.folder, 'Assets/text_font.ttf'), 32)
         self.button_font = pygame.font.Font(os.path.join(self.folder, 'Assets/text_font.ttf'), 26)
+        self.mini_font = pygame.font.Font(os.path.join(self.folder, 'Assets/text_font.ttf'), 18)
         background=pygame.image.load(os.path.join(self.folder, "Assets/Pack_"+pack+"/background.png"))
         self.background=pygame.transform.scale(background, (self.window_size[0], self.window_size[1]))
 
