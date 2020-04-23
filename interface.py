@@ -146,10 +146,10 @@ class MainMenu:
         self.button1=add_button(self.h_align,325,200,50)
         self.button2=add_button(self.h_align,400,200,50)   
         self.button3=add_button(self.h_align,475,200,50)
-        self.statsbtn=add_button(app.window_size[0]-110,10,200,50) 
-        self.ui_button=app.sprites_list["UI_Button"] 
+        self.statsbtn=add_button(app.window_size[0]-110,10,200,50)
 
         while self.display:
+            self.ui_button=app.sprites_list["UI_Button"]
             app.window.blit(app.background,(0,0)) 
             draw_text("Menu principal",app.title_font,(255,255,255),app,self.h_align,100)
             #draw_text("Meilleur score: "+str(app.best_score),app.text_font,(255,255,255),app,self.h_align,150) 
@@ -342,25 +342,33 @@ class Settings:
         clock = pygame.time.Clock()
         self.display=True
         self.click=False
-        self.h_align=app.window_size[0]/2        
-        self.ui_button=app.sprites_list["UI_Button"]
+        self.h_align=app.window_size[0]/2
         self.settings_list = app.settings_list        
 
         self.back_button=add_button(self.h_align,550,200,50)
-        self.difficulty_button=add_button(self.h_align,200,100,50) 
-        self.sounds_button=add_button(self.h_align,300,100,50) 
-        self.skin_button=add_button(self.h_align,400,100,50)   
+        self.difficulty_button=add_button(self.h_align,200,200,50) 
+        self.sounds_button=add_button(self.h_align,300,200,50) 
+        self.skin_button=add_button(self.h_align,400,200,50)   
 
         while self.display:
+            self.ui_button=app.sprites_list["UI_Button"]
+            self.pack_banner=app.sprites_list["Pack_Banner"] 
             app.window.blit(app.background,(0,0)) 
             draw_text("Options",app.title_font,(255,255,255),app,app.window_size[0]/2,100)
             pygame.draw.rect(app.window, (10,10,10),self.difficulty_button)
-            if (self.settings_list["Sounds"]):
-                pygame.draw.rect(app.window, (10,10,10),self.sounds_button)
-            else:
-                pygame.draw.rect(app.window, (45,45,45),self.sounds_button)
-            pygame.draw.rect(app.window, (10,10,10),self.skin_button)
+            pygame.draw.rect(app.window, (10,10,10),self.sounds_button)
+            app.window.blit(self.pack_banner,self.skin_button)
             app.window.blit(self.ui_button,self.back_button)
+            if (self.settings_list["Difficulty"]==0):
+                draw_text("Facile",app.button_font,(127,0,0),app,self.h_align,225)
+            elif (self.settings_list["Difficulty"]==1):
+                draw_text("Normal",app.button_font,(127,0,0),app,self.h_align,225)
+            elif (self.settings_list["Difficulty"]==2):
+                draw_text("Difficile",app.button_font,(127,0,0),app,self.h_align,225)
+            if (self.settings_list["Sounds"]==0):
+                draw_text("Sans",app.button_font,(127,0,0),app,self.h_align,325)
+            elif (self.settings_list["Sounds"]==1):
+                draw_text("Avec",app.button_font,(127,0,0),app,self.h_align,325)
             draw_text("Retour",app.button_font,(127,0,0),app,self.h_align,575)
 
             mouse_x,mouse_y=pygame.mouse.get_pos()
@@ -395,8 +403,11 @@ class Settings:
             clock.tick(30)
 
     def save_options(self):
-        f = open(os.path.join(self.app.folder,"Files/settings.txt"),"w")
-        f.write(
-            "Player_Name:"+str(self.settings_list["Player_Name"])+"\nDifficulty:"+str(self.settings_list["Difficulty"])+"\nSounds:"+str(self.settings_list["Sounds"])+"\nSkin_Pack:"+str(self.settings_list["Skin_Pack"])
-        )
-        f.close()
+        try:
+            f = open(os.path.join(self.app.folder,"Files/settings.txt"),"w")
+            f.write(
+                "Player_Name:"+str(self.settings_list["Player_Name"])+"\nDifficulty:"+str(self.settings_list["Difficulty"])+"\nSounds:"+str(self.settings_list["Sounds"])+"\nSkin_Pack:"+str(self.settings_list["Skin_Pack"])
+            )
+            f.close()
+        except:
+            print("Erreur de sauvegarde")

@@ -280,9 +280,10 @@ class App: # Le programme
             "Ennemy1": pygame.image.load(os.path.join(self.folder, "Assets/Pack_"+pack+"/ennemy1.png")),
             "Bonus1": pygame.image.load(os.path.join(self.folder, "Assets/bonuscoin.png")),
             "Bonus2": pygame.image.load(os.path.join(self.folder, "Assets/bonuslife.png")),
+            "BlackHole" : pygame.image.load(os.path.join(self.folder, "Assets/Black_hole.png")),
             "UI_Menu": pygame.image.load(os.path.join(self.folder, "Assets/ui_menu.png")),
             "UI_Button": pygame.image.load(os.path.join(self.folder, "Assets/Pack_"+pack+"/ui_button.png")),
-            "BlackHole" : pygame.image.load(os.path.join(self.folder, "Assets/Black_hole.png"))
+            "Pack_Banner" : pygame.image.load(os.path.join(self.folder, "Assets/Pack_"+str((self.settings_list["Skin_Pack"]+1)%2)+"/pack_banner.png"))
         }
         self.title_font = pygame.font.Font(os.path.join(self.folder, 'Assets/title_font.ttf'), 48)
         self.text_font = pygame.font.Font(os.path.join(self.folder, 'Assets/text_font.ttf'), 32)
