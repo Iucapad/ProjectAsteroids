@@ -163,6 +163,7 @@ class MainMenu:
             draw_text("Quitter",app.button_font,(127,0,0),app,self.h_align,500)
             draw_text("Statistiques",app.button_font,(127,0,0),app,app.window_size[0]-110,35)
             draw_text(app.settings_list["Player_Name"],app.button_font,(127,0,0),app,110,35)
+            draw_text("Asteroids ©2020 HeH, developed by Vitali L., Belga D., De Troch T., Lambrecht B., Vlassembrouck M.",app.mini_font,(255,255,255),app,app.window_size[0]/2,app.window_size[1]-35)
 
             mouse_x,mouse_y=pygame.mouse.get_pos()
             if (self.button1.collidepoint(mouse_x,mouse_y)):

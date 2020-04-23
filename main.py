@@ -288,6 +288,7 @@ class App: # Le programme
         self.title_font = pygame.font.Font(os.path.join(self.folder, 'Assets/title_font.ttf'), 48)
         self.text_font = pygame.font.Font(os.path.join(self.folder, 'Assets/text_font.ttf'), 32)
         self.button_font = pygame.font.Font(os.path.join(self.folder, 'Assets/text_font.ttf'), 26)
+        self.mini_font = pygame.font.Font(os.path.join(self.folder, 'Assets/text_font.ttf'), 18)
         background=pygame.image.load(os.path.join(self.folder, "Assets/Pack_"+pack+"/background.png"))
         self.background=pygame.transform.scale(background, (self.window_size[0], self.window_size[1]))
 
