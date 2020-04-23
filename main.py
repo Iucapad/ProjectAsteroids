@@ -75,8 +75,6 @@ class Game: # La partie
         self.start_level(self.level)
         self.player_space_ship.teleported = 0
         self.player_space_ship.is_invincible = 120
-        if self.player_space_ship.life < 3:
-            self.player_space_ship.life += 1
 
     def update_loop(self,window,window_size):
         self.game_draw(window) #Dessiner ce qu'elle contient dans la fenêtre
