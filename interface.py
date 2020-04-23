@@ -189,30 +189,6 @@ class MainMenu:
             pygame.display.update()
             clock.tick(30)
 
-class ViewStatistics:
-
-    def __init__(self,player):
-        self.player=player
-        clock = pygame.time.Clock()
-        self.display=True
-        self.click=False
-
-        while self.display:
-            mouse_x,mouse_y=pygame.mouse.get_pos()
-            if (self.close.collidepoint(mouse_x,mouse_y)):
-                if (self.click):
-                    pass
-            self.click=False
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        self.click=True
-            pygame.display.update()
-            clock.tick(30)
-
 class Shop:
 
     def __init__(self, game):
@@ -236,7 +212,7 @@ class Shop:
             2:"Tir ++",
             3:"Bouclier"
         }
-        self.prices=[50,100,250,1000]
+        self.prices=[50,100,250,300]
         self.generate_sale()
 
         while self.display:
@@ -266,26 +242,20 @@ class Shop:
                     self.display=False
             if (self.item1.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
-                    if (game.coins>self.prices[self.item_1]):
+                    if (game.coins>=self.prices[self.item_1]):
                         self.transaction(self.item_1)
                         print("Achat de "+str(self.items[self.item_1]+"pour un prix de "+str(self.prices[self.item_1])))
                         self.display=False
-                    else:
-                        print('t pauvre')
             if (self.item2.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
-                    if (game.coins>self.prices[self.item_2]):
+                    if (game.coins>=self.prices[self.item_2]):
                         self.transaction(self.item_2)
                         self.display=False
-                    else:
-                        print('t pauvre')
             if (self.item3.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
-                    if (game.coins>self.prices[self.item_3]):
+                    if (game.coins>=self.prices[self.item_3]):
                         self.transaction(self.item_3)
                         self.display=False
-                    else:
-                        print('t pauvre')
             self.click=False
             
             for event in pygame.event.get():
@@ -297,8 +267,7 @@ class Shop:
             pygame.display.update()
             clock.tick(120)
 
-    def transaction(self,item):
-        self.game.coins-=self.prices[item]
+    def transaction(self,item):        
         if (item==0):            
             self.game.player_space_ship.life+=5
         elif (item==1):
@@ -313,6 +282,7 @@ class Shop:
                 self.game.player_space_ship.shoot_rate-=0.05
         elif (item==3):
             self.game.player_space_ship.is_invincible = 1800
+        self.game.coins-=self.prices[item]
 
     def generate_sale(self):
         it1=random.randint(0,3)
