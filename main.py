@@ -295,6 +295,7 @@ class App: # Le programme
             if line.strip():                 
                 key,value = line.split(":")          
                 self.best_list[key]=value.strip()          # Affecte la valeur à la clé correspondante dans le dictionnaire
+        self.best_list={k: v for k, v in sorted(self.best_list.items(), key=lambda item: item[1])}
 
     def load_sprites(self):                                       # Va chercher les assets dans les fichiers du jeu
         pack=str(self.settings_list["Skin_Pack"])

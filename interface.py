@@ -1,6 +1,7 @@
 import os.path
 import pygame
 import random
+from typing import OrderedDict
 
 pygame.init()
 
@@ -156,6 +157,8 @@ class MainMenu:
                 draw_text("Meilleur score: "+str(app.best_list[app.settings_list["Player_Name"]]),app.text_font,(255,255,255),app,self.h_align,150) 
             except:
                 app.best_list[app.settings_list["Player_Name"]]=0
+            print(app.best_list)
+            draw_text("1000"+"pseudo",app.text_font,(255,255,255),app,self.h_align,150)
             app.window.blit(self.ui_button,self.button1)
             app.window.blit(self.ui_button,self.button2)
             app.window.blit(self.ui_button,self.button3)
