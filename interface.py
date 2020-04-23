@@ -359,16 +359,19 @@ class Settings:
             pygame.draw.rect(app.window, (10,10,10),self.sounds_button)
             app.window.blit(self.pack_banner,self.skin_button)
             app.window.blit(self.ui_button,self.back_button)
+            draw_text("Difficulté",app.button_font,(255,255,255),app,self.h_align,185)
             if (self.settings_list["Difficulty"]==0):
                 draw_text("Facile",app.button_font,(127,0,0),app,self.h_align,225)
             elif (self.settings_list["Difficulty"]==1):
                 draw_text("Normal",app.button_font,(127,0,0),app,self.h_align,225)
             elif (self.settings_list["Difficulty"]==2):
                 draw_text("Difficile",app.button_font,(127,0,0),app,self.h_align,225)
+            draw_text("Son",app.button_font,(255,255,255),app,self.h_align,285)
             if (self.settings_list["Sounds"]==0):
                 draw_text("Sans",app.button_font,(127,0,0),app,self.h_align,325)
             elif (self.settings_list["Sounds"]==1):
                 draw_text("Avec",app.button_font,(127,0,0),app,self.h_align,325)
+            draw_text("Pack de skins",app.button_font,(255,255,255),app,self.h_align,385)
             draw_text("Retour",app.button_font,(127,0,0),app,self.h_align,575)
 
             mouse_x,mouse_y=pygame.mouse.get_pos()
