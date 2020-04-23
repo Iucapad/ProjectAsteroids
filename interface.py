@@ -34,7 +34,7 @@ class GameInfo:
     def draw_game_info(self,app,score,coins,level,life):
         corner_text((" Niveau: "+str(level)),app.text_font,(255,255,255),app,1,25)
         corner_text((" Score: "+str(score)),app.text_font,(255,255,255),app,2,25)
-        corner_text((" $: "+str(coins)),app.text_font,(255,255,255),app,1,60)
+        corner_text((str(coins))+" $",app.text_font,(255,255,255),app,1,60)
         corner_text((" Vies: "+str(life)),app.text_font,(255,255,255),app,3,25)
 
 class PauseMenu:
