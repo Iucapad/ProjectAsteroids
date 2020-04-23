@@ -162,6 +162,7 @@ class MainMenu:
             draw_text("Options",app.button_font,(127,0,0),app,self.h_align,425)
             draw_text("Quitter",app.button_font,(127,0,0),app,self.h_align,500)
             draw_text("Statistiques",app.button_font,(127,0,0),app,app.window_size[0]-110,35)
+            draw_text(app.settings_list["Player_Name"],app.button_font,(127,0,0),app,110,35)
 
             mouse_x,mouse_y=pygame.mouse.get_pos()
             if (self.button1.collidepoint(mouse_x,mouse_y)):
@@ -343,38 +344,48 @@ class Settings:
         self.display=True
         self.click=False
         self.h_align=app.window_size[0]/2
-        self.settings_list = app.settings_list        
-
+        self.settings_list = app.settings_list
         self.back_button=add_button(self.h_align,550,200,50)
-        self.difficulty_button=add_button(self.h_align,200,200,50) 
-        self.sounds_button=add_button(self.h_align,300,200,50) 
-        self.skin_button=add_button(self.h_align,400,200,50)   
+        self.text=add_button(self.h_align,155,200,40)
+        self.textbox=add_button(self.h_align,190,200,5)
+        self.active=False
+        self.difficulty_button=add_button(self.h_align,250,200,50) 
+        self.sounds_button=add_button(self.h_align,350,200,50) 
+        self.skin_button=add_button(self.h_align,450,200,50)   
 
         while self.display:
             self.ui_button=app.sprites_list["UI_Button"]
-            self.pack_banner=app.sprites_list["Pack_Banner"] 
+            self.pack_banner=app.sprites_list["Pack_Banner"]
             app.window.blit(app.background,(0,0)) 
             draw_text("Options",app.title_font,(255,255,255),app,app.window_size[0]/2,100)
+            if (self.active):
+                pygame.draw.rect(app.window, (45,0,0),self.textbox)
+            else:
+                pygame.draw.rect(app.window, (127,0,0),self.textbox)
             pygame.draw.rect(app.window, (10,10,10),self.difficulty_button)
             pygame.draw.rect(app.window, (10,10,10),self.sounds_button)
             app.window.blit(self.pack_banner,self.skin_button)
             app.window.blit(self.ui_button,self.back_button)
-            draw_text("Difficulté",app.button_font,(255,255,255),app,self.h_align,185)
+            draw_text(self.settings_list["Player_Name"],app.button_font,(255,255,255),app,self.h_align,175)
+            draw_text("Difficulté",app.button_font,(255,255,255),app,self.h_align,235)
             if (self.settings_list["Difficulty"]==0):
-                draw_text("Facile",app.button_font,(127,0,0),app,self.h_align,225)
+                draw_text("Facile",app.button_font,(127,0,0),app,self.h_align,275)
             elif (self.settings_list["Difficulty"]==1):
-                draw_text("Normal",app.button_font,(127,0,0),app,self.h_align,225)
+                draw_text("Normal",app.button_font,(127,0,0),app,self.h_align,275)
             elif (self.settings_list["Difficulty"]==2):
-                draw_text("Difficile",app.button_font,(127,0,0),app,self.h_align,225)
-            draw_text("Son",app.button_font,(255,255,255),app,self.h_align,285)
+                draw_text("Difficile",app.button_font,(127,0,0),app,self.h_align,275)
+            draw_text("Son",app.button_font,(255,255,255),app,self.h_align,335)
             if (self.settings_list["Sounds"]==0):
-                draw_text("Sans",app.button_font,(127,0,0),app,self.h_align,325)
+                draw_text("Sans",app.button_font,(127,0,0),app,self.h_align,375)
             elif (self.settings_list["Sounds"]==1):
-                draw_text("Avec",app.button_font,(127,0,0),app,self.h_align,325)
-            draw_text("Pack de skins",app.button_font,(255,255,255),app,self.h_align,385)
+                draw_text("Avec",app.button_font,(127,0,0),app,self.h_align,375)
+            draw_text("Pack de skins",app.button_font,(255,255,255),app,self.h_align,435)
             draw_text("Retour",app.button_font,(127,0,0),app,self.h_align,575)
 
             mouse_x,mouse_y=pygame.mouse.get_pos()
+            if (self.text.collidepoint(mouse_x,mouse_y)):
+                if (self.click):
+                    self.active=True
             if (self.difficulty_button.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
                     self.settings_list["Difficulty"]+=1
@@ -393,19 +404,30 @@ class Settings:
                     self.app.load_sprites()
             if (self.back_button.collidepoint(mouse_x,mouse_y)):
                 if (self.click):
+                    self.save_options()
                     self.display=False
-            self.click=False
-            
+            self.click=False            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
+                        self.active=False
                         self.click=True
+                elif event.type == pygame.KEYDOWN:
+                    if self.active:
+                        if event.key == pygame.K_RETURN:
+                            self.active=False
+                        elif event.key == pygame.K_BACKSPACE:
+                            self.settings_list["Player_Name"] = self.settings_list["Player_Name"][:-1]
+                        else:
+                            self.settings_list["Player_Name"] += event.unicode
             pygame.display.update()
             clock.tick(30)
 
     def save_options(self):
+        if self.settings_list["Player_Name"]=="":
+            self.settings_list["Player_Name"]="Joueur"
         try:
             f = open(os.path.join(self.app.folder,"Files/settings.txt"),"w")
             f.write(

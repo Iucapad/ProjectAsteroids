@@ -106,7 +106,7 @@ class Game: # La partie
         else:
             self.player_space_ship.thrust = False
         if self.key_pressed.get(pygame.K_DOWN):
-            self.player_space_ship.teleport(self.asteroids, self.ennemyspaceships, self.son_teleport, self.black_hole)
+            self.player_space_ship.teleport(self.asteroids, self.ennemyspaceships, self.son_teleport, self.black_hole,self.app.settings_list["Sounds"])
 
         if self.key_pressed.get(pygame.K_b):
             shop=interface.Shop(self)
