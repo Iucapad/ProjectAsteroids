@@ -16,7 +16,7 @@ class Game: # La partie
         self.son_teleport = pygame.mixer.Sound(os.path.join(app.folder, "Assets/teleport.wav"))
         self.app=app
         self.score = 0
-        self.level = 5
+        self.level = 1
         self.game_info = interface.GameInfo(self.app)
         self.key_pressed = {}
         self.player_space_ship = objects.PlayerSpaceShip(self.app.sprites_list, self.app.window_size[0]/2, self.app.window_size[1]/2)
@@ -191,9 +191,10 @@ class Game: # La partie
                 self.player_space_ship.life+=1
             self.bonus_list.remove(key)
 
-        collisionbonus_trou_noir = pygame.sprite.spritecollide(black_hole, self.bonus_list, False, pygame.sprite.collide_mask)    # Collision entre les items et le trou noir
-        for key in collisionbonus_trou_noir:
-            self.bonus_list.remove(key)
+        for black_hole in self.black_hole:
+            collisionbonus_trou_noir = pygame.sprite.spritecollide(black_hole, self.bonus_list, False, pygame.sprite.collide_mask)    # Collision entre les items et le trou noir
+            for key in collisionbonus_trou_noir:
+                self.bonus_list.remove(key)
 
     def border_wrapping(self,obj,window_size):   #Si les objets sont à la limite de la fenêtre, ils se tp à l'opposé
         if (obj.x > window_size[0]):
