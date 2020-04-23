@@ -30,8 +30,7 @@ class Game: # La partie
         self.ennemyspaceships = [] #Création d'un tableau contenant tous les vaisseaux ennemis
         self.shots = [] # Création d'un tableau contenant tout les tirs
         self.bonus_list = [] #Création d'un tableau contenant les bonus apparus
-        self.black_hole = []
-        
+        self.black_hole = [] #Création d'un tableau contenant les trous noirs
 
         for i in range(level+3):
             alt_spr = random.randint(1,3)
@@ -215,17 +214,17 @@ class Game: # La partie
                 self.son_gameover.play()
             if (self.score>int(self.app.best_list[self.app.settings_list["Player_Name"]])):  #Vérifie si le score est un nouveau record personnel
                     f = open(os.path.join(self.app.folder,"Files/stats.txt"),"w")
-                    for key in self.app.best_list:
-                        if (key==str(self.app.settings_list["Player_Name"])):
+                    for key in self.app.best_list:                                           #Réécrit dans le fichier les scores des différents joueurs
+                        if (key==str(self.app.settings_list["Player_Name"])):                #Si c'est le joueur actuel on inscrit le score actuel
                             f.write(
                             str(key)+":"+str(self.score)+"\n"
                             )
-                        else:
+                        else:                                                                #Sinon, on réécrit le score stocké auparavant
                             f.write(
                             str(key)+":"+str(self.app.best_list[key])+"\n"
                             )
                     f.close()
-            game_over=interface.GameOver(self)
+            game_over=interface.GameOver(self)                                               #Affiche l'écran de mort
 
     def game_draw(self, win):    # Cette fonction va dessiner chaque élément du niveau
         for black_hole in self.black_hole:
@@ -245,7 +244,7 @@ class Game: # La partie
             asteroid.draw(win)
             asteroid.move()        
             
-        self.game_info.draw_game_info(self.app,self.score,self.coins,self.level,self.player_space_ship.get_life)    #Todo: Executer sur un thread différent -> Pas besoin d'update à 60fps l'affichage
+        self.game_info.draw_game_info(self.app,self.score,self.coins,self.level,self.player_space_ship.get_life)
 
 class App: # Le programme
     def __init__(self):
@@ -269,7 +268,7 @@ class App: # Le programme
         self.running = True        
         while self.running:
             self.window.fill((0,0,0))                           # Vide l'affichage de la frame
-            self.frame_draw()                                    # Appelle la fonction qui dessine les objets du jeu
+            self.frame_draw()                                   # Appelle la fonction qui dessine les objets du jeu
             self.events()                                       # Gestion des évènements/inputs/clics
             clock.tick(60)                                      # Met à jour l'affichage
         pygame.quit()
@@ -290,7 +289,7 @@ class App: # Le programme
         self.settings_list["Skin_Pack"]=int(self.settings_list["Skin_Pack"])
 
     def load_statistics(self):
-        file = open(os.path.join(self.folder,'Files/stats.txt'), 'r')    #Charge le fichier de settings
+        file = open(os.path.join(self.folder,'Files/stats.txt'), 'r')    #Charge le fichier de stats
         lines = file.readlines() 
         for line in lines: 
             if line.strip():                 
