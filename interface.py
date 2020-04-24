@@ -280,7 +280,7 @@ class Shop:
             elif (self.game.player_space_ship.deceleration==0.11):
                 self.game.player_space_ship.deceleration=0.13
         elif (item==2):
-            if (self.game.player_space_ship.shoot_rate>0.05):
+            if (self.game.player_space_ship.shoot_rate>0.2):
                 self.game.player_space_ship.shoot_rate-=0.05
         elif (item==3):
             self.game.player_space_ship.is_invincible = 1800
